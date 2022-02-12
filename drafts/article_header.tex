@@ -1,0 +1,193 @@
+\documentclass[12pt]{article}
+%\documentclass[reqno]{amsart}
+%\documentclass[titlepage]{amsart}
+
+%% {{{{
+%% This package is already loaded by beamer
+% https://tex.stackexchange.com/questions/314344/beamer-presentation-compile-error
+\usepackage{graphicx}
+%% }}}}
+
+%http://tex.stackexchange.com/questions/36797/how-can-i-make-todonotes-use-all-of-the-margin
+\usepackage{fullpage}
+%\usepackage{showframe}
+% \usepackage[paperwidth=210mm,
+%             paperheight=297mm,
+%             left=50pt,
+%             top=50pt,
+%             textwidth=345pt,
+%             marginparsep=25pt,
+%             marginparwidth=150pt,
+%             textheight=692pt,
+%             footskip=50pt]
+%            {geometry}
+
+%% {{{{
+% https://tex.stackexchange.com/questions/9796/how-to-add-todo-notes
+\usepackage{xargs} % Use more than one optional parameter in a new commands 
+\usepackage[dvipsnames]{xcolor}
+% \newcommandx{\todoproposal}[2][1=]{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
+\newcommandx{\todoproposal}[2][1=]{\todo[disable, linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
+% \newcommandx{\tododraft}[2][1=]{\todo[#1]{#2}}
+\newcommandx{\tododraft}[2][1=]{\todo[disable, #1]{#2}}
+% \newcommandx{\thiswillnotshow}[2][1=]{\todo[disable,#1]{#2}}
+%% Math environment in todo note
+%
+% https://tex.stackexchange.com/questions/298404/todonotes-and-reserveda-nested-itemize-enumerate-environments/298405#298405
+\newcommand\todoin[2][]{\todo[inline, caption={2do}, #1]{
+\begin{minipage}{\textwidth-4pt}#2\end{minipage}}}
+% \newcommand\todoin[2][]{\todo[disable, inline, caption={2do}, #1]{
+% \begin{minipage}{\textwidth-4pt}#2\end{minipage}}}
+%% }}}}
+
+
+%% {{{{
+%http://tex.stackexchange.com/questions/44858/adding-the-word-appendix-to-table-of-contents-in-latex
+\usepackage[titletoc, page]{appendix}
+%% }}}}
+
+%% {{{{
+	
+%I'm using this package to put todo notes into my document. Then, I can
+%use it to put a list of the todo notes at the end of the document.
+\usepackage[textsize=footnotesize]{todonotes}
+% \usepackage[disable=true, colorinlistoftodos,prependcaption,textsize=footnotesize]{todonotes}
+%This package has some conficts with amsart. To resolve this, I use
+%the following code.
+\makeatletter
+\providecommand\@dotsep{5}
+\def\listtodoname{List of Todos}
+\def\listoftodos{\@starttoc{tdo}\listtodoname}
+\makeatother
+%I got this workaround code from the package's documentation:
+%http://get-software.net/macros/latex/contrib/todonotes/todonotes.pdf
+
+% %\newcounter{chapter}
+% %\numberwithin{section}{chapter}
+% \theoremstyle{mydefinition}
+% \newtheorem{exercise}{Exercise}
+% \newcommand{\newproblem}[2]{\setcounter{exercise}{#1}\addtocounter{exercise}{
+% -1}\begin{exercise}#2\end{exercise}}
+% \newcommand{\setcontext}[2]{\setcounter{chapter}{#1}\setcounter{section}{#2}}
+
+% \newtheorem*{remark}{Remark}
+
+%% }}}}
+
+
+%% {{{{
+% Bibliography as numbered section
+% https://tex.stackexchange.com/questions/88890/how-to-get-the-references-section-to-be-numbered-as-if-it-were-created-via-sect
+\usepackage[numbib]{tocbibind}
+%% }}}}
+
+
+%%%%%%%%%%%%5
+%%%% >>>>
+
+%%%%%%%%%%%%5
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%% Section Styling
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ \usepackage{titlesec}
+
+% %\titleformat*{\subsection}{\newpage \Large \bfseries}
+% \titleformat*{\subsubsection}{\large\itshape}
+
+% \usepackage[explicit]{titlesec}
+
+% %Start section with new page
+% %http://tex.stackexchange.com/questions/9497/start-new-page-with-each-section
+% \newcommand{\sectionbreak}{\clearpage}
+
+% %Underlining ruler for subsections
+% %http://tex.stackexchange.com/questions/84061/how-can-i-make-a-bold-horizontal-rule-under-each-section-title
+% \titleformat{\section}
+%   {\normalfont\LARGE\bfseries}
+%   {
+%   \thesection
+%   }
+%   {1em}
+%   {#1}
+%   [{\titlerule[0.8pt]}]
+
+% \titleformat{\subsection}
+%   {\normalfont\Large\bfseries}
+%   {\thesubsection}
+%   {1em}
+%   {#1}
+
+% \titleformat{\subsubsection}
+%   {\normalfont\normalsize\itshape}
+%   {\thesubsubsection}
+%   {1em}
+%   {#1}
+
+
+% Change format of \paragraph{...}
+% http://tex.stackexchange.com/questions/3881/formatting-a-paragraph-to-look-like-a-section
+% \titleformat{\paragraph}[hang]{\normalfont\normalsize\itshape}{\theparagraph}{1em}{}
+% \titlespacing*{\paragraph}{0pt}{3.25ex plus 1ex minus .2ex}{1em}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Change section styling for HW documents %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%
+% This first method uses the base LaTeX package:
+% http://tex.stackexchange.com/questions/85011/section-and-subsection-heading-style
+
+%\def\@seccntformat#1{\csname the#1\endcsname\quad} %default
+
+%\def\@seccntformat#1{Problem \csname the#1\endcsname\quad} 
+
+% %%% 
+% % This next one uses the `titlesec` packages. The references I used are
+% % here:
+% % http://tex.stackexchange.com/questions/140447/changing-section-heading-style
+% % http://tex.stackexchange.com/questions/37189/number-subsections-and-subsubsections-but-not-sections
+% \usepackage{bookmark}
+% \usepackage{titlesec}
+% \titleformat{\section}
+%   {\normalfont\bfseries\Large}{Problem \thesection}{1em}{}
+% \titleformat{\subsection}
+%   {\normalfont\large\itshape}{\thesubsection}{1em}{}
+% \titleformat{\subsubsection}
+%   {\normalfont\normalsize\itshape}{\thesubsubsection}{1em}{}
+
+% % Add proper labels to PDF bookmarks.
+% % http://tex.stackexchange.com/questions/156530/how-to-change-the-pdfbookmark-titles-hyperref
+% \makeatletter
+% \bookmarksetup{%
+%   addtohook={%
+%     \ifnum\toclevel@section=\bookmarkget{level}\relax
+%       \renewcommand*{\numberline}[1]{Problem #1 }%
+%     \fi
+%   },
+% }
+
+
+
+%Option to number subsection with letters
+% http://tex.stackexchange.com/questions/74529/sections-indexed-with-numbers-subsections-with-letters
+% \renewcommand{\thesection}{\Alph{section}}
+% \renewcommand{\thesubsubsection}{\thesubsection.\alph{subsubsection}}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% {{{{
+%Links, esp. from table of contents
+% http://timmurphy.org/2014/03/11/latex-table-of-contents-with-clickable-links/
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true, % make the links colored
+    linkcolor=blue, % color TOC links in blue
+    urlcolor=red, % color URLs in red
+    linktoc=all, % 'all' will create links for everything in the TOC
+    %citecolor=gray
+    citecolor=blue
+    }
+%% }}}}

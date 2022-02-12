@@ -1,0 +1,131 @@
+\newcommand*{\MyHeaderPath}{..}% This path definition is also passed to inside the header files.
+\newcommand*{\PathToAssets}{../../assets}%
+\newcommand*{\PathToOutput}{../../output}%
+% \newcommand*{\PathToBibFile}{../../../bibliography.bib}%
+
+
+\input{\MyHeaderPath/beamer_header.tex}
+\input{\MyHeaderPath/lean_header.tex}
+
+\title[Short Title]{
+Long Title
+}
+\author[Short Author Name]{Author Name Here}
+\institute[Short Affiliation]{Long Affiliation}
+\date{\today}
+
+
+\begin{document}
+\begin{frame}[noframenumbering, plain]
+\titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{This paper} % Abstract?
+  \begin{itemize}
+  \item \alert{Question:} 
+  What?
+  \item \alert{Approach:} 
+  How?
+  \item \alert{Main Result:} 
+  We find this.
+  \item \alert{Application:}
+  Our finding has implications for this.
+  \end{itemize}
+\end{frame}
+
+% \begin{frame}[noframenumbering, plain]
+%   \frametitle{Table of Contents}
+%   \setbeamertemplate{section in toc}[sections numbered]
+%   \tableofcontents%[hideallsubsections]
+% \end{frame}
+
+\begin{frame}
+\frametitle{Definitions}
+\begin{itemize}
+\item Let this be ...
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Related Literature}
+  \begin{itemize}
+  \item Initial motivation for term structure of equity lit.: value stocks (high book-to-market stocks) have higher risk adjusted expected returns than growth stocks. Does difference in cash flow growth explain premium?
+  \\ \light{Lettau and Wachter (2007); Hansen, Heaton, Li (2008)}
+  \item First direct measurement used options data and leverages put-call parity: put and call payoffs depend on price changes, not total return. Returns on short-term strips are higher than aggregate stock market, contrary to prediction of leading asset pricing models.
+  % Hedging a call with a put, underlying, and bond still leave you exposed to dividend risk. Difference is the present value of the dividends. 
+  \\ \light{Binsbergen, Brandt, Koijen (2012)}
+  \item Phenomenon exists across countries and asset classes: cross-section of equity, nominal and corporate bonds (in Sharpe ratios), credit default swaps, volatility, housing.
+  \\ \light{e.g., Palhares (2012), Giglio, Maggiori, Stroebel (2015); Binsbergen, Koijen (2017); Gormsen, Lazarus (2019)}
+  \item Examining macroeconomic models through the lens of asset pricing. Growth expecations and dividend futures prices. 
+  \\ \light{Borovi{\v{c}}ka, Hansen (2014); Gormsen, Koijen (2020)}
+  \end{itemize}
+\end{frame}
+
+\section{Stylized Facts}
+
+\begin{frame}
+  \frametitle{The Term Structure of Equity}
+  \begin{itemize}
+  \item This is in the data...
+  \item That...
+  \end{itemize}
+\label{slide:stylized_facts}
+\end{frame}
+
+\section{Model}
+
+
+\begin{frame}{Model Setup}
+\begin{itemize}
+\item Consider a model in which...
+\end{itemize}
+\label{slide:state-space-framework}
+\hyperlink{slide:stylized_facts}{\beamerbutton{Stylized Facts}}
+\end{frame}
+
+\begin{frame}
+
+\begin{figure}
+\centering
+\caption{Example plot}
+  \centering
+  \includegraphics[width=0.6\linewidth]{\PathToOutput/example_plot.png}
+  % \caption{Average returns}
+\caption*{
+  Traditional calibration...
+  }
+\label{fig:div-futures-habits-comparison}
+\end{figure}
+
+\end{frame}
+
+\appendix
+\begin{frame}
+  \centering
+  \textbf{Appendix}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Extra Material}
+  \label{slide:prop7}
+\alert{Proposition 7 (cont.)}
+\begin{itemize}
+\item This and that
+\item \citet{Alvarez2005}
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\vspace{15pt}
+  \bibliography{../bibliography.bib}
+\end{frame}
+
+
+\end{document}
+
+
+
+

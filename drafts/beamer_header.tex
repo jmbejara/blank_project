@@ -1,0 +1,91 @@
+%%% TOGGLE THIS
+\documentclass[ignorenonframetext, 9pt]{beamer}
+
+
+%% {{{{
+%%% Beamer Options
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Put Table of contents at the beginning of each section
+%
+% \AtBeginSection[]
+% {
+%     \begin{frame}{Table of Contents}
+%         \tableofcontents[currentsection]
+%     \end{frame}
+% }
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% See the following url: http://tex.stackexchange.com/questions/196756/phd-thesis-format-can-be-used-for-producing-handout-and-slides
+\mode<presentation>{
+
+  %%%%%%%%%%%%%%%%%%%
+  \usetheme[
+  outer/progressbar=foot,
+  outer/numbering=fraction
+]{metropolis}
+  %%%%%%%%%%%%%
+  % \useoutertheme{metropolis}
+  % \useinnertheme{metropolis}
+  % \usefonttheme{metropolis}
+  % \usecolortheme{seahorse} 
+  %%%%%%%%%%%%%%%%%%%%
+  %https://www.hartwork.org/beamer-theme-matrix/
+  %http://deic.uab.es/~iblanes/beamer_gallery/individual/CambridgeUS-dolphin-professionalfonts.html
+  %http://tex.stackexchange.com/questions/68587/how-to-change-colors-in-beamer-theme
+  % \usetheme{CambridgeUS}
+  % \usecolortheme{dolphin}
+  %\usefonttheme{professionalfonts}
+
+  %%%%%%%%%%%%%%%%
+
+  % Remove figure and table numbers from presentation. First, beamer doesn't number
+  % them anyway. Second, even if it did, we might not show every table and figure
+  % in the presentation, and don't want to confuse Figure 1.3 in the presentation with
+  % Figure 1.7 in the article.
+  \setbeamertemplate{caption}{\insertcaption}% will not show up in article, only in presentation
+  \setbeamertemplate{caption}[numbered]
+  \setbeamertemplate{caption label separator}{}%
+
+}
+
+
+\setbeamertemplate{navigation symbols}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% No new section title slide at each new section
+% https://tex.stackexchange.com/questions/27378/show-plan-before-each-section-except-the-first-one/
+%
+% \AtBeginSection[]{}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Add Footer Text to Every slide
+%
+% https://tex.stackexchange.com/questions/26476/add-footer-text-to-all-slides-in-beamer?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+% %
+% \setbeamertemplate{footline}[text line]{%
+%   \parbox{\linewidth}{\vspace*{-8pt}\insertshortauthor\hfill}}
+% \setbeamertemplate{navigation symbols}{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\setbeameroption{show notes} %un-comment to see the notes
+
+%% }}}}
+
+
+%% {{{{
+% Sometimes, it is useful to add slides at the end of your presentation
+% to refer to during audience questions.
+% The best way to do this is to include the appendixnumberbeamer
+% package in your preamble and call \appendix before your backup
+% slides.
+% metropolis will automatically turn off slide numbering and progress
+% bars for slides in the appendix.  
+\usepackage{appendixnumberbeamer}
+%% }}}}
+

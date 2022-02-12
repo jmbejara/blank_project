@@ -1,0 +1,451 @@
+%% Deal with warnings
+
+% -- Temporarily filter warning. "remreset package is obsolete". This package is likely innocuous.
+% https://tex.stackexchange.com/questions/438543/what-to-do-when-an-actively-maintained-package-requires-an-obsolete-package
+\RequirePackage{silence}
+\WarningFilter{remreset}{The remreset package}
+
+% -- Todo notes margin warning:
+\setlength {\marginparwidth }{2cm}
+
+%https://tex.stackexchange.com/questions/3473/blackboard-bold-variants-for-greek-letters
+\usepackage[bbgreekl]{mathbbol}
+
+\usepackage{amsmath, amsfonts, amscd, amssymb, amsthm}
+\usepackage{url}
+\usepackage{enumerate}
+\usepackage{float}
+\usepackage{bbm}
+\usepackage{color,soul}
+\usepackage{thmtools}
+\usepackage{threeparttable}
+
+%% {{{{
+% Scalable font and better handling of accents, etc.
+% https://tex.stackexchange.com/questions/664/why-should-i-use-usepackaget1fontenc
+% https://tex.stackexchange.com/a/10708/41208
+% \usepackage[T1]{fontenc}
+\usepackage{lmodern}
+%% }}}}
+
+%% {{{{
+
+%% When Caption is too wide:
+% https://tex.stackexchange.com/questions/110393/too-wide-figure-caption/110453
+% \captionsetup{width=0.8\textwidth}
+
+% \usepackage[skip=4pt,font=footnotesize, width=\textwidth]{caption}
+\usepackage[font=small]{caption}
+% \usepackage{caption}
+\usepackage{subcaption}
+%% }}}}
+
+%% {{{{
+%% Bibliography
+\usepackage[round,sort,comma,authoryear]{natbib}
+% Include in main .tex file: \newcommand*{\MyHeaderPath}{..path_to_header_files..}%
+\bibliographystyle{\MyHeaderPath/jpe}
+% \bibliographystyle{rusnat}
+% \bibliographystyle{plainnat}   % this means that the order of references
+%% }}}}
+
+
+\usepackage[export]{adjustbox}
+
+%% Biblatex
+% \usepackage[natbib=true]{biblatex}
+% \addbibresource{../../My_Collection.bib}
+
+
+\usepackage{mathtools}
+
+%% {{{
+% Doesn't work with beamer
+% https://tex.stackexchange.com/questions/314344/beamer-presentation-compile-error#comment766741_314344
+% Anyway, loading the packages in different order solves the issue: load bm last. I suggest the order inputenc, fontenc, babel if needed, lmodern, mathtools and finally bm
+\usepackage{bm}
+%% }}}
+
+
+
+\usepackage{dcolumn}
+
+%% Force LaTeX image to appear in the section in which it's declared [duplicate]
+% https://tex.stackexchange.com/questions/32598/force-latex-image-to-appear-in-the-section-in-which-its-declared
+\usepackage[section]{placeins}
+
+%% Used for making landscape (sidewaystable) tables
+%
+% From here: https://latex.org/forum/viewtopic.php?t=1493
+% Creates sideways table environment 
+\usepackage{rotating}
+
+
+%% For use in making tables with multiple panels
+%
+% See here: https://tex.stackexchange.com/questions/27971/tables-with-multiple-panels-in-latex-r-and-sweave
+\usepackage{tabularx}% http://ctan.org/pkg/tabularx
+\newcolumntype{Y}{>{\raggedleft\arraybackslash}X}% raggedleft column X
+
+%% For use in raggedright text justification in regular tabular tables
+%
+% See here: https://tex.stackexchange.com/questions/12703/how-to-create-fixed-width-table-columns-with-text-raggedright-centered-raggedlef
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+% How to add a forced line break inside a table cell
+% https://tex.stackexchange.com/questions/2441/how-to-add-a-forced-line-break-inside-a-table-cell
+\usepackage{pbox}
+
+
+%% For use in making landscape tables
+% https://tex.stackexchange.com/questions/3930/how-to-rotate-landscape-table-page-in-pdf
+% An interesting alternative that also works is https://tex.stackexchange.com/questions/37220/how-to-adjust-or-remove-page-numbers-on-a-landscape-page-within-a-portrait-docum
+\usepackage{geometry}
+\usepackage{pdflscape}
+
+
+\usepackage{bibentry}
+\makeatletter
+%http://tex.stackexchange.com/questions/141446/problem-of-duplicate-identifier-when-using-bibentry-and-hyperref
+\renewcommand\bibentry[1]{\nocite{#1}{\frenchspacing
+\@nameuse{BR@r@#1\@extra@b@citeb}}}
+\makeatother
+
+
+% %%%% <<<<
+
+% %% Professional Looking Code listings
+% %% http://stackoverflow.com/questions/741985/latex-source-code-listing-like-in-professional-books
+
+% %\usepackage{color}
+% \usepackage{xcolor}
+% \usepackage{listings}
+
+% %\usepackage{caption}
+% \DeclareCaptionFont{white}{\color{white}}
+% \DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
+% \captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+
+% %% Alternative Font for Code Listings
+% %% http://tex.stackexchange.com/questions/33685/set-the-font-family-for-lstlisting
+% \usepackage{courier}
+
+% \lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
+% \lstset{framextopmargin=50pt,frame=bottomline}
+
+% %% Line Numbers
+% \lstset
+% { %Formatting for code in appendix
+%     %language=Matlab,
+%     numbers=left,
+%     stepnumber=1,
+%     showstringspaces=false,
+%     tabsize=1,
+%     breaklines=true,
+%     breakatwhitespace=false,
+% }
+
+% %% Line Numbers starting form an arbitrary number
+% %% http://tex.stackexchange.com/questions/61030/how-can-i-start-the-line-numbering-of-my-listing-by-an-arbitrary-number
+
+% % \begin{lstlisting}[firstnumber=100]
+% % for i:=maxint to 0 do
+% % begin
+% % { do nothing }
+% % end;
+% % \end{lstlisting}
+
+% %%%% >>>>
+
+%%%% <<<<
+
+%% Examples of using underset and underbrace
+
+% $$
+% \frac{\dd \pi^2}{\dd K_1} = 
+%   \underbrace{\pd{\pi^2}{K_1} }_\text{direct effect}
+%   + 
+%   \underbrace{\pd{\pi^2}{x_1^*} \pd{x_1^*}{K_1}}_\text{strategic effect}
+%   + \underset{\text{due to the envelope theorem}}
+%   {\cancel{ \pd{\pi^2}{x_2^*}\pd{x_2^*}{K_1}}}
+% $$
+%%%% >>>>
+
+
+%% Aligning numbers by decimal points in table columns
+%https://tex.stackexchange.com/questions/2746/aligning-numbers-by-decimal-points-in-table-columns
+\usepackage{siunitx}
+% From here:https://ctan.org/pkg/siunitx
+% Don't intepret comma as decimal marker
+\sisetup{
+input-decimal-markers = .
+}
+
+
+
+%%%% <<<<
+%% Packages for tables
+\usepackage{booktabs}
+\usepackage{multirow}
+%\usepackage[table,xcdraw]{xcolor}
+%I got the following one from here: http://stackoverflow.com/questions/790932/how-to-wrap-text-in-latex-tables
+\usepackage{tabulary}
+%% Example Table
+% \begin{figure}[h!]
+% \centering
+% \begin{tabulary}{\linewidth}{C|C|C}
+% \toprule
+% Actions & Inflow at time $t$ & Inflow at time $t + \dd t$     \\ \midrule
+% Buy and sell call & $-C$ & $C + \dd C$ \\ \hline
+% Short $\alpha$ shares & $\alpha S$ & $-\alpha (S + \dd S)$ \\ \hline
+% Buy and sell $\beta$ of option $\hat C$ & $-\beta \hat C$ & $\beta (\hat C + \dd \hat C)$ \\ \hline
+% Borrow & $C - \alpha S + \beta \hat C$ & $-(1+r)(C - \alpha S + \beta \hat C)$ \\ \hline
+% Net & 0 & $C + \dd C - \alpha (S + \dd S) + \beta (\hat C + \dd \hat C)
+%  - (1+r) (C - \alpha S + \beta \hat C)$
+% \\ \hline
+% \bottomrule
+% \end{tabulary} 
+% \end{figure}
+
+%itemize in table:
+%  http://tex.stackexchange.com/questions/150492/how-to-use-itemize-in-table-environment
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+
+%useful for spacining:
+% http://tex.stackexchange.com/questions/267601/invisible-and-unselectable-text
+%%%% >>>>
+
+%%%% <<<<<<
+%% Text Box:
+% http://tex.stackexchange.com/questions/36524/how-to-put-a-framed-box-around-text-math-enviroment
+\usepackage{tcolorbox}
+%% Example:
+
+% \begin{tcolorbox}
+% blablabla
+% \begin{align}
+% E &= mc^2 & \text{Formula of the universe}
+% \end{align}
+% Hoaray
+% \end{tcolorbox}
+
+%% http://tex.stackexchange.com/questions/172475/how-can-i-define-a-custom-tcolorbox-environment-with-color-as-a-parameter
+
+% new tcolorbox environment
+% #1: tcolorbox options
+% #2: color
+% #3: box title
+\newtcolorbox{textbox}[3][]
+{
+colframe = #2!25,
+colback  = #2!10,
+coltitle = #2!20!black,  
+title    = #3,
+#1,
+}
+%%%% >>>>>>
+
+%%%% <<<<<<
+%%%%%%%%%%%%%%%%%%%%%%%%
+%% Cancel out math terms
+%http://tex.stackexchange.com/questions/75525/how-to-write-crossed-out-math-in-latex
+\usepackage[makeroom]{cancel}
+%% Examples:
+%%
+% \verb|\cancel{5y}|:
+% \[ x+\cancel{5y}=0\]
+% \verb|\bcancel{5y}|:
+% \[ x+\bcancel{5y}=0\]
+% \verb|\xcancel{5y}|:
+% \[ x+\xcancel{5y}=0\]
+% \verb|\cancelto{\infty}{5y}|:
+% \[ x+\cancelto{\infty}{5y}=0\]
+
+% The first three commands work in text mode also i.e., \cancel{5y}, \bcancel{5y} and 
+% \xcancel{5y} works but \verb|\cancelto{\infty}{5y}| is not. 
+%%%% >>>>>>
+
+\usepackage{lscape}
+%\begin{landscape}
+%...
+%\end{landscape}
+
+%I'm using this for the \intertext and \shortintertex commands
+%to be used with the align environment from amsmath
+\usepackage{mathtools}
+
+
+%%%%%%%%%%%%%%%%
+%Custom commands
+%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%Custom commands for common mathematical expressions
+
+
+
+%QED "grave" symbol
+\renewcommand{\qed}{\begin{flushright} $\square$ \end{flushright}}
+%vector of ones
+\newcommand{\1}{\mathbbm{1}}
+\newcommand{\E}{\mathbbm{E}}
+%differential d
+\newcommand{\dd}{\, \mathrm{d}}
+%variance and covariance
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Std}{\text{Std}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+\renewcommand{\t}{\prime}
+
+
+%% Underline, underbar, ubar, munderbar
+% http://tex.stackexchange.com/questions/163280/underbar-changing-the-style-of-font-but-bar-not-why
+\usepackage{accents}
+\newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
+
+%% Rename hats and tildes
+\let\smallhat\hat
+\renewcommand{\hat}{\widehat}
+\let\smalltilde\tilde
+\renewcommand{\tilde}{\widetilde}
+
+% https://tex.stackexchange.com/questions/43335/how-to-write-is-distributed-as-under-a-certain-hypothesis
+%% iid over \sim
+\makeatletter
+\newcommand{\distas}[1]{\mathbin{\overset{#1}{\kern\z@\sim}}}%
+\newsavebox{\mybox}\newsavebox{\mysim}
+\newcommand{\distras}[1]{%
+  \savebox{\mybox}{\hbox{\kern3pt$\scriptstyle#1$\kern3pt}}%
+  \savebox{\mysim}{\hbox{$\sim$}}%
+  \mathbin{\overset{#1}{\kern\z@\resizebox{\wd\mybox}{\ht\mysim}{$\sim$}}}%
+  }
+
+%% Deemphasizing Text {{{
+% https://latex.org/forum/viewtopic.php?t=17731
+\newcommand{\light}[1]{{\footnotesize \textcolor{gray}{#1}}}
+% \light{This is grayed-out}  
+% }}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%Document Specific Commands%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%% {{{{
+% Theroems
+
+% \newcommand{\bm}[1]{\begin{bmatrix}#1 \end{bmatrix}}
+\newtheorem{goal}{Project Goal}
+
+% https://en.wikibooks.org/wiki/LaTeX/Theorems#Theorem_counters
+%\newtheorem{proposition}{Proposition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{mylemma}[proposition]{Lemma}
+\newtheorem{mycorollary}[proposition]{Corollary} 
+\newtheorem{myassumption}[proposition]{Assumption} 
+% OLD: Use proposition counter as `parent` %This comes from https://tex.stackexchange.com/a/381593/41208
+% \newtheorem{theorem}{Theorem}[section]
+
+\theoremstyle{definition}
+\newtheorem{myexample}{Example}[section]
+\theoremstyle{definition}
+\newtheorem{mydefinition}[proposition]{Definition}
+
+
+\newcommand\xqed[1]{%
+  \leavevmode\unskip\penalty9999 \hbox{}\nobreak\hfill
+  \quad\hbox{#1}}
+\newcommand\demo{\xqed{$\triangle$}}
+
+%%%%% }}}}
+
+
+%% Needed for underbraces under matrix
+\newlength{\bracewidth}
+\newcommand{\myunderbrace}[2]{\settowidth{\bracewidth}{$#1$}#1\hspace*{-1\bracewidth}\smash{\underbrace{\makebox{\phantom{$#1$}}}_{#2}}}
+
+
+%% Another method for braces under a matrix. This comes from
+% https://tex.stackexchange.com/a/102468/41208
+\newcommand\undermat[2]{%
+  \makebox[0pt][l]{$\smash{\underbrace{\phantom{%
+    \begin{matrix}#2\end{matrix}}}_{\text{$#1$}}}$}#2}
+
+
+
+%%%% <<<<
+%%%%%%%%%%%%%
+%%Custom commands for quickly entering pictures
+
+%Fast Picture
+%Arguments {File}{ShortCaption}{LongCaption}{Label}
+\newcommand{\fastpic}[4]{
+\begin{figure}[H]
+\centering
+\includegraphics[width=3in]{#1}
+\caption[#2]
+{#3}
+\label{#4}
+\end{figure}
+}
+
+%A bigger picture
+\newcommand{\bfastpic}[4]{
+\begin{figure}[H]
+\centering
+\includegraphics[width=5in]{#1}
+\caption[#2]
+{#3}
+\label{#4}
+\end{figure}
+}
+
+%fast side-by-side picture
+% Arguments--
+% #1: filename
+% #2: subcaption
+% #3: subtag
+% #4: filename
+% #5: subcaption
+% #6: subtag
+% #7: supercaption
+% #8: supertag
+\newcommand{\fastpicTwo}[8]{
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+\includegraphics[width=\textwidth]{#1}
+\caption{#2}
+\label{#3}
+\end{subfigure}
+    ~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. 
+      %(or a blank line to force the subfigure onto a new line)
+      \begin{subfigure}[b]{0.45\textwidth}
+      \includegraphics[width=\textwidth]{#4}
+      \caption{#5}
+      \label{#6}
+      \end{subfigure}
+      \caption{#7}\label{#8}
+      \end{figure}
+
+      }
+
+
+
+
+
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
