@@ -1,20 +1,15 @@
-\newcommand*{\MyHeaderPath}{..}% This path definition is also passed to inside the header files.
-\newcommand*{\PathToAssets}{../../assets}%
-\newcommand*{\PathToOutput}{../../output/}%
-% \newcommand*{\PathToBibFile}{../../bibliography.bib}%
+\newcommand*{\MyHeaderPath}{.}% This path definition is also passed to inside the header files.
+\newcommand*{\PathToAssets}{../assets}%
+\newcommand*{\PathToOutput}{../output/}%
+% \newcommand*{\PathToBibFile}{bibliography.bib}%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% This file is compiled with XeLaTex.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\input{\MyHeaderPath/article_header.tex}
-\input{\MyHeaderPath/lean_header.tex}
-
-\usepackage{setspace}
-\doublespacing
-\newcommand{\cpi}{\text{cpi}}
-
+\input{\MyHeaderPath/_article_header.tex}
+\input{\MyHeaderPath/_lean_header.tex}
 
 
 \begin{document}
@@ -185,7 +180,7 @@ ac turpis egestas maecenas pharetra. Augue eget arcu dictum varius duis at
 consectetur lorem.
 
 \newpage
-\bibliography{../bibliography.bib}  % list here all the bibliographies that you need. 
+\bibliography{bibliography.bib}  % list here all the bibliographies that you need. 
 % \bibliography{\PathToBibFile}
 % \printbibliography
 

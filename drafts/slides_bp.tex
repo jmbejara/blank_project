@@ -1,11 +1,11 @@
-\newcommand*{\MyHeaderPath}{..}% This path definition is also passed to inside the header files.
-\newcommand*{\PathToAssets}{../../assets}%
-\newcommand*{\PathToOutput}{../../output}%
+\newcommand*{\MyHeaderPath}{.}% This path definition is also passed to inside the header files.
+\newcommand*{\PathToAssets}{../assets}%
+\newcommand*{\PathToOutput}{../output}%
 % \newcommand*{\PathToBibFile}{../../../bibliography.bib}%
 
 
-\input{\MyHeaderPath/beamer_header.tex}
-\input{\MyHeaderPath/lean_header.tex}
+\input{\MyHeaderPath/_beamer_header.tex}
+\input{\MyHeaderPath/_lean_header.tex}
 
 \title[Short Title]{
 Long Title
@@ -120,7 +120,7 @@ Long Title
 
 \begin{frame}
 \vspace{15pt}
-  \bibliography{../bibliography.bib}
+  \bibliography{bibliography.bib}
 \end{frame}
 
 
