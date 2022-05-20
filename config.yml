@@ -1,3 +1,9 @@
-data_dir: "C:/Dropbox/data/"
-output_dir: "C:/Users/Jeremy/GitRepositories/blank_project/output/"
-private_data_dir: "D:/data/that/cant/be/shared/"
+# Primary paths
+data_dir: "D:/Dropbox/mdata_data/dividend_dynamics_data"
+private_data_dir:  # left blank because not used
+output_dir: "C:/Users/Jeremy/GitRepositories/dividend_dynamics/output"
+
+# Alternate paths
+data_dir_alt: None
+output_dir_alt: None
+private_data_dir_alt: None
