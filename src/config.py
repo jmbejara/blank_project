@@ -28,17 +28,26 @@ from pathlib import Path
 with open("../config.yml") as f:
     config = yaml.safe_load(f)
 
+def _read_config_entry(upper_key, lower_key):
+    entry = config[upper_key][lower_key]
+    if entry is None:
+        p = None
+    else:
+        p = Path(entry)
+    return p
+
 def switch_to(pathset_name='default'):
     global data_dir
     global private_data_dir
     global output_dir
 
-    data_dir = Path(config[pathset_name]["data_dir"])
-    private_data_dir = Path(config[pathset_name]["private_data_dir"])
-    output_dir = Path(config[pathset_name]["output_dir"])
+    data_dir = _read_config_entry(pathset_name, "data_dir")
+    private_data_dir = _read_config_entry(pathset_name, "private_data_dir")
+    output_dir = _read_config_entry(pathset_name, "output_dir")
 
-def main():
-    switch_to(pathset_name='default')
+switch_to(pathset_name='default')
 
 if __name__ == "__main__":
-    main()
+    pass
+    
+
