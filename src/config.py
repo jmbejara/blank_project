@@ -11,44 +11,34 @@ path
 ## The config YAML should look something like this:
 # config.yml
 
-# Primary paths
-data_dir: "C:/..."
-private_data_dir:  # Left blank because not used
-output_dir: "C:/..."
+default:
+    data_dir: "C:/My Documents/data/misc_project"
+    private_data_dir: "D:/My Documents/private_data/misc_project"
+    output_dir: "C:/Users/jdoe/GitRepositories/misc_project/output"
 
-# Alternate paths
-data_dir_alt:
-output_dir_alt:
-private_data_dir_alt:
+AWS:
+    data_dir: "/data/awshomes/jdoe/data/misc_project"
+    private_data_dir: "/data/awshomes/jdoe/private_data/misc_project"
+    output_dir: "/data/awshomes/jdoe/GitRepositories/INT_misc_project/output"
 
 """
 import yaml
 from pathlib import Path
+
 with open("../config.yml") as f:
     config = yaml.safe_load(f)
 
-def _read_config_entry(key):
-    entry = config[key]
-    if entry is None:
-        p = None
-    else:
-        p = Path(entry)
-    return p
-
-data_dir = _read_config_entry("data_dir")
-output_dir = _read_config_entry("output_dir")
-private_data_dir = _read_config_entry("private_data_dir")
-
-def switch_to_alt():
-    """Right now the default paths are on my local computer. The alternate
-    paths are for when I'm doing some remote work on another server.
-    This function allows you to interactively switch to the alternate.
-    These are left blank for now.
-    """
+def switch_to(pathset_name='default'):
     global data_dir
-    global output_dir
     global private_data_dir
+    global output_dir
 
-    data_dir = _read_config_entry("data_dir_alt")
-    output_dir = _read_config_entry("output_dir_alt")
-    private_data_dir = _read_config_entry("private_data_dir_alt")
+    data_dir = Path(config[pathset_name]["data_dir"])
+    private_data_dir = Path(config[pathset_name]["private_data_dir"])
+    output_dir = Path(config[pathset_name]["output_dir"])
+
+def main():
+    switch_to(pathset_name='default')
+
+if __name__ == "__main__":
+    main()
