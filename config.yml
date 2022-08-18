@@ -1,5 +1,5 @@
 # Default paths on private servers
-server:
+default:
   data_dir: "/data/unixhome/jdoe/data/misc_project"
   private_data_dir: "/data/unixhome/jdoe/private_data/misc_project"
   output_dir: "/data/unixhome/jdoe/GitRepositories/INT_misc_project/output"
