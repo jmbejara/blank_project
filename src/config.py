@@ -15,6 +15,7 @@ default:
     data_dir: "C:/My Documents/data/misc_project"
     private_data_dir: "D:/My Documents/private_data/misc_project"
     output_dir: "C:/Users/jdoe/GitRepositories/misc_project/output"
+    wrds_username: "jdoe"
 
 AWS:
     data_dir: "/data/awshomes/jdoe/data/misc_project"
@@ -40,10 +41,17 @@ def switch_to(pathset_name='default'):
     global data_dir
     global private_data_dir
     global output_dir
+    global pathset
 
     data_dir = _read_config_entry(pathset_name, "data_dir")
     private_data_dir = _read_config_entry(pathset_name, "private_data_dir")
     output_dir = _read_config_entry(pathset_name, "output_dir")
+    pathset = pathset_name
+
+def read(key):
+    upper_key = pathset
+    value = config[upper_key][key]
+    return value
 
 switch_to(pathset_name='default')
 
