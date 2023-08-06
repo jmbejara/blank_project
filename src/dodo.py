@@ -10,14 +10,14 @@ data_dir = config.data_dir
 private_data_dir = config.private_data_dir
 
 ## Helper functions for automatic execution of Jupyter notebooks
-def jupyter_run_string(notebook):
+def jupyter_execute_notebook(notebook):
     return f"jupyter nbconvert --execute --to notebook --ClearMetadataPreprocessor.enabled=True --inplace {notebook}.ipynb"
-def to_html_string(notebook):
+def jupyter_to_html(notebook):
     return f"jupyter nbconvert --to html --output-dir='../output' {notebook}.ipynb"
-def to_md_string(notebook):
+def jupyter_to_md(notebook):
     return f"jupytext --to markdown {notebook}.ipynb"
-def jupyter_string_output(notebook):
-    return f"jupyter nbconvert --ClearOutputPreprocessor.enabled=True --inplace {notebook}.ipynb"
+def jupyter_clear_output(notebook):
+    return f"jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --inplace {notebook}.ipynb"
 
 
 
@@ -102,10 +102,10 @@ def task_convert_notebooks_to_markdown():
     targets = [f'{stem}.md' for stem in stems]
 
     actions = [
-        # *[jupyter_run_string(notebook) for notebook in notebooks_to_run],
-        # *[to_html_string(notebook) for notebook in notebooks_to_run],
-        *[jupyter_string_output(notebook) for notebook in stems],
-        *[to_md_string(notebook) for notebook in stems],
+        # *[jupyter_execute_notebook(notebook) for notebook in notebooks_to_run],
+        # *[jupyter_to_html(notebook) for notebook in notebooks_to_run],
+        *[jupyter_clear_output(notebook) for notebook in stems],
+        *[jupyter_to_md(notebook) for notebook in stems],
         ]
     return {
         "actions": actions,
@@ -139,10 +139,10 @@ def task_convert_notebooks_to_markdown():
 #         ]
 
 #     actions = [
-#         *[jupyter_run_string(notebook) for notebook in stems],
-#         *[to_html_string(notebook) for notebook in stems],
-#         *[jupyter_string_output(notebook) for notebook in stems],
-#         # *[to_md_string(notebook) for notebook in notebooks_to_run],
+#         *[jupyter_execute_notebook(notebook) for notebook in stems],
+#         *[jupyter_to_html(notebook) for notebook in stems],
+#         *[jupyter_clear_output(notebook) for notebook in stems],
+#         # *[jupyter_to_md(notebook) for notebook in notebooks_to_run],
 #         ]
 #     return {
 #         "actions": actions,
