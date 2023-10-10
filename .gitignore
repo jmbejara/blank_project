@@ -238,3 +238,5 @@ src/data/temp\.csv
 *.dir
 
 drafts/draft_bp.pdf
+
+.env

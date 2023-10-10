@@ -1,13 +1,15 @@
 """Run or update the project. This file uses the `doit` Python package. It works
 like a Makefile, but is Python-based
 """
-import config
+from dotenv import load_dotenv
+load_dotenv("../.env")
+
 from pathlib import Path
 from doit.tools import run_once
 
-output_dir = config.output_dir
-data_dir = config.data_dir
-private_data_dir = config.private_data_dir
+OUTPUT_DIR = os.getenv('OUTPUT_DIR')
+DATA_DIR = os.getenv('DATA_DIR')
+PRIVATE_DATA_DIR = os.getenv('PRIVATE_DATA_DIR')
 
 ## Helper functions for automatic execution of Jupyter notebooks
 def jupyter_execute_notebook(notebook):
@@ -35,7 +37,7 @@ def jupyter_clear_output(notebook):
 #     file_dep = list(sql_pulls_dict.keys())
 #     file_output = list(sql_pulls_dict.values())
     
-#     targets = [config.private_data_dir / 'sql_pulled' / file for file in file_output]
+#     targets = [PRIVATE_DATA_DIR / 'sql_pulled' / file for file in file_output]
 
 #     def action_string(sql_file, csv_output):
 #         s = f"""
@@ -47,7 +49,7 @@ def jupyter_clear_output(notebook):
 #         return s
 #     actions = [
 #                 action_string(sql_file, 
-#                               (config.private_data_dir / 'sql_pulled' / sql_pulls_dict[sql_file])
+#                               (PRIVATE_DATA_DIR / 'sql_pulled' / sql_pulls_dict[sql_file])
 #                               ) for sql_file in sql_pulls_dict
 #             ]
 #     return {
@@ -60,9 +62,9 @@ def jupyter_clear_output(notebook):
 def task_summary_stats():
     """
     """
-    file_dep = ['example_table.py', 'config.py']
+    file_dep = ['example_table.py']
     file_output = ['example_table.tex']
-    targets = [output_dir / file for file in file_output]
+    targets = [OUTPUT_DIR / file for file in file_output]
 
     return {
         'actions': [
@@ -75,9 +77,9 @@ def task_summary_stats():
 def task_example_plot():
     """Example plots
     """
-    file_dep = ['example_plot.py', 'config.py']
+    file_dep = ['example_plot.py']
     file_output = ['example_plot.png']
-    targets = [output_dir / file for file in file_output]
+    targets = [OUTPUT_DIR / file for file in file_output]
 
     return {
         'actions': [
@@ -125,7 +127,6 @@ def task_convert_notebooks_to_markdown():
 #     stems = [notebook.split('.')[0] for notebook in notebooks_to_run_as_md]
 
 #     file_dep = [
-#         'config.py',
 #         'load_performance_data.py',
 #         *[f'{stem}.md' for stem in stems],
 #         ]
@@ -133,9 +134,9 @@ def task_convert_notebooks_to_markdown():
     
 #     targets = [
 #         ## analyze_performance.ipynb output
-#         config.output_dir / 'performance.png',
+#         OUTPUT_DIR / 'performance.png',
 #         ## Notebooks converted to HTML
-#         *[config.output_dir / f'{stem}.html' for stem in stems],
+#         *[OUTPUT_DIR / f'{stem}.html' for stem in stems],
 #         ]
 
 #     actions = [
@@ -164,15 +165,14 @@ def task_convert_notebooks_to_markdown():
     
 #     file_dep = [
 #         'load_performance_and_loan_merged.py',
-#         'config.py',
 #         *[file + ".Rmd" for file in files_to_knit_stems],
 #         ]
 
 #     file_output = [file + '.html' for file in files_to_knit_stems]
-#     targets = [config.output_dir / file for file in file_output]
+#     targets = [OUTPUT_DIR / file for file in file_output]
 
 #     def knit_string(file):
-#         return f"""Rscript -e 'library(rmarkdown); rmarkdown::render("{file}.Rmd", output_format="html_document", output_dir="../output/")'"""
+#         return f"""Rscript -e 'library(rmarkdown); rmarkdown::render("{file}.Rmd", output_format="html_document", OUTPUT_DIR="../output/")'"""
 #     actions = [knit_string(file) for file in files_to_knit_stems]
 #     return {
 #         "actions": [
