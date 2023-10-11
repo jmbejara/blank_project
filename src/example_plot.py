@@ -1,7 +1,9 @@
+from pathlib import Path
+import os
 from dotenv import load_dotenv
 load_dotenv("../.env")
 
-OUTPUT_DIR = os.getenv('OUTPUT_DIR')
+OUTPUT_DIR = Path(os.getenv('OUTPUT_DIR'))
 
 import numpy as np
 from matplotlib import pyplot as plt
