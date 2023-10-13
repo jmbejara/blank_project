@@ -7,6 +7,7 @@
 \input{\MyHeaderPath/_beamer_header.tex}
 \input{\MyHeaderPath/_lean_header.tex}
 
+
 \title[Short Title]{
 Long Title
 }
@@ -64,6 +65,7 @@ Long Title
 
 \section{Stylized Facts}
 
+
 \begin{frame}
   \frametitle{The Term Structure of Equity}
   \begin{itemize}
@@ -100,6 +102,7 @@ Long Title
 
 \end{frame}
 
+
 \appendix
 \begin{frame}
   \centering
@@ -112,16 +115,17 @@ Long Title
 \alert{Proposition 7 (cont.)}
 \begin{itemize}
 \item This and that
-\item \citet{Alvarez2005}
+% \item \citet{fama1992cross}
 \end{itemize}
 \end{frame}
 
 
-
-\begin{frame}
-\vspace{15pt}
-  \bibliography{bibliography.bib}
-\end{frame}
+%% Bibliographies are finicky in beamer. This was working at one point, but now it isn't.
+% Instead, I enter references inline manually (e.g., Fama 19XX), and refer to the paper for the full citation.
+% \begin{frame}
+% \vspace{15pt}
+%   \bibliography{bibliography.bib}
+% \end{frame}
 
 
 \end{document}
