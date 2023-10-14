@@ -182,3 +182,32 @@ def task_run_notebooks():
 #         "file_dep": file_dep,
 #     }
 
+
+def task_compile_latex_docs():
+    """Example plots
+    """
+    file_dep = [
+        "../reports/report_example.tex",
+        "../reports/slides_example.tex",
+        "example_plot.py",
+        "example_table.py",
+        ]
+    file_output = [
+        "../reports/report_example.pdf",
+        "../reports/slides_example.pdf",
+        ]
+    targets = [file for file in file_output]
+
+    return {
+        'actions': [
+            "latexmk -xelatex -cd ../reports/report_example.tex",
+            "latexmk -xelatex -c -cd ../reports/report_example.tex",
+            "latexmk -xelatex -cd ../reports/slides_example.tex",
+            "latexmk -xelatex -c -cd ../reports/slides_example.tex",
+            # "latexmk -CA -cd ../reports/",
+        ],
+        'targets': targets,
+        'file_dep': file_dep
+    }
+
+
