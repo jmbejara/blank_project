@@ -3,7 +3,7 @@ like a Makefile, but is Python-based
 """
 import os
 from dotenv import load_dotenv
-load_dotenv("../relative.env")
+load_dotenv("../example_relative.env")
 
 from pathlib import Path
 from doit.tools import run_once
