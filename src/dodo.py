@@ -3,14 +3,13 @@ like a Makefile, but is Python-based
 """
 import os
 from dotenv import load_dotenv
-load_dotenv("../.env")
+load_dotenv("../relative.env")
 
 from pathlib import Path
 from doit.tools import run_once
 
 OUTPUT_DIR = Path(os.getenv('OUTPUT_DIR'))
 DATA_DIR = Path(os.getenv('DATA_DIR'))
-PRIVATE_DATA_DIR = Path(os.getenv('PRIVATE_DATA_DIR'))
 
 ## Helper functions for automatic execution of Jupyter notebooks
 def jupyter_execute_notebook(notebook):
@@ -91,14 +90,13 @@ def task_example_plot():
     }
 
 
-
 def task_convert_notebooks_to_markdown():
     """Preps the notebooks for presentation format.
     Execute notebooks with summary stats and plots and remove metadata.
     """
     
     notebooks = [
-        'analyze_performance.ipynb',
+        '01_example_notebook.ipynb',
         ]
     file_dep = notebooks
     stems = [notebook.split('.')[0] for notebook in notebooks]
@@ -118,40 +116,39 @@ def task_convert_notebooks_to_markdown():
     }
 
 
-# def task_run_notebooks():
-#     """Preps the notebooks for presentation format.
-#     Execute notebooks with summary stats and plots and remove metadata.
-#     """
-#     notebooks_to_run_as_md = [
-#         'analyze_performance.ipynb',
-#         ]
-#     stems = [notebook.split('.')[0] for notebook in notebooks_to_run_as_md]
+def task_run_notebooks():
+    """Preps the notebooks for presentation format.
+    Execute notebooks with summary stats and plots and remove metadata.
+    """
+    notebooks_to_run_as_md = [
+        '01_example_notebook.ipynb',
+        ]
+    stems = [notebook.split('.')[0] for notebook in notebooks_to_run_as_md]
 
-#     file_dep = [
-#         'load_performance_data.py',
-#         *[f'{stem}.md' for stem in stems],
-#         ]
+    file_dep = [
+        # 'load_other_data.py',
+        *[f'{stem}.md' for stem in stems],
+        ]
 
-    
-#     targets = [
-#         ## analyze_performance.ipynb output
-#         OUTPUT_DIR / 'performance.png',
-#         ## Notebooks converted to HTML
-#         *[OUTPUT_DIR / f'{stem}.html' for stem in stems],
-#         ]
+    targets = [
+        ## 01_example_notebook.ipynb output
+        OUTPUT_DIR / 'sine_graph.png',
+        ## Notebooks converted to HTML
+        *[OUTPUT_DIR / f'{stem}.html' for stem in stems],
+        ]
 
-#     actions = [
-#         *[jupyter_execute_notebook(notebook) for notebook in stems],
-#         *[jupyter_to_html(notebook) for notebook in stems],
-#         *[jupyter_clear_output(notebook) for notebook in stems],
-#         # *[jupyter_to_md(notebook) for notebook in notebooks_to_run],
-#         ]
-#     return {
-#         "actions": actions,
-#         "targets": targets,
-#         'task_dep':[],
-#         "file_dep": file_dep,
-#     }
+    actions = [
+        *[jupyter_execute_notebook(notebook) for notebook in stems],
+        *[jupyter_to_html(notebook) for notebook in stems],
+        *[jupyter_clear_output(notebook) for notebook in stems],
+        # *[jupyter_to_md(notebook) for notebook in notebooks_to_run],
+        ]
+    return {
+        "actions": actions,
+        "targets": targets,
+        'task_dep':[],
+        "file_dep": file_dep,
+    }
 
 
 # def task_knit_RMarkdown_files():
