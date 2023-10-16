@@ -1,15 +1,12 @@
 """Run or update the project. This file uses the `doit` Python package. It works
 like a Makefile, but is Python-based
 """
-import os
-from dotenv import load_dotenv
-load_dotenv("../example_relative.env")
-
+import config
 from pathlib import Path
 from doit.tools import run_once
 
-OUTPUT_DIR = Path(os.getenv('OUTPUT_DIR'))
-DATA_DIR = Path(os.getenv('DATA_DIR'))
+OUTPUT_DIR = Path(config.output_dir)
+DATA_DIR = Path(config.data_dir)
 
 ## Helper functions for automatic execution of Jupyter notebooks
 def jupyter_execute_notebook(notebook):
