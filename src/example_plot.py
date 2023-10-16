@@ -1,17 +1,19 @@
+import load_fred
+import config
 from pathlib import Path
-import os
-from dotenv import load_dotenv
-load_dotenv("../.env")
-
-OUTPUT_DIR = Path(os.getenv('OUTPUT_DIR'))
+DATA_DIR = Path(config.data_dir)
+OUTPUT_DIR = Path(config.output_dir)
 
 import numpy as np
 from matplotlib import pyplot as plt
 import seaborn as sns
 
 sns.set()
-a = np.array([1,2,3])
-plt.plot(a)
 
+df = load_fred.load_fred(data_dir=DATA_DIR)
+
+(100 * df.pct_change(12)).plot()
+plt.title("Inflation, Seasonally Adjusted")
+plt.ylabel('Percent change from 12-months prior')
 filename = OUTPUT_DIR / 'example_plot.png'
 plt.savefig(filename);

@@ -7,12 +7,10 @@ to help convert Pandas to LaTeX tables.
 import pandas as pd
 import numpy as np
 
+import config
 from pathlib import Path
-import os
-from dotenv import load_dotenv
-load_dotenv("../.env")
-OUTPUT_DIR = Path(os.getenv('OUTPUT_DIR'))
-
+DATA_DIR = Path(config.data_dir)
+OUTPUT_DIR = Path(config.output_dir)
 
 df = pd.DataFrame({'categorical': pd.Categorical(['d','e','f']),
                    'xvar': [1, 2, 3],

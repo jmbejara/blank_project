@@ -18,12 +18,9 @@ This notebook is designed demonstrate a number of goals:
   - Since we want to use Jupyter Notebooks for exploratory reports, we want to keep fully-computed versions of the notebook (with the output intact). However, earlier I said that I strip the notebook of its output before committing to version control. Well, to keep the output, every time PyDoit runs the notebook, it outputs an HTML version of the freshly run notebook and saves that HTML report in the `output` directory. That way, you will be able to view the finished report at any time without having to open Jupyter.
 
 ```python
+import config
 from pathlib import Path
-import os
-from dotenv import load_dotenv
-load_dotenv("../relative.env")
-
-OUTPUT_DIR = os.getenv('OUTPUT_DIR')
+OUTPUT_DIR = Path(config.output_dir)
 ```
 
 ```python

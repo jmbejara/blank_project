@@ -20,6 +20,23 @@ def jupyter_clear_output(notebook):
 
 
 
+def task_pull_fred():
+    """
+    """
+    file_dep = ['load_fred.py']
+    file_output = [DATA_DIR / 'pulled' / 'fred_cpi.csv']
+    targets = [OUTPUT_DIR / file for file in file_output]
+
+    return {
+        'actions': [
+            "ipython ./load_fred.py",
+        ],
+        'targets': targets,
+        'file_dep': file_dep
+    }
+
+
+
 # def task_pull_data_via_presto():
 #     """
 #     Run several data pulls
@@ -74,7 +91,7 @@ def task_summary_stats():
 def task_example_plot():
     """Example plots
     """
-    file_dep = ['example_plot.py']
+    file_dep = ['example_plot.py', 'load_fred.py']
     file_output = ['example_plot.png']
     targets = [OUTPUT_DIR / file for file in file_output]
 
