@@ -14,7 +14,11 @@ def jupyter_execute_notebook(notebook):
 def jupyter_to_html(notebook):
     return f"jupyter nbconvert --to html --output-dir='../output' {notebook}.ipynb"
 def jupyter_to_md(notebook):
+    """Requires jupytext"""
     return f"jupytext --to markdown {notebook}.ipynb"
+def jupyter_to_python(notebook):
+    """Requires jupytext"""
+    return f"jupyter nbconvert --to python {notebook}.ipynb"
 def jupyter_clear_output(notebook):
     return f"jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --inplace {notebook}.ipynb"
 
@@ -104,7 +108,7 @@ def task_example_plot():
     }
 
 
-def task_convert_notebooks_to_markdown():
+def task_convert_notebooks_to_scripts():
     """Preps the notebooks for presentation format.
     Execute notebooks with summary stats and plots and remove metadata.
     """
@@ -114,13 +118,13 @@ def task_convert_notebooks_to_markdown():
         ]
     file_dep = notebooks
     stems = [notebook.split('.')[0] for notebook in notebooks]
-    targets = [f'{stem}.md' for stem in stems]
+    targets = [f'{stem}.py' for stem in stems]
 
     actions = [
         # *[jupyter_execute_notebook(notebook) for notebook in notebooks_to_run],
         # *[jupyter_to_html(notebook) for notebook in notebooks_to_run],
         *[jupyter_clear_output(notebook) for notebook in stems],
-        *[jupyter_to_md(notebook) for notebook in stems],
+        *[jupyter_to_python(notebook) for notebook in stems],
         ]
     return {
         "actions": actions,
@@ -141,7 +145,7 @@ def task_run_notebooks():
 
     file_dep = [
         # 'load_other_data.py',
-        *[f'{stem}.md' for stem in stems],
+        *[f'{stem}.py' for stem in stems],
         ]
 
     targets = [
@@ -155,7 +159,7 @@ def task_run_notebooks():
         *[jupyter_execute_notebook(notebook) for notebook in stems],
         *[jupyter_to_html(notebook) for notebook in stems],
         *[jupyter_clear_output(notebook) for notebook in stems],
-        # *[jupyter_to_md(notebook) for notebook in notebooks_to_run],
+        # *[jupyter_to_python(notebook) for notebook in notebooks_to_run],
         ]
     return {
         "actions": actions,
