@@ -39,8 +39,11 @@ escape_coverter = {
 
 df = df[columns_for_summary_stats]
 
-# Suppress scientific notation and limit to 3 decimal places
+## Suppress scientific notation and limit to 3 decimal places
+# Sets display, but doesn't affect formatting to LaTeX
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
+# Sets format for printing to LaTeX
+float_format_func = lambda x: '{:.3f}'.format(x)
 
 # Pooled summary stats
 describe = (
@@ -50,10 +53,10 @@ describe = (
 )
 describe['count'] = describe['count'].astype(int)
 describe.columns.name = 'Subsample A'
-latex_table_string = describe.to_latex(escape=False)
+latex_table_string = describe.to_latex(escape=False, float_format=float_format_func)
 
 describe.columns.name = 'Subsample B'
-latex_table_string2 = describe.to_latex(escape=False)
+latex_table_string2 = describe.to_latex(escape=False, float_format=float_format_func)
 
 latex_table_string_split = [
     *latex_table_string.split('\n')[0:-3],

@@ -192,7 +192,7 @@ def task_run_notebooks():
 #     actions = [knit_string(file) for file in files_to_knit_stems]
 #     return {
 #         "actions": [
-#                     "module use -a /opt/aws_ofropt/Modulefiles",
+#                     "module use -a /opt/aws_opt/Modulefiles",
 #                     "module load R/4.2.2",
 #                     *actions],
 #         "targets": targets,
@@ -218,10 +218,10 @@ def task_compile_latex_docs():
 
     return {
         'actions': [
-            "latexmk -xelatex -cd ../reports/report_example.tex",
-            "latexmk -xelatex -c -cd ../reports/report_example.tex",
-            "latexmk -xelatex -cd ../reports/slides_example.tex",
-            "latexmk -xelatex -c -cd ../reports/slides_example.tex",
+            "latexmk -xelatex -cd ../reports/report_example.tex", # Compile
+            "latexmk -xelatex -c -cd ../reports/report_example.tex", # Clean
+            "latexmk -xelatex -cd ../reports/slides_example.tex", # Compile
+            "latexmk -xelatex -c -cd ../reports/slides_example.tex", # Clean
             # "latexmk -CA -cd ../reports/",
         ],
         'targets': targets,
