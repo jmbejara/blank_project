@@ -6,13 +6,13 @@ from pathlib import Path
 DATA_DIR = Path(config.data_dir)
 
 
-def pull_and_save_fred_data(start="2000-01-01", end="2023-10-01", data_dir=DATA_DIR):
+def pull_and_save_fred_data(start="1913-01-01", end="2023-10-01", data_dir=DATA_DIR):
     # Load CPI data from FRED, seasonally adjusted
-    cpi_data = pandas_datareader.get_data_fred("CPIAUCNS", start=start, end=end)
+    df = pandas_datareader.get_data_fred(["CPIAUCNS", "GDP", "GDPC1"], start=start, end=end)
     file_dir = Path(data_dir) / "pulled"
     file_dir.mkdir(parents=True, exist_ok=True)
-    cpi_data.to_csv(file_dir / "fred_cpi.csv")
-    # cpi_data.to_parquet(file_dir / 'fred_cpi.parquet')
+    df.to_csv(file_dir / "fred_cpi.csv")
+    # df.to_parquet(file_dir / 'fred_cpi.parquet')
 
 
 def load_fred(data_dir=DATA_DIR):
@@ -28,4 +28,4 @@ def load_fred(data_dir=DATA_DIR):
 
 
 if __name__ == "__main__":
-    pull_and_save_fred_data(start="2000-01-01", end="2023-10-01", data_dir=DATA_DIR)
+    pull_and_save_fred_data(start="1913-01-01", end="2023-10-01", data_dir=DATA_DIR)

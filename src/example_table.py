@@ -12,23 +12,31 @@ from pathlib import Path
 DATA_DIR = Path(config.data_dir)
 OUTPUT_DIR = Path(config.output_dir)
 
-df = pd.DataFrame({'categorical': pd.Categorical(['d','e','f']),
-                   'xvar': [1, 2, 3],
-                   'yvar': np.sin([1, 2, 3]),
-                   'zvar': np.cos([1,2,3]),
-                   'object': ['a', 'b', 'c']
-                  })
-df.describe()
+import load_fred
+
+df_level = load_fred.load_fred(data_dir=DATA_DIR).dropna()
+
+df_quarterly = 100 * df_level.pct_change()
+# df_quarterly.plot()
+
+# Select only the values that occur in July
+_df = df_level[df_level.index.month == 7]
+df_annual = 100 * _df.pct_change()
+# df_annual.plot()
+
+df_quarterly.describe()
+df_annual.describe()
+
 
 columns_for_summary_stats = [
-    'xvar',
-    'yvar',
+    'CPIAUCNS',
+    'GDPC1',
     ]
 
 # This maps the column names to their LaTeX descriptions
 column_names_map = {
-    'xvar':'Longitude',
-    'yvar':'Lattitude',
+    'CPIAUCNS':'Inflation',
+    'GDPC1':'Real GDP',
 }
 
 escape_coverter = {
@@ -37,26 +45,31 @@ escape_coverter = {
     '75%':'75\\%'
 }
 
-df = df[columns_for_summary_stats]
+df_annual = df_annual[columns_for_summary_stats]
 
 ## Suppress scientific notation and limit to 3 decimal places
 # Sets display, but doesn't affect formatting to LaTeX
-pd.set_option('display.float_format', lambda x: '%.3f' % x)
+pd.set_option('display.float_format', lambda x: '%.2f' % x)
 # Sets format for printing to LaTeX
-float_format_func = lambda x: '{:.3f}'.format(x)
+float_format_func = lambda x: '{:.2f}'.format(x)
 
 # Pooled summary stats
 describe = (
-    df[columns_for_summary_stats].
+    df_annual[columns_for_summary_stats].
     describe().T.
     rename(index=column_names_map, columns=escape_coverter)
 )
 describe['count'] = describe['count'].astype(int)
-describe.columns.name = 'Subsample A'
+describe.columns.name = 'Full Sample: 1947 - 2023'
 latex_table_string = describe.to_latex(escape=False, float_format=float_format_func)
 
-describe.columns.name = 'Subsample B'
-latex_table_string2 = describe.to_latex(escape=False, float_format=float_format_func)
+describe2 = (
+    df_annual.loc["1990":,columns_for_summary_stats].
+    describe().T.
+    rename(index=column_names_map, columns=escape_coverter)
+)
+describe2.columns.name = 'Subsample: 1990-2023'
+latex_table_string2 = describe2.to_latex(escape=False, float_format=float_format_func)
 
 latex_table_string_split = [
     *latex_table_string.split('\n')[0:-3],
