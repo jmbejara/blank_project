@@ -54,14 +54,23 @@ pd.set_option('display.float_format', lambda x: '%.2f' % x)
 float_format_func = lambda x: '{:.2f}'.format(x)
 
 # Pooled summary stats
-describe = (
+describe_all = (
     df_annual[columns_for_summary_stats].
     describe().T.
     rename(index=column_names_map, columns=escape_coverter)
 )
-describe['count'] = describe['count'].astype(int)
-describe.columns.name = 'Full Sample: 1947 - 2023'
-latex_table_string = describe.to_latex(escape=False, float_format=float_format_func)
+describe_all['count'] = describe_all['count'].astype(int)
+describe_all.columns.name = 'Full Sample: 1947 - 2023'
+latex_table_string_all = describe_all.to_latex(escape=False, float_format=float_format_func)
+
+describe1 = (
+    df_annual[columns_for_summary_stats].
+    describe().T.
+    rename(index=column_names_map, columns=escape_coverter)
+)
+describe1['count'] = describe1['count'].astype(int)
+describe1.columns.name = 'Subsample: 1947 - 1990'
+latex_table_string1 = describe1.to_latex(escape=False, float_format=float_format_func)
 
 describe2 = (
     df_annual.loc["1990":,columns_for_summary_stats].
@@ -72,9 +81,11 @@ describe2.columns.name = 'Subsample: 1990-2023'
 latex_table_string2 = describe2.to_latex(escape=False, float_format=float_format_func)
 
 latex_table_string_split = [
-    *latex_table_string.split('\n')[0:-3],
+    *latex_table_string_all.split('\n')[0:-3], # Skip the \end{tabular} and \bottomrule lines
     '\\midrule',
-    *latex_table_string2.split('\n')[2:]
+    *latex_table_string1.split('\n')[2:-3], # Skip the \begin and \end lines
+    '\\midrule',
+    *latex_table_string2.split('\n')[2:] # Skip the \begin{tabular} and \toprule lines
 ]
 latex_table_string = '\n'.join(latex_table_string_split)
 # print(latex_table_string)
