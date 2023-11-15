@@ -1,3 +1,9 @@
+###########################################
+# Project Environment Variables and Secrets
+###########################################
+.env*
+
+
 ############
 # NOTES    #
 ############
@@ -238,7 +244,5 @@ src/data/temp\.csv
 *.dir
 
 drafts/draft_bp.pdf
-
-.env
 
 *.vrb
