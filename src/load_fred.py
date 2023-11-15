@@ -18,9 +18,10 @@ def load_fred(
     and dates are ignored
     """
     if from_cache:
-        file_path = Path(data_dir) / "pulled" / "fred_cpi.csv"
-        df = pd.read_csv(file_path, parse_dates=["DATE"])
-        df = df.set_index("DATE")
+        file_path = Path(data_dir) / "pulled" / "fred_other.parquet"
+        # df = pd.read_csv(file_path, parse_dates=["DATE"])
+        df = pd.read_parquet(file_path)
+        # df = df.set_index("DATE")
     else:
         # Load CPI, nominal GDP, and real GDP data from FRED, seasonally adjusted
         df = pandas_datareader.get_data_fred(
@@ -29,14 +30,19 @@ def load_fred(
         if save_cache:
             file_dir = Path(data_dir) / "pulled"
             file_dir.mkdir(parents=True, exist_ok=True)
-            df.to_csv(file_dir / "fred_cpi.csv")
-            # df.to_parquet(file_dir / 'fred_cpi.parquet')
+            # df.to_csv(file_dir / "fred_cpi.csv")
+            df.to_parquet(file_dir / 'fred_other.parquet')
 
     # df.info()
     # df = pd.read_parquet(file_path)
     return df
 
 
+def demo():
+    df = load_fred()
+
+
 if __name__ == "__main__":
     # Pull and save cache of fred data
-    load_fred(start="1913-01-01", end="2023-10-01", data_dir=DATA_DIR, from_cache=False)
+    _ = load_fred(start="1913-01-01", end="2023-10-01", 
+        data_dir=DATA_DIR, from_cache=False, save_cache=True)
