@@ -12,7 +12,8 @@
 # around this.
 
 Exclude data folder
-/data/
+/data/*
+!/data/manual/
 temp*.csv
 
 
