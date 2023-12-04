@@ -5,6 +5,24 @@ Project Title HERE
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
+# Quick Start
+
+To quickest way to run code in this repo is to use the following steps.
+First, open a terminal and navigate to the root directory of the project and create a conda environment using the following command:
+```
+conda env create -f environment.yml
+```
+Now, load the environment with
+```
+conda activate blank
+```
+Now, navigate to the directory called `src`
+and run
+```
+doit
+```
+That should be it!
+
 
 # General Directory Structure
 
