@@ -10,20 +10,17 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 To quickest way to run code in this repo is to use the following steps.
 First, open a terminal and navigate to the root directory of the project and create a conda environment using the following command:
 ```
-conda env create -f environment.yml
-```
-Now, load the environment with
-```
+conda create -n blank python=3.10
 conda activate blank
 ```
-Now, navigate to the directory called `src`
-and run
+and then install the dependencies with pip
+```
+pip install -r requirements.txt
+```
+You can then navigate to the `src` directory and then run 
 ```
 doit
 ```
-That should be it!
-
-
 # General Directory Structure
 
  - The `assets` folder is used for things like hand-drawn figures or other pictures that were not generated from code. These things cannot be easily recreated if they are deleted.
@@ -54,6 +51,11 @@ Of course, the data directory and output directory can be kept elsewhere on the 
 pip install -r requirements.txt
 ```
 
+The requirements file can be created like this:
+```
+pip list --format=freeze
+```
+
 ## Working with `conda` environments
 
 The dependencies used in this environment (along with many other environments commonly used in data science) are stored in the conda environment called `blank` which is saved in the file called `environment.yml`. To create the environment from the file (as a prerequisite to loading the environment), use the following command:
@@ -81,6 +83,25 @@ Also, these dependencies are also saved in `requirements.txt` for those that wou
 ```
 pip freeze > requirements.txt
 ```
+
+### Alternative Quickstart using Conda
+Another way to  run code in this repo is to use the following steps.
+First, open a terminal and navigate to the root directory of the project and create a conda environment using the following command:
+```
+conda env create -f environment.yml
+```
+Now, load the environment with
+```
+conda activate blank
+```
+Now, navigate to the directory called `src`
+and run
+```
+doit
+```
+That should be it!
+
+
 
 **Other helpful `conda` commands**
 

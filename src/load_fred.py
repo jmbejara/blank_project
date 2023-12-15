@@ -18,7 +18,7 @@ def load_fred(
     and dates are ignored
     """
     if from_cache:
-        file_path = Path(data_dir) / "pulled" / "fred_other.parquet"
+        file_path = Path(data_dir) / "pulled" / "fred.parquet"
         # df = pd.read_csv(file_path, parse_dates=["DATE"])
         df = pd.read_parquet(file_path)
         # df = df.set_index("DATE")
@@ -31,7 +31,7 @@ def load_fred(
             file_dir = Path(data_dir) / "pulled"
             file_dir.mkdir(parents=True, exist_ok=True)
             # df.to_csv(file_dir / "fred_cpi.csv")
-            df.to_parquet(file_dir / 'fred_other.parquet')
+            df.to_parquet(file_dir / 'fred.parquet')
 
     # df.info()
     # df = pd.read_parquet(file_path)

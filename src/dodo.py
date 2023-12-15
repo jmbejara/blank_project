@@ -16,9 +16,9 @@ def jupyter_to_html(notebook):
 def jupyter_to_md(notebook):
     """Requires jupytext"""
     return f"jupytext --to markdown {notebook}.ipynb"
-def jupyter_to_python(notebook):
+def jupyter_to_python(notebook, build_dir):
     """Requires jupytext"""
-    return f"jupyter nbconvert --to python {notebook}.ipynb"
+    return f"jupyter nbconvert --to python {notebook}.ipynb --output {notebook}.py --output-dir {build_dir}"
 def jupyter_clear_output(notebook):
     return f"jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --inplace {notebook}.ipynb"
 
@@ -28,7 +28,7 @@ def task_pull_fred():
     """
     """
     file_dep = ['load_fred.py']
-    file_output = [DATA_DIR / 'pulled' / 'fred_cpi.csv']
+    file_output = [DATA_DIR / 'pulled' / 'fred.parquet']
     targets = [OUTPUT_DIR / file for file in file_output]
 
     return {
@@ -112,19 +112,21 @@ def task_convert_notebooks_to_scripts():
     """Preps the notebooks for presentation format.
     Execute notebooks with summary stats and plots and remove metadata.
     """
-    
+    build_dir = Path('./_build')
+    build_dir.mkdir(parents=True, exist_ok=True)
+
     notebooks = [
         '01_example_notebook.ipynb',
         ]
     file_dep = notebooks
     stems = [notebook.split('.')[0] for notebook in notebooks]
-    targets = [f'{stem}.py' for stem in stems]
+    targets = [build_dir / f'{stem}.py' for stem in stems]
 
     actions = [
         # *[jupyter_execute_notebook(notebook) for notebook in notebooks_to_run],
         # *[jupyter_to_html(notebook) for notebook in notebooks_to_run],
         *[jupyter_clear_output(notebook) for notebook in stems],
-        *[jupyter_to_python(notebook) for notebook in stems],
+        *[jupyter_to_python(notebook, build_dir) for notebook in stems],
         ]
     return {
         "actions": actions,
@@ -145,7 +147,7 @@ def task_run_notebooks():
 
     file_dep = [
         # 'load_other_data.py',
-        *[f'{stem}.py' for stem in stems],
+        *[Path('./_build') / f'{stem}.py' for stem in stems],
         ]
 
     targets = [
@@ -159,7 +161,7 @@ def task_run_notebooks():
         *[jupyter_execute_notebook(notebook) for notebook in stems],
         *[jupyter_to_html(notebook) for notebook in stems],
         *[jupyter_clear_output(notebook) for notebook in stems],
-        # *[jupyter_to_python(notebook) for notebook in notebooks_to_run],
+        # *[jupyter_to_python(notebook, build_dir) for notebook in notebooks_to_run],
         ]
     return {
         "actions": actions,
