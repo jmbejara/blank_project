@@ -28,6 +28,7 @@ pandas-market-calendars==4.3.1
 plotly==5.18.0
 plotnine==0.12.4
 polars==0.19.12
+pytest==7.4.3
 python-decouple==3.8
 python-dotenv==1.0.0
 pyxlsb==1.0.10
