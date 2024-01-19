@@ -33,8 +33,8 @@ def jupyter_clear_output(notebook):
 def task_pull_fred():
     """ """
     file_dep = ["./src/load_fred.py"]
-    file_output = [DATA_DIR / "pulled" / "fred.parquet"]
-    targets = [OUTPUT_DIR / file for file in file_output]
+    file_output = ["fred.parquet"]
+    targets = [DATA_DIR / "pulled" / file for file in file_output]
 
     return {
         "actions": [
