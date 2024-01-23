@@ -30,5 +30,6 @@ DATA_DIR=../somedir/ OUTPUT_DIR=../otherdir/ python ./src/demo_environment_varia
 ```
 """
 import config
-print(config.data_dir)
-print(config.output_dir)
+print(config.DATA_DIR)
+print(config.OUTPUT_DIR)
+print(config.WRDS_USERNAME)
