@@ -148,10 +148,10 @@ def task_run_notebooks():
     """Preps the notebooks for presentation format.
     Execute notebooks with summary stats and plots and remove metadata.
     """
-    notebooks_to_run_as_md = [
+    notebooks = [
         "01_example_notebook.ipynb",
     ]
-    stems = [notebook.split(".")[0] for notebook in notebooks_to_run_as_md]
+    stems = [notebook.split(".")[0] for notebook in notebooks]
 
     file_dep = [
         # 'load_other_data.py',
