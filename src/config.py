@@ -26,10 +26,6 @@ DATA_DIR = config('DATA_DIR', default=(BASE_DIR / 'data'), cast=Path)
 OUTPUT_DIR = config('OUTPUT_DIR', default=(BASE_DIR / 'output'), cast=Path)
 WRDS_USERNAME = config("WRDS_USERNAME", default="")
 
-# TEMP: For backwards compatibility
-data_dir = DATA_DIR
-output_dir = OUTPUT_DIR
-
 if __name__ == "__main__":
     
     ## If they don't exist, create the data and output directories

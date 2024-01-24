@@ -3,7 +3,7 @@ import pandas_datareader
 import config
 from pathlib import Path
 
-DATA_DIR = Path(config.data_dir)
+DATA_DIR = Path(config.DATA_DIR)
 
 
 def load_fred(

@@ -4,7 +4,7 @@ import pytest
 import config
 import load_fred
 
-DATA_DIR = config.data_dir
+DATA_DIR = config.DATA_DIR
 
 
 def test_load_fred_functionality():

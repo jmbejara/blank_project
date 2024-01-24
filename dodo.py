@@ -10,8 +10,8 @@ from pathlib import Path
 from doit.tools import run_once
 
 
-OUTPUT_DIR = Path(config.output_dir)
-DATA_DIR = Path(config.data_dir)
+OUTPUT_DIR = Path(config.OUTPUT_DIR)
+DATA_DIR = Path(config.DATA_DIR)
 
 # fmt: off
 ## Helper functions for automatic execution of Jupyter notebooks

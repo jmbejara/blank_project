@@ -17,7 +17,7 @@
 
 import config
 from pathlib import Path
-OUTPUT_DIR = Path(config.output_dir)
+OUTPUT_DIR = Path(config.OUTPUT_DIR)
 
 
 # In[ ]:

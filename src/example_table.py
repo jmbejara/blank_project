@@ -9,8 +9,8 @@ import numpy as np
 
 import config
 from pathlib import Path
-DATA_DIR = Path(config.data_dir)
-OUTPUT_DIR = Path(config.output_dir)
+DATA_DIR = Path(config.DATA_DIR)
+OUTPUT_DIR = Path(config.OUTPUT_DIR)
 
 import load_fred
 
