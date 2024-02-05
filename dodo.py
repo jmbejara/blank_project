@@ -86,12 +86,16 @@ def task_pull_fred():
 def task_summary_stats():
     """ """
     file_dep = ["./src/example_table.py"]
-    file_output = ["example_table.tex"]
+    file_output = [
+        "example_table.tex",
+        "pandas_to_latex_simple_table1.tex",
+        ]
     targets = [OUTPUT_DIR / file for file in file_output]
 
     return {
         "actions": [
             "ipython ./src/example_table.py",
+            "ipython ./src/pandas_to_latex_demo.py",
         ],
         "targets": targets,
         "file_dep": file_dep,

@@ -1,6 +1,6 @@
 """
-At some point, I should probably refactor this into a set of helper functions
-to help convert Pandas to LaTeX tables.
+At some point, I should probably refactor this into a set of 
+helper functions to help convert Pandas to LaTeX tables.
 
 
 """
