@@ -83,10 +83,9 @@ def weighted_average(data_col=None, weight_col=None, data=None):
 
     Example:
     >>> df_nccb = pd.DataFrame({
-        'rate': [2, 3, 2],
-        'start_leg_amount': [100, 200, 100]},
-    )
-    >>> df_nccb
+    ...     'rate': [2, 3, 2],
+    ...     'start_leg_amount': [100, 200, 100]},
+    ... )
     >>> weighted_average(data_col='rate', weight_col='start_leg_amount', data=df_nccb)
     2.5
     """
@@ -104,16 +103,15 @@ def groupby_weighted_average(data_col=None, weight_col=None, by_col=None, data=N
     https://stackoverflow.com/a/44683506
 
     Example:
-    >>> df_nccb = pd.DataFrame({
-        'trade_direction': ['RECEIVED', 'RECEIVED', 'DELIVERED'],
-        'rate': [2, 3, 2],
-        'start_leg_amount': [100, 200, 100]},
-    )
-    >>> df_nccb
+    >>> df_nccb = pd.DataFrame({ 
+    ...     'trade_direction': ['RECEIVED', 'RECEIVED', 'DELIVERED'], 
+    ...     'rate': [2, 3, 2], 
+    ...     'start_leg_amount': [100, 200, 100]}, 
+    ... )
     >>> groupby_weighted_average(data=df_nccb, data_col='rate', weight_col='start_leg_amount', by_col='trade_direction')
     trade_direction
-    DELIVERED    2.000000
-    RECEIVED     2.666667
+    DELIVERED   2.00
+    RECEIVED    2.67
     dtype: float64
     """
     data['_data_times_weight'] = data[data_col] * data[weight_col]
@@ -139,16 +137,15 @@ def groupby_weighted_std(data_col=None, weight_col=None, by_col=None, data=None,
 
     Example:
     >>> df_nccb = pd.DataFrame({
-        'trade_direction': ['RECEIVED', 'RECEIVED', 'RECEIVED', 'RECEIVED', 
-            'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED'],
-        'rate': [2, 2, 2, 3, 2, 2, 2, 3],
-        'start_leg_amount': [300, 300, 300, 0, 200, 200, 200, 200]},
-    )
-    >>> df_nccb
+    ...     'trade_direction': ['RECEIVED', 'RECEIVED', 'RECEIVED', 'RECEIVED', 
+    ...         'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED'],
+    ...     'rate': [2, 2, 2, 3, 2, 2, 2, 3],
+    ...     'start_leg_amount': [300, 300, 300, 0, 200, 200, 200, 200]},
+    ... )
     >>> groupby_weighted_std(data=df_nccb, data_col='rate', weight_col='start_leg_amount', by_col='trade_direction', ddof=1)
     trade_direction
-    DELIVERED    0.5
-    RECEIVED     0.0
+    DELIVERED   0.50
+    RECEIVED    0.00
     dtype: float64
     >>> np.std([2,2,2,3], ddof=1)
     0.5
@@ -156,8 +153,8 @@ def groupby_weighted_std(data_col=None, weight_col=None, by_col=None, data=None,
     0.0
     >>> groupby_weighted_std(data=df_nccb, data_col='rate', weight_col='start_leg_amount', by_col='trade_direction', ddof=0)
     trade_direction
-    DELIVERED    0.433013
-    RECEIVED     0.000000
+    DELIVERED   0.43
+    RECEIVED    0.00
     dtype: float64
     >>> np.std([2,2,2,3])
     0.4330127018922193
@@ -194,8 +191,10 @@ def weighted_quantile(values, quantiles, sample_weight=None,
     FROM: https://stackoverflow.com/a/29677616
 
     NOTE: that a groupby weighted quantile can look like this:
-    >>> median_SD_spread = data.groupby('date').apply(
-    >>>    lambda x: weighted_quantile(x['rate_SD_spread'], 0.5, sample_weight=x['Volume']))
+    ```
+    median_SD_spread = data.groupby('date').apply(
+        lambda x: weighted_quantile(x['rate_SD_spread'], 0.5, sample_weight=x['Volume']))
+    ```
     """
     values = np.array(values)
     quantiles = np.array(quantiles)
@@ -380,44 +379,42 @@ def with_lagged_columns(data=None, columns_to_lag=None, id_columns=None, lags=1,
                          date_col='date', prefix='L'):
     """
     >>> a=[[1,'1990/1/1',1],
-    >>> [1,'1990/2/1',2],
-    >>> [1,'1990/3/1',3],
-    >>> [2,'1989/12/1',3],
-    >>> [2,'1990/1/1',3],
-    >>> [2,'1990/2/1',4],
-    >>> [2,'1990/3/1',5.5],
-    >>> [2,'1990/4/1',5],
-    >>> [2,'1990/6/1',6]]
+    ... [1,'1990/2/1',2],
+    ... [1,'1990/3/1',3],
+    ... [2,'1989/12/1',3],
+    ... [2,'1990/1/1',3],
+    ... [2,'1990/2/1',4],
+    ... [2,'1990/3/1',5.5],
+    ... [2,'1990/4/1',5],
+    ... [2,'1990/6/1',6]]
 
     >>> data=pd.DataFrame(a,columns=['id','date','value'])
     >>> data['date']=pd.to_datetime(data['date'])
 
     >>> data
-
-        id	date	    value
-    0	1	1990-01-01	1.0
-    1	1	1990-02-01	2.0
-    2	1	1990-03-01	3.0
-    3	2	1989-12-01	3.0
-    4	2	1990-01-01	3.0
-    5	2	1990-02-01	4.0
-    6	2	1990-03-01	5.5
-    7	2	1990-04-01	5.0
-    8	2	1990-06-01	6.0
+       id       date  value
+    0   1 1990-01-01   1.00
+    1   1 1990-02-01   2.00
+    2   1 1990-03-01   3.00
+    3   2 1989-12-01   3.00
+    4   2 1990-01-01   3.00
+    5   2 1990-02-01   4.00
+    6   2 1990-03-01   5.50
+    7   2 1990-04-01   5.00
+    8   2 1990-06-01   6.00
 
     >>> data_lag = with_lagged_columns(data=data, columns_to_lag=['value'], id_columns=['id'], lags=1)
     >>> data_lag
-
-        id	date	    value	L1_value
-    0	1	1990-01-01	1.0	    NaN
-    1	1	1990-02-01	2.0	    1.0
-    2	1	1990-03-01	3.0	    2.0
-    3	2	1989-12-01	3.0	    NaN
-    4	2	1990-01-01	3.0	    3.0
-    5	2	1990-02-01	4.0	    3.0
-    6	2	1990-03-01	5.5	    4.0
-    7	2	1990-04-01	5.0	    5.5
-    8	2	1990-06-01	6.0	    5.0
+       id       date  value  L1_value
+    0   1 1990-01-01   1.00       NaN
+    1   1 1990-02-01   2.00      1.00
+    2   1 1990-03-01   3.00      2.00
+    3   2 1989-12-01   3.00       NaN
+    4   2 1990-01-01   3.00      3.00
+    5   2 1990-02-01   4.00      3.00
+    6   2 1990-03-01   5.50      4.00
+    7   2 1990-04-01   5.00      5.50
+    8   2 1990-06-01   6.00      5.00
     
     """
     data_lag = create_lagged_columns(data=data, columns_to_lag=columns_to_lag, 
