@@ -115,3 +115,9 @@ That should be it!
 ## `mamba` and `conda` performance issues
 
 Since `conda` has so many performance issues, it's recommended to use `mamba` instead. I recommend installing the `miniforge` distribution. See here: https://github.com/conda-forge/miniforge
+
+## Unit Tests
+You can run the unit test, including doctests, with the following command:
+```
+pytest --doctest-modules
+```
