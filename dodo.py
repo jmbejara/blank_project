@@ -8,7 +8,7 @@ sys.path.insert(1, './src/')
 import config
 from pathlib import Path
 from doit.tools import run_once
-
+import platform
 
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 DATA_DIR = Path(config.DATA_DIR)
@@ -28,6 +28,27 @@ def jupyter_to_python(notebook, build_dir):
 def jupyter_clear_output(notebook):
     return f"jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --inplace ./src/{notebook}.ipynb"
 # fmt: on
+
+def get_os():
+    os_name = platform.system()
+    if os_name == "Windows":
+        return "windows"
+    elif os_name == "Darwin":
+        return "nix"
+    elif os_name == "Linux":
+        return "nix"
+    else:
+        return "unknown"
+os_type = get_os()
+
+def copy_notebook_to_folder(notebook_stem, origin_folder, destination_folder):
+    origin_path = Path(origin_folder) / f"{notebook_stem}.ipynb"
+    destination_path = Path(destination_folder) / f"_{notebook_stem}.ipynb"
+    if os_type == "nix":
+        command =  f"cp {origin_path} {destination_path}"
+    else:
+        command = f"copy  {origin_path} {destination_path}"
+    return command
 
 
 def task_pull_fred():
@@ -128,6 +149,7 @@ def task_convert_notebooks_to_scripts():
 
     notebooks = [
         "01_example_notebook.ipynb",
+        "02_interactive_plot_example.ipynb",
     ]
     file_dep = [Path("./src") / file for file in notebooks]
     stems = [notebook.split(".")[0] for notebook in notebooks]
@@ -154,6 +176,7 @@ def task_run_notebooks():
     """
     notebooks = [
         "01_example_notebook.ipynb",
+        "02_interactive_plot_example.ipynb",
     ]
     stems = [notebook.split(".")[0] for notebook in notebooks]
 
@@ -172,6 +195,8 @@ def task_run_notebooks():
     actions = [
         *[jupyter_execute_notebook(notebook) for notebook in stems],
         *[jupyter_to_html(notebook) for notebook in stems],
+        *[copy_notebook_to_folder(notebook, Path("./src"), OUTPUT_DIR) for notebook in stems],
+        *[copy_notebook_to_folder(notebook, Path("./src"), "./docs") for notebook in stems],
         *[jupyter_clear_output(notebook) for notebook in stems],
         # *[jupyter_to_python(notebook, build_dir) for notebook in notebooks_to_run],
     ]

@@ -81,7 +81,9 @@ def move_columns_to_front(df, cols=[]):
 def weighted_average(data_col=None, weight_col=None, data=None):
     """Simple calculation of weighted average.
 
-    Example:
+    Examples
+    --------
+    
     >>> df_nccb = pd.DataFrame({
     ...     'rate': [2, 3, 2],
     ...     'start_leg_amount': [100, 200, 100]},
@@ -102,7 +104,8 @@ def groupby_weighted_average(data_col=None, weight_col=None, by_col=None, data=N
     From:
     https://stackoverflow.com/a/44683506
 
-    Example:
+    Examples
+    --------
     >>> df_nccb = pd.DataFrame({ 
     ...     'trade_direction': ['RECEIVED', 'RECEIVED', 'DELIVERED'], 
     ...     'rate': [2, 3, 2], 
@@ -135,7 +138,9 @@ def groupby_weighted_std(data_col=None, weight_col=None, by_col=None, data=None,
     From:
     https://stackoverflow.com/a/72915123
 
-    Example:
+    Examples
+    --------
+
     >>> df_nccb = pd.DataFrame({
     ...     'trade_direction': ['RECEIVED', 'RECEIVED', 'RECEIVED', 'RECEIVED', 
     ...         'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED'],
@@ -178,15 +183,28 @@ def groupby_weighted_std(data_col=None, weight_col=None, by_col=None, data=None,
 def weighted_quantile(values, quantiles, sample_weight=None, 
                       values_sorted=False, old_style=False):
     """ Very close to numpy.percentile, but supports weights.
-    NOTE: quantiles should be in [0, 1]!
-    :param values: numpy.array with data
-    :param quantiles: array-like with many quantiles needed
-    :param sample_weight: array-like of the same length as `array`
-    :param values_sorted: bool, if True, then will avoid sorting of
-        initial array
-    :param old_style: if True, will correct output to be consistent
-        with numpy.percentile.
-    :return: numpy.array with computed quantiles.
+
+    Parameters
+    ----------
+    values: 
+        numpy.array with data
+    quantiles : 
+        array-like with many quantiles needed
+    sample_weight : 
+        array-like of the same length as `array`
+    values_sorted : bool, 
+        if True, then will avoid sorting of initial array
+    old_style: 
+        if True, will correct output to be consistent with numpy.percentile.
+
+    Returns
+    -------
+    numpy.array 
+        with computed quantiles.
+    
+    Notes
+    -----
+    quantiles should be in [0, 1]!
     
     FROM: https://stackoverflow.com/a/29677616
 
@@ -378,6 +396,10 @@ def create_lagged_columns(data=None, columns_to_lag=None, id_columns=None, lags=
 def with_lagged_columns(data=None, columns_to_lag=None, id_columns=None, lags=1, 
                          date_col='date', prefix='L'):
     """
+    Add lagged columns to a dataframe.
+
+    Examples
+    --------
     >>> a=[[1,'1990/1/1',1],
     ... [1,'1990/2/1',2],
     ... [1,'1990/3/1',3],
@@ -426,31 +448,34 @@ def with_lagged_columns(data=None, columns_to_lag=None, id_columns=None, lags=1,
 
 def leave_one_out_sums(df, groupby=[], summed_col=''):
     """
-    Compute leave-one-out sums, x_i = \sum_{\ell'\neq\ell} w_{i, \ell'}
+    Compute leave-one-out sums, 
+    
+    $x_i = \\sum_{\\ell'\\neq\\ell} w_{i, \\ell'}$
 
     This is helpful for constructing the shift-share instruments
     in Borusyak, Hull, Jaravel (2022).
 
-    Examples and Tests
-    ------------------
-    df = pd.DataFrame({
-        'A' : ['foo', 'bar', 'foo', 'bar', 'foo', 'bar'],
-        'B' : ['one', 'one', 'one', 'two', 'two', 'two'],
-        'C' : [1, 5, 5, 2, 5, 3],
-        'D' : [2.0, 5., 8., 1., 2., 9.],
-        'LOO_Sum_C_groupby_B': [10, 6, 6, 8, 5, 7]
-                   })
-    LOO_Sum_C_groupby_B = df.groupby(['B'])['C'].transform(lambda x: x.sum() - x)
-    pd.testing.assert_series_equal(
-        df['LOO_Sum_C_groupby_B'], 
-        df.groupby(['B'])['C'].transform(lambda x: x.sum() - x),
-        check_names=False)
+    Examples
+    --------
     
-    s = leave_one_out_sums(df, groupby=['B'], summed_col='C')
-    pd.testing.assert_series_equal(
-        df['LOO_Sum_C_groupby_B'], 
-        s,
-        check_names=False)
+    >>> df = pd.DataFrame({
+    ...     'A' : ['foo', 'bar', 'foo', 'bar', 'foo', 'bar'],
+    ...     'B' : ['one', 'one', 'one', 'two', 'two', 'two'],
+    ...     'C' : [1, 5, 5, 2, 5, 3],
+    ...     'D' : [2.0, 5., 8., 1., 2., 9.],
+    ...     'LOO_Sum_C_groupby_B': [10, 6, 6, 8, 5, 7]
+    ...                })
+    >>> LOO_Sum_C_groupby_B = df.groupby(['B'])['C'].transform(lambda x: x.sum() - x)
+    >>> pd.testing.assert_series_equal(
+    ...     df['LOO_Sum_C_groupby_B'], 
+    ...     df.groupby(['B'])['C'].transform(lambda x: x.sum() - x),
+    ...     check_names=False)
+    
+    >>> s = leave_one_out_sums(df, groupby=['B'], summed_col='C')
+    >>> pd.testing.assert_series_equal(
+    ...     df['LOO_Sum_C_groupby_B'], 
+    ...     s,
+    ...     check_names=False)
     """
     s = df.groupby(groupby)[summed_col].transform(lambda x: x.sum() - x)
     return s
@@ -553,14 +578,11 @@ def plot_weighted_median_with_distribution_bars(data=None, variable_name=None,
         ylabel=None, xlabel=None, label=None,
         ):
     """
-    Note
-    ====
-
-      - rolling_window=1 means that there is no rolling aggregation applied.
+    Plot the weighted median of a variable over time. Optionally, plot the 25th and 75th percentiles
 
     Examples
-    ========
-
+    --------    
+    ```
     ax = plot_weighted_median_with_distribution_bars(
             data=df, 
             variable_name='rate_SD_spread', 
@@ -579,7 +601,7 @@ def plot_weighted_median_with_distribution_bars(data=None, variable_name=None,
     plt.title('Volume-weighted median rate spread (bps)\nShaded region shows 25/75 percentiles')
     other_bbg['2019-10-21':].plot(ax=ax)
     plt.legend()
-
+    
     fig, ax = plt.subplots()
     ax = plot_weighted_median_with_distribution_bars(
             data=df, 
@@ -599,7 +621,13 @@ def plot_weighted_median_with_distribution_bars(data=None, variable_name=None,
     plt.title('Volume-weighted median rate spread (bps)\nShaded region shows 25/75 percentiles')
     other_bbg['2019-10-21':].plot(ax=ax)
     plt.legend()
-
+    ```
+    
+    Notes
+    -----
+    rolling_window=1 means that there is no rolling aggregation applied.
+    
+    
     """
     if ax is None:
         plt.clf();

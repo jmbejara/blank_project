@@ -22,6 +22,21 @@ You can then navigate to the `src` directory and then run
 ```
 doit
 ```
+
+## Other commands
+
+You can run the unit test, including doctests, with the following command:
+```
+pytest --doctest-modules
+```
+You can build the documentation with:
+```
+rm ./src/.pytest_cache/README.md 
+jupyter-book build -W ./
+```
+Use `del` instead of rm on Windows
+
+
 # General Directory Structure
 
  - The `assets` folder is used for things like hand-drawn figures or other pictures that were not generated from code. These things cannot be easily recreated if they are deleted.
@@ -108,7 +123,7 @@ That should be it!
 
 - Create conda environment from file: `conda env create -f environment.yml`
 - Activate environment for this project: `conda activate blank`
-- Remove conda environment: `conda remove --name myenv --all`
+- Remove conda environment: `conda remove --name blank --all`
 - Create blank conda environment: `conda create --name myenv --no-default-packages`
 - Create blank conda environment with different version of Python: `conda create --name myenv --no-default-packages python` Note that the addition of "python" will install the most up-to-date version of Python. Without this, it may use the system version of Python, which will likely have some packages installed already.
 
@@ -116,8 +131,3 @@ That should be it!
 
 Since `conda` has so many performance issues, it's recommended to use `mamba` instead. I recommend installing the `miniforge` distribution. See here: https://github.com/conda-forge/miniforge
 
-## Unit Tests
-You can run the unit test, including doctests, with the following command:
-```
-pytest --doctest-modules
-```
