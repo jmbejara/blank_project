@@ -1,8 +1,9 @@
 """Run or update the project. This file uses the `doit` Python package. It works
 like a Makefile, but is Python-based
 """
+
 import sys
-sys.path.insert(1, './src/')
+sys.path.insert(1, "./src/")
 
 
 import config
@@ -29,6 +30,7 @@ def jupyter_clear_output(notebook):
     return f"jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --inplace ./src/{notebook}.ipynb"
 # fmt: on
 
+
 def get_os():
     os_name = platform.system()
     if os_name == "Windows":
@@ -39,13 +41,16 @@ def get_os():
         return "nix"
     else:
         return "unknown"
+
+
 os_type = get_os()
+
 
 def copy_notebook_to_folder(notebook_stem, origin_folder, destination_folder):
     origin_path = Path(origin_folder) / f"{notebook_stem}.ipynb"
     destination_path = Path(destination_folder) / f"_{notebook_stem}.ipynb"
     if os_type == "nix":
-        command =  f"cp {origin_path} {destination_path}"
+        command = f"cp {origin_path} {destination_path}"
     else:
         command = f"copy  {origin_path} {destination_path}"
     return command
@@ -110,7 +115,7 @@ def task_summary_stats():
     file_output = [
         "example_table.tex",
         "pandas_to_latex_simple_table1.tex",
-        ]
+    ]
     targets = [OUTPUT_DIR / file for file in file_output]
 
     return {
@@ -195,8 +200,7 @@ def task_run_notebooks():
     actions = [
         *[jupyter_execute_notebook(notebook) for notebook in stems],
         *[jupyter_to_html(notebook) for notebook in stems],
-        *[copy_notebook_to_folder(notebook, Path("./src"), OUTPUT_DIR) for notebook in stems],
-        *[copy_notebook_to_folder(notebook, Path("./src"), "./docs") for notebook in stems],
+        *[copy_notebook_to_folder(notebook, Path("./src"), "./docs/_notebook_build/") for notebook in stems],
         *[jupyter_clear_output(notebook) for notebook in stems],
         # *[jupyter_to_python(notebook, build_dir) for notebook in notebooks_to_run],
     ]
@@ -205,6 +209,59 @@ def task_run_notebooks():
         "targets": targets,
         "task_dep": [],
         "file_dep": file_dep,
+        "clean": True,
+    }
+
+
+
+
+def task_compile_latex_docs():
+    """Compile the LaTeX documents to PDFs"""
+    file_dep = [
+        "./reports/report_example.tex",
+        "./reports/slides_example.tex",
+        "./src/example_plot.py",
+        "./src/example_table.py",
+    ]
+    file_output = [
+        "./reports/report_example.pdf",
+        "./reports/slides_example.pdf",
+    ]
+    targets = [file for file in file_output]
+
+    return {
+        "actions": [
+            "latexmk -xelatex -cd ./reports/report_example.tex",  # Compile
+            "latexmk -xelatex -c -cd ./reports/report_example.tex",  # Clean
+            "latexmk -xelatex -cd ./reports/slides_example.tex",  # Compile
+            "latexmk -xelatex -c -cd ./reports/slides_example.tex",  # Clean
+            # "latexmk -CA -cd ../reports/",
+        ],
+        "targets": targets,
+        "file_dep": file_dep,
+        "clean": True,
+    }
+
+
+def task_compile_sphinx_docs():
+    """Compile Sphinx Docs"""
+    file_dep = [
+        "./docs/conf.py",
+        "./docs/index.rst",
+        "./docs/myst_markdown_demos.md",
+        "./docs/api.rst",
+    ]
+    targets = [
+        "./docs/_build/html/index.html",
+        "./docs/_build/html/myst_markdown_demos.html",
+        "./docs/_build/html/api.html",
+    ]
+
+    return {
+        "actions": ["sphinx-build -M html ./docs/ ./docs/_build"],
+        "targets": targets,
+        "file_dep": file_dep,
+        "task_dep": ["run_notebooks"],
         "clean": True,
     }
 
@@ -239,31 +296,3 @@ def task_run_notebooks():
 #         'task_dep':[],
 #         "file_dep": file_dep,
 #     }
-
-
-def task_compile_latex_docs():
-    """Example plots"""
-    file_dep = [
-        "./reports/report_example.tex",
-        "./reports/slides_example.tex",
-        "./src/example_plot.py",
-        "./src/example_table.py",
-    ]
-    file_output = [
-        "./reports/report_example.pdf",
-        "./reports/slides_example.pdf",
-    ]
-    targets = [file for file in file_output]
-
-    return {
-        "actions": [
-            "latexmk -xelatex -cd ./reports/report_example.tex",  # Compile
-            "latexmk -xelatex -c -cd ./reports/report_example.tex",  # Clean
-            "latexmk -xelatex -cd ./reports/slides_example.tex",  # Compile
-            "latexmk -xelatex -c -cd ./reports/slides_example.tex",  # Clean
-            # "latexmk -CA -cd ../reports/",
-        ],
-        "targets": targets,
-        "file_dep": file_dep,
-        "clean": True,
-    }

@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to MY Proj's documentation!
-===================================
+Welcome to My Blank Project's documentation!
+============================================
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
@@ -20,8 +20,8 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
    :caption: Contents:
 
    myst_markdown_demos.md
-   _01_example_notebook.ipynb
-   _02_interactive_plot_example.ipynb
+   ./_notebook_build/_01_example_notebook.ipynb
+   ./_notebook_build/_02_interactive_plot_example.ipynb
    api.rst
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
