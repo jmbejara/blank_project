@@ -48,7 +48,9 @@ os_type = get_os()
 
 def copy_notebook_to_folder(notebook_stem, origin_folder, destination_folder):
     origin_path = Path(origin_folder) / f"{notebook_stem}.ipynb"
-    destination_path = Path(destination_folder) / f"_{notebook_stem}.ipynb"
+    destination_folder = Path(destination_folder)
+    destination_folder.mkdir(parents=True, exist_ok=True)
+    destination_path = destination_folder / f"_{notebook_stem}.ipynb"
     if os_type == "nix":
         command = f"cp {origin_path} {destination_path}"
     else:
