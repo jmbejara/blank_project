@@ -22,8 +22,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DATA_DIR = config('DATA_DIR', default=(BASE_DIR / 'data'), cast=Path)
-OUTPUT_DIR = config('OUTPUT_DIR', default=(BASE_DIR / 'output'), cast=Path)
+DATA_DIR = (BASE_DIR / config('DATA_DIR', default=Path('data'), cast=Path)).resolve()
+OUTPUT_DIR = (BASE_DIR / config('OUTPUT_DIR', default=Path('output'), cast=Path)).resolve()
 WRDS_USERNAME = config("WRDS_USERNAME", default="")
 
 if __name__ == "__main__":
