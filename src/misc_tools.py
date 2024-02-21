@@ -192,7 +192,7 @@ def weighted_quantile(values, quantiles, sample_weight=None,
         array-like with many quantiles needed
     sample_weight : 
         array-like of the same length as `array`
-    values_sorted : bool, 
+    values_sorted : bool, Default False 
         if True, then will avoid sorting of initial array
     old_style: 
         if True, will correct output to be consistent with numpy.percentile.
