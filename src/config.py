@@ -19,12 +19,15 @@ over to the other configuration, for example.
 """
 from decouple import config
 from pathlib import Path
+import pandas as pd
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 DATA_DIR = (BASE_DIR / config('DATA_DIR', default=Path('data'), cast=Path)).resolve()
 OUTPUT_DIR = (BASE_DIR / config('OUTPUT_DIR', default=Path('output'), cast=Path)).resolve()
 WRDS_USERNAME = config("WRDS_USERNAME", default="")
+START_DATE = config("START_DATE", default="1913-01-01", cast=pd.to_datetime)
+END_DATE = config("END_DATE", default="2023-10-01", cast=pd.to_datetime)
 
 if __name__ == "__main__":
     

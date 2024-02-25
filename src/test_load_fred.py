@@ -8,7 +8,7 @@ DATA_DIR = config.DATA_DIR
 
 
 def test_load_fred_functionality():
-    df = load_fred.load_fred(data_dir=DATA_DIR, from_cache=False)
+    df = load_fred.pull_fred()
     # Test if the function returns a pandas DataFrame
     assert isinstance(df, pd.DataFrame)
 
@@ -21,7 +21,7 @@ def test_load_fred_functionality():
         load_fred.load_fred(data_dir="invalid_directory")
 
 def test_load_fred_data_validity():
-    df = load_fred.load_fred(data_dir=DATA_DIR, from_cache=False)
+    df = load_fred.pull_fred()
     
     # Test if the default date range has the expected start date and end date
     assert df.index.min() == pd.Timestamp('1913-01-01')

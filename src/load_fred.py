@@ -4,37 +4,31 @@ import config
 from pathlib import Path
 
 DATA_DIR = Path(config.DATA_DIR)
+START_DATE = config.START_DATE
+END_DATE = config.END_DATE
 
-
-def load_fred(
-    data_dir=DATA_DIR,
-    from_cache=True,
-    save_cache=False,
+def pull_fred(
     start="1913-01-01",
     end="2023-10-01",
 ):
     """
-    Must first run pull_and_save_fred_data. If loading from cache, then start
-    and dates are ignored
+    Pull data from FRED
     """
-    if from_cache:
-        file_path = Path(data_dir) / "pulled" / "fred.parquet"
-        # df = pd.read_csv(file_path, parse_dates=["DATE"])
-        df = pd.read_parquet(file_path)
-        # df = df.set_index("DATE")
-    else:
-        # Load CPI, nominal GDP, and real GDP data from FRED, seasonally adjusted
-        df = pandas_datareader.get_data_fred(
-            ["CPIAUCNS", "GDP", "GDPC1"], start=start, end=end
-        )
-        if save_cache:
-            file_dir = Path(data_dir) / "pulled"
-            file_dir.mkdir(parents=True, exist_ok=True)
-            # df.to_csv(file_dir / "fred_cpi.csv")
-            df.to_parquet(file_dir / 'fred.parquet')
+    # Load CPI, nominal GDP, and real GDP data from FRED, seasonally adjusted
+    df = pandas_datareader.get_data_fred(
+        ["CPIAUCNS", "GDP", "GDPC1"], start=start, end=end
+    )
+    return df
 
-    # df.info()
-    # df = pd.read_parquet(file_path)
+
+def load_fred(data_dir=DATA_DIR):
+    """
+    Must first run this module as main to pull and save data.
+    """
+    file_path = Path(data_dir) / "pulled" / "fred.parquet"
+    df = pd.read_parquet(file_path)
+    # df = pd.read_csv(file_path, parse_dates=["DATE"])
+    # df = df.set_index("DATE")
     return df
 
 
@@ -43,6 +37,8 @@ def demo():
 
 
 if __name__ == "__main__":
-    # Pull and save cache of fred data
-    _ = load_fred(start="1913-01-01", end="2023-10-01", 
-        data_dir=DATA_DIR, from_cache=False, save_cache=True)
+    dirpath = Path(config.DATA_DIR) / "pulled"
+    dirpath.mkdir(exist_ok=True)
+    file_path = dirpath / "fred.parquet"
+    df = pull_fred(start=START_DATE, end=END_DATE)
+    df = df.to_parquet(file_path)
