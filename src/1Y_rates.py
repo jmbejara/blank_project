@@ -39,4 +39,12 @@ for i in range(1, 14):
 all_data = pd.concat(dataframes, ignore_index=True)
 all_data.set_index('Date', inplace=True)
 
+## Dataframe processing - change column names, sort
+columns_required = ['SVENY01','SVENY02','SVENY03','SVENY04','SVENY05','SVENY06','SVENY07','SVENY08','SVENY09','SVENY10']
+
+all_data = all_data[columns_required]
+all_data.columns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+all_data.index = pd.to_datetime(all_data.index)
+all_data= all_data.sort_index()
+
 all_data
