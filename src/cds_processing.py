@@ -1,4 +1,16 @@
 from cds_data_fetch import *
+import pandas as pd
+from pandas.tseries.offsets import MonthEnd, YearEnd
+
+import numpy as np
+import wrds
+
+import config
+from pathlib import Path
+
+OUTPUT_DIR = Path(config.OUTPUT_DIR)
+DATA_DIR = Path(config.DATA_DIR)
+WRDS_USERNAME = config.WRDS_USERNAME
 
 def assign_quantiles(group, n_quantiles=20):
     # Use qcut to assign quantile bins; add 1 because bins are zero-indexed by default
@@ -11,7 +23,7 @@ def resample_end_of_month(data):
 
 cds_data = get_cds_data()
 
-with open('../data/manual/cds_data.pkl', 'wb') as handle:
+with open('data/manual/cds_data.pkl', 'wb') as handle:
     pickle.dump(cds_data, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 def process_cds_data():
@@ -48,5 +60,5 @@ def process_cds_data():
 
 
     df_quantiled.reset_index(inplace=True)
-    df_quantiled.drop(columns=['level_1','index','date'], inplace=True)
+    #df_quantiled.drop(columns=['level_1','index','date'], inplace=True)
     return df_quantiled
