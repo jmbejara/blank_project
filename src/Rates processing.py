@@ -36,3 +36,14 @@ def extrapolate_rates(rates):
         extrapolated_rates_df.loc[index] = extrapolated_rates
 
     return extrapolated_rates_df
+
+def calc_discount(start_date, end_date):
+   rates = process_rates_data(start_date, end_date) 
+   quarterly_rates = extrapolate_rates(rates)
+   quarterly_rates = quarterly_rates.iloc[:, :20]
+   quarterly_rates.columns = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+   quarterly_discount = pd.DataFrame(columns=quarterly_rates.columns, index=quarterly_rates.index)
+   for col in quarterly_rates.columns:
+        quarterly_discount[col] = quarterly_rates[col].apply(lambda x: np.exp(-(col * x)/4))
+   
+   return quarterly_discount
