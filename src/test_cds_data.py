@@ -16,6 +16,8 @@ def test_cds_data():
     expected_columns = ['ticker', 'parspread']
     assert all(col in df.columns for col in expected_columns)
 
-    print(df.head())
+def test_calc_cds_monthly():
+    # Assert that 20 portfolios are created
+    assert len(cds_processing.calc_cds_monthly().columns) == 20
 
 

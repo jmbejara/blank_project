@@ -12,7 +12,7 @@ import pandas as pd
 def get_cds_data():
     db = wrds.Connection(wrds_username=WRDS_USERNAME)
     cds_data = {} 
-    for year in range(2001, 2002):  # Loop from 2001 to 2023
+    for year in range(2001, 2024):  # Loop from 2001 to 2005
         table_name = f"markit.CDS{year}"  # Generate table name dynamically
         query = f"""
         SELECT
