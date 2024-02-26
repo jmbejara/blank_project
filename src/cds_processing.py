@@ -1,4 +1,16 @@
 from cds_data_fetch import *
+import pandas as pd
+from pandas.tseries.offsets import MonthEnd, YearEnd
+
+import numpy as np
+import wrds
+
+import config
+from pathlib import Path
+
+OUTPUT_DIR = Path(config.OUTPUT_DIR)
+DATA_DIR = Path(config.DATA_DIR)
+WRDS_USERNAME = config.WRDS_USERNAME
 
 def assign_quantiles(group, n_quantiles=20):
     # Use qcut to assign quantile bins; add 1 because bins are zero-indexed by default
@@ -9,23 +21,25 @@ def assign_quantiles(group, n_quantiles=20):
 def resample_end_of_month(data):
     return data.resample('M').last()
 
-cds_data = get_cds_data()
+cds_data_dict = get_cds_data()
 
-with open('../data/manual/cds_data.pkl', 'wb') as handle:
+cds_data = pd.concat(cds_data_dict.values(), axis=0)
+
+with open('data/manual/cds_data.pkl', 'wb') as handle:
     pickle.dump(cds_data, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 def process_cds_data():
-    for year, data in cds_data.items():
-        cds_data[year] = data.set_index('date')
+    # for year, data in cds_data.items():
+    #     cds_data[year] = data.set_index('date')
 
-    monthly_cds_data = {}
-    for year, data in cds_data.items():
-        monthly_cds_data[year] = data.resample('M').last()
+    # monthly_cds_data = {}
+    # for year, data in cds_data.items():
+    #     monthly_cds_data[year] = data.resample('M').last()
 
-    cds_data[2001].index = pd.to_datetime(cds_data[2001].index)
+    #cds_data[2001].index = pd.to_datetime(cds_data[2001].index)
 
-    a = cds_data[2001].groupby(['date','ticker']).mean()
-    df = a.reset_index()
+    #a = cds_data.groupby(['date','ticker']).mean()
+    df = cds_data.groupby(['date','ticker']).mean().reset_index()
     df['date'] = pd.to_datetime(df['date'])
     df.set_index('date', inplace=True)
 
@@ -36,17 +50,33 @@ def process_cds_data():
     end_of_month_data.reset_index(level=0, drop=True, inplace=True)
 
     # Ensure the 'date' column is the right datetime type
-    df.reset_index(inplace=True)
-    df['date'] = pd.to_datetime(df['date'])
+    end_of_month_data.reset_index(inplace=True)
+    end_of_month_data['date'] = pd.to_datetime(end_of_month_data['date'])
 
     # Sort values by 'date' and 'parspread' to ensure proper quantile ranking
-    df_sorted = df.sort_values(['date', 'parspread'])
+    end_of_month_data_sorted = end_of_month_data.sort_values(['date', 'parspread'])
 
     # Group by 'date' and apply the function to assign quantiles
-    df_quantiled = df_sorted.groupby('date').apply(assign_quantiles)
-    df_quantiled.rename(columns={'date': 'Date'}, inplace=True)
+    end_of_month_data_quantiled = end_of_month_data_sorted.groupby('date').apply(assign_quantiles)
+    end_of_month_data_quantiled.rename(columns={'date': 'Date'}, inplace=True)
 
 
-    df_quantiled.reset_index(inplace=True)
-    df_quantiled.drop(columns=['level_1','index','date'], inplace=True)
-    return df_quantiled
+    end_of_month_data_quantiled.reset_index(inplace=True)
+    #end_of_month_data_quantiled.drop(columns=['level_1','index','date'], inplace=True)
+    return end_of_month_data_quantiled
+
+def calc_cds_monthly():
+    df = process_cds_data()
+    df.set_index('quantile', inplace = True)
+    mean_parspread = df.groupby(['quantile', 'Date'])['parspread'].mean().reset_index()
+
+    # Pivot the table to have 'date' as index, 'quantile' as columns, and mean 'parspread' as values
+    pivot_table = mean_parspread.pivot_table(index='Date', columns='quantile', values='parspread')
+
+    # Rename the columns to follow the 'cds_{quantile}' format
+    pivot_table.columns = [f'cds_{int(col)}' for col in pivot_table.columns]
+    return pivot_table
+
+
+
+
