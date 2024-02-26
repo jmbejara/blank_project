@@ -95,3 +95,5 @@ if dataframes:
     print(all_data_processed)
 else:
     print("No dataframes were fetched.")
+
+#the output is "all_data_processed" which is the processed dataframe
