@@ -78,23 +78,22 @@ def process_dataframe(dataframe, columns_required):
     processed_df = processed_df.sort_index()
     return processed_df
 
-def main():
-    base_url = "https://www.federalreserve.gov/data/yield-curve-tables/feds200628_"
-    dataframes = []
+# Start of the inline code
+base_url = "https://www.federalreserve.gov/data/yield-curve-tables/feds200628_"
+dataframes = []
 
-    for i in range(1, 14):
-        url = f"{base_url}{i}.html"
-        yield_curve_data = fetch_yield_curve_data(url)
-        if yield_curve_data is not None:
-            dataframes.append(yield_curve_data)
+for i in range(1, 14):
+    url = f"{base_url}{i}.html"
+    yield_curve_data = fetch_yield_curve_data(url)
+    if yield_curve_data is not None:
+        dataframes.append(yield_curve_data)
 
-    if dataframes:
-        all_data = combine_dataframes(dataframes)
-        columns_required = ['SVENY01','SVENY02','SVENY03','SVENY04','SVENY05','SVENY06','SVENY07','SVENY08','SVENY09','SVENY10']
-        all_data_processed = process_dataframe(all_data, columns_required)
-        print(all_data_processed)
-    else:
-        print("No dataframes were fetched.")
+if dataframes:
+    all_data = combine_dataframes(dataframes)
+    columns_required = ['SVENY01','SVENY02','SVENY03','SVENY04','SVENY05','SVENY06','SVENY07','SVENY08','SVENY09','SVENY10']
+    all_data_processed = process_dataframe(all_data, columns_required)
+    print(all_data_processed)
+else:
+    print("No dataframes were fetched.")
 
-if __name__ == "__main__":
-    main()
+#the output is "all_data_processed" which is the processed dataframe
