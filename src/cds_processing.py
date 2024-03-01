@@ -25,20 +25,12 @@ cds_data_dict = get_cds_data()
 
 cds_data = pd.concat(cds_data_dict.values(), axis=0)
 
-with open('data/manual/cds_data.pkl', 'wb') as handle:
-    pickle.dump(cds_data, handle, protocol=pickle.HIGHEST_PROTOCOL)
+# Uncomment only when you pull all the data 
+# with open('data/manual/cds_data.pkl', 'wb') as handle:
+#     pickle.dump(cds_data, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 def process_cds_data():
-    # for year, data in cds_data.items():
-    #     cds_data[year] = data.set_index('date')
 
-    # monthly_cds_data = {}
-    # for year, data in cds_data.items():
-    #     monthly_cds_data[year] = data.resample('M').last()
-
-    #cds_data[2001].index = pd.to_datetime(cds_data[2001].index)
-
-    #a = cds_data.groupby(['date','ticker']).mean()
     df = cds_data.groupby(['date','ticker']).mean().reset_index()
     df['date'] = pd.to_datetime(df['date'])
     df.set_index('date', inplace=True)
@@ -65,18 +57,26 @@ def process_cds_data():
     #end_of_month_data_quantiled.drop(columns=['level_1','index','date'], inplace=True)
     return end_of_month_data_quantiled
 
-def calc_cds_monthly():
+def calc_cds_monthly(method = 'median'):
     df = process_cds_data()
     df.set_index('quantile', inplace = True)
-    mean_parspread = df.groupby(['quantile', 'Date'])['parspread'].mean().reset_index()
+
+    def weighted_mean(data):
+        weights = data['parspread']
+        return (data['parspread'] * weights).sum() / weights.sum()
+
+    if method == 'mean':
+        comb_spread = df.groupby(['quantile', 'Date'])['parspread'].mean().reset_index()
+    elif method == 'median':
+        comb_spread = df.groupby(['quantile', 'Date'])['parspread'].median().reset_index()
+    elif method == 'weighted':
+        comb_spread = df.groupby(['quantile', 'Date']).apply(weighted_mean).reset_index(name = 'parspread')
 
     # Pivot the table to have 'date' as index, 'quantile' as columns, and mean 'parspread' as values
-    pivot_table = mean_parspread.pivot_table(index='Date', columns='quantile', values='parspread')
+    pivot_table = comb_spread.pivot_table(index='Date', columns='quantile', values='parspread')
 
     # Rename the columns to follow the 'cds_{quantile}' format
     pivot_table.columns = [f'cds_{int(col)}' for col in pivot_table.columns]
     return pivot_table
-
-
 
 
