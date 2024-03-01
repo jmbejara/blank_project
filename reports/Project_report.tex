@@ -1,5 +1,6 @@
 \documentclass{article}
 
+%change 
 % Language setting
 % Replace `english' with e.g. `spanish' to change the document language
 \usepackage[english]{babel}
@@ -25,17 +26,34 @@ Professor: Jeremy Bejerano.
 
 \section{Introduction}
 
-The present project is an academic exercise designed to replicate and analyze the Credit Default Swap (CDS) returns specified by \cite{kelly2017}. The dataset, sourced from the comprehensive repositories of Markit, provides the empirical foundation upon which our replication model is constructed. This model is designed to not only corroborate the meticulous work of \cite{kelly2017} but also to substantiate the theoretical implications proposed by \cite{Palhares2013} concerning the maturation of cash-flows and their correlation with the risk premia observed in the market for credit default swaps.
+The present project is an academic exercise designed to replicate and analyze the Credit Default Swap (CDS) returns specified by \cite{kelly2017}. The dataset, sourced from the comprehensive repositories of Markit, provides the empirical foundation upon which our replication model is constructed. This model is designed to not only corroborate the work of \cite{kelly2017} but also to substantiate the theoretical implications proposed by \cite{Palhares2013} concerning the maturation of cash-flows and their correlation with the risk premia observed in the market for credit default swaps.
 This project is committed to the application of rigorous methodological practices to ensure the fidelity of the replication process. It is the intention of this study to contribute to the existing body of knowledge on CDS market mechanisms, offering nuanced insights into the determinants of risk premia as influenced by the maturity structure of cash flows.
 
 
-\section{CDS Returns}
+\section{CDS Returns definition and variables}
 
-\subsection{Definition}
+In particular, let $CDS_t$ be the credit spread at day $t$. The one-day return on a short CDS strategy (in the case of no default) is
+\begin{equation}
+CDS^{ret}_t = \frac{CDS_{t-1}}{250} + \Delta CDS_t \times RD_{t-1}.
+\end{equation}
+The first term on the right-hand-side is the carry component of the return due to the seller's receipt of insurance premium payments. The second term is the capital gain return, equal to the change in spread times the lagged risky duration of the contract (denoted $RD_{t-1}$) \cite{sourcekey}.
 
-Simply use the section and subsection commands, as in this example document! With Overleaf, all the formatting and numbering is handled automatically according to the template you've chosen. If you're using Rich Text mode, you can also create new section and subsections via the buttons in the editor toolbar.
 
-\subsection{How to include Figures}
+According to \cite{kelly2017}, 
+%talk about the definition and what we are going to do
+
+\section{CDS returns estimation}
+In this section we will present the data we are going to use and the estimation of the CDS returns.
+
+\subsection{Data}
+
+%PROFESSOR INSTRUCTION: explain the data sources that you used. The LaTeX document should not contain code snippets, 
+%but only give the tables and charts and a high level discussion of the project.
+
+% Rates, 
+% Risky dutarion
+% CDS spreads
+
 
 First you have to upload the image file from your computer using the upload link in the file-tree menu. Then use the includegraphics command to include it in your document. Use the figure environment and the caption command to add a number and a caption to your figure. See the code for Figure \ref{fig:myplot} in this section for an example.
 
@@ -47,24 +65,13 @@ Note that your figure will automatically be placed in the most appropriate place
 \caption{\label{fig:myplot}This image was uploaded via the file-tree menu.}
 \end{figure}
 
-\subsection{How to add Tables}
+\subsection{Estimation}
 
-Use the table and tabular environments for basic tables --- see Table~\ref{tab:widgets}, for example. For more information, please see this help article on \href{https://www.overleaf.com/learn/latex/tables}{tables}. 
-The following website is helpful for generating tables manually: 
-\url{https://www.tablesgenerator.com/}. You can also automatically generate tables from Pandas DataFrames with this method: 
-\url{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_latex.html}
+%PROFESSOR INSTRUCTION: You should give a high level overview of how the replication project went. 
+%Where did you find success, where were the challenges? 
 
-\begin{table}
-\centering
-\begin{tabular}{l|r}
-Item & Quantity \\\hline
-Widgets & 42 \\
-Gadgets & 13
-\end{tabular}
-\caption{\label{tab:widgets}An example table.}
-\end{table}
 
-\subsection{How to add Comments and Track Changes}
+\section{Conclusion}
 
 Comments can be added to your project by highlighting some text and clicking ``Add comment'' in the top right of the editor pane. To view existing comments, click on the Review menu in the toolbar above. To reply to a comment, click on the Reply button in the lower right corner of the comment. You can close the Review pane by clicking its name on the toolbar when you're done reviewing for the time being.
 
@@ -83,6 +90,8 @@ You can make lists with automatic numbering \dots
 \item Like this,
 \item and like this.
 \end{itemize}
+
+
 
 \subsection{How to write Mathematics}
 
