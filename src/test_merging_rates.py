@@ -1,3 +1,14 @@
+#Final version of the test_merging_rates.py file
+
+'''
+The test_merging_rates.py file contains the test cases for the merge_data function in the merging_rates.py file.
+
+The merge_data function reads the exchange rates from the federal reserve and the FRED databases and merges them into a single DataFrame. 
+
+The function then returns the merged DataFrame ans tested to ensure that it returns a non-empty DataFrame.
+
+'''
+
 import pandas as pd
 import pytest
 from merging_rates import merge_data
