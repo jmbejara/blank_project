@@ -3,8 +3,13 @@ import pandas as pd
 import numpy as np
 
 ##########################################################
-#test 2
-
+'''
+Selectiong the 3 and 6 month treasury constant maturity rates
+The source file was from
+3-Month Treasury Constant Maturity Rate: https://fred.stlouisfed.org/series/DGS3MO
+6-Month Treasury Constant Maturity Rate: https://fred.stlouisfed.org/series/DGS6MO 
+'''
+############################################################
 series_descriptions = {
     'DGS3MO': '3-Month Treasury Constant Maturity Rate',
     'DGS6MO': '6-Month Treasury Constant Maturity Rate',
@@ -14,8 +19,6 @@ def pull_fred_data(start_date, end_date, ffill=True):
     """
     Pull data for the specified series from FRED.
     """
-
-    # Using the same structure from HW1
     df = web.DataReader(list(series_descriptions.keys()), 'fred', start_date, end_date)
 
     if ffill:
@@ -35,6 +38,12 @@ def process_fed_data():
 
     return fred_data #all the data are 6033 rows and 2 columns
 
-    #store the data in a csv file
-    #fred_data.to_csv('data\manual\fred_data.csv')
+def get_fred_data():
+    #Setting a function to store the data
+    fred_data = process_fed_data()
+    return fred_data
+
+if __name__ == "__main__":
+    data = get_fred_data()
+    print(data)
 
