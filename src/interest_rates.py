@@ -111,7 +111,7 @@ def merge_and_process_data(start_date, end_date):
     rates = merged_data.resample('M').last()
 
     # Filter by the specified date range
-    rates = rates[(rates.index >= pd.to_datetime(start_date)) & (rates.index <= pd.to_datetime(end_date))]
+    rates = rates[(rates.index >= pd.to_datetime(start_date)) & (rates.index <= pd.to_datetime(end_date))]/100
 
     return rates
 
