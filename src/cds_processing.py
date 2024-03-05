@@ -88,3 +88,21 @@ def calc_cds_monthly(method = 'median'):
     elif method == 'weighted':
         pivot_table.to_csv(OUTPUT_DIR / 'cds_monthly_spread_weighted.csv')
     return pivot_table
+
+def process_cds_monthly(method = 'median'):
+    df = calc_cds_monthly(method)
+    #print(df['cds_20'].describe())
+    mean = df['cds_20'].mean()
+    std = df['cds_20'].std()
+    cutoff = std * 3
+    lower, upper = mean - cutoff, mean + cutoff
+
+    # Calculate the median
+    median = df['cds_20'].median()
+    window_size = 15
+    # Replace outliers with the median
+    #df['cds_20'] = np.where((df['cds_20'] < lower) | (df['cds_20'] > upper), median, df['cds_20'])
+    df['cds_20'] = df['cds_20'].rolling(window=window_size).median()
+    #print(df['cds_20'].describe())
+    return df
+    
