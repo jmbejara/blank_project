@@ -21,9 +21,10 @@ def assign_quantiles(group, n_quantiles=20):
 def resample_end_of_month(data):
     return data.resample('M').last()
 
-def process_cds_data():
+# Uncomment to pull fresh data
+#cds_data_dict = get_cds_data()
 
-    cds_data_dict = get_cds_data()
+def process_cds_data():
 
     cds_data = pd.concat(cds_data_dict.values(), axis=0)
 
@@ -56,6 +57,11 @@ def process_cds_data():
 def calc_cds_monthly(method = 'median'):
     if Path(OUTPUT_DIR / 'cds_monthly_spread_median.csv').exists() and method == 'median':
         return pd.read_csv(OUTPUT_DIR / 'cds_monthly_spread_median.csv')
+    elif Path(OUTPUT_DIR / 'cds_monthly_spread_mean.csv').exists() and method == 'mean':
+        return pd.read_csv(OUTPUT_DIR / 'cds_monthly_spread_mean.csv')
+    elif Path(OUTPUT_DIR / 'cds_monthly_spread_weighted.csv').exists() and method == 'weighted':
+        return pd.read_csv(OUTPUT_DIR / 'cds_monthly_spread_weighted.csv')
+    
     df = process_cds_data()
     df.set_index('quantile', inplace = True)
 
@@ -64,7 +70,6 @@ def calc_cds_monthly(method = 'median'):
         return (data['parspread'] * weights).sum() / weights.sum()
 
     if method == 'mean':
-
         comb_spread = df.groupby(['quantile', 'Date'])['parspread'].mean().reset_index()
     elif method == 'median':
         comb_spread = df.groupby(['quantile', 'Date'])['parspread'].median().reset_index()
@@ -76,5 +81,10 @@ def calc_cds_monthly(method = 'median'):
 
     # Rename the columns to follow the 'cds_{quantile}' format
     pivot_table.columns = [f'cds_{int(col)}' for col in pivot_table.columns]
-    pivot_table.to_csv(OUTPUT_DIR / 'cds_monthly_spread_median.csv')
+    if method == 'median':
+        pivot_table.to_csv(OUTPUT_DIR / 'cds_monthly_spread_median.csv')
+    elif method == 'mean':
+        pivot_table.to_csv(OUTPUT_DIR / 'cds_monthly_spread_mean.csv')
+    elif method == 'weighted':
+        pivot_table.to_csv(OUTPUT_DIR / 'cds_monthly_spread_weighted.csv')
     return pivot_table
