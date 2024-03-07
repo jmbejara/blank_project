@@ -7,7 +7,7 @@ import cds_processing
 DATA_DIR = config.DATA_DIR
 
 def test_calc_cds_monthly():
-    # Assert that 20 portfolios are created
+    # Assert that 20 portfolios are created. An extra column for the date column 
     assert len(cds_processing.calc_cds_monthly().columns) == 21
 
 
