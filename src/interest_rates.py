@@ -62,7 +62,9 @@ def combine_dataframes(dataframes):
 def process_dataframe(dataframe, columns_required):
     processed_df = dataframe[columns_required]
     processed_df.columns = [12, 24, 36, 48, 60, 72, 84, 96, 108, 120]
-    processed_df.index = pd.to_datetime(processed_df.index)
+    processed_df.index = pd.to_datetime(processed_df.index, format='%d-%m-%Y')
+    processed_df.index = processed_df.index.strftime('%Y-%m-%d')
+    processed_df.index = pd.to_datetime(processed_df.index, format='%Y-%m-%d')
     processed_df = processed_df.sort_index()
     return processed_df
 
