@@ -47,3 +47,18 @@ def calc_cds_return(start_date, end_date,Method):
     cds_spread_change = cds_spread.diff()
     cds_return = ((cds_spread_shifted/12) + (cds_spread_change * risky_duration_shifted))
     return cds_return
+
+def calc_difference(cds_return, actual_return):
+    '''
+    Function inputs - calculated cds returns, actual returns from He-Kelly paper
+
+    output - Actual returns, cds returns and Difference of Actual return - Calculated return
+    Finally, all have same index and column names
+    
+    '''
+    cds_return = cds_return[cds_return.index <= '2012-12-31']
+    cds_return = cds_return.dropna(axis=0)
+    actual_return = actual_return.reindex(cds_return.index)
+    actual_return.columns = cds_return.columns
+    diff = (actual_return - cds_return)*100
+    return actual_return, cds_return, diff
