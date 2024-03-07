@@ -1,12 +1,29 @@
-Project Title HERE
+Project 15: Palhares, Diogo. Cash-flow maturity and risk premia in CDS markets. The University of Chicago, 2013.
 ==================
 
 # About this project
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+In our project, we endeavor to replicate and extend the empirical analysis presented in the study by He, Kelly, and Manela, specifically focusing on the factors and test assets associated with Credit Default Swap (CDS) markets. Our replication primarily involves reconstructing the CDS_01 to CDS_20 columns as delineated in "He_Kelly_Manela_Factors_And_Test_Assets_monthly.csv" [available in the P15_DANK/data/manual]. In order to construct the "CDS" the authors used the theoretical framework established by Palhares, Diogo, particularly his insights on cash-flow maturity and its influence on risk premia within CDS markets. 
+
+
+
+To correctly replicate the desired output we used the formula delineated on page 10 of He, Kelly, and Manela work, based on Palhares framework:
+
+$$
+CDS^{ret}_t = \frac{CDS_t}{250}+ \Delta CDS_t \times RD_t.
+$$
+
+Where RD_t is a follows:
+
+$$
+RD_t = \frac{1}{4} \sum_{j=1}^{4M} e^{-\lambda j/4} - e^{-\left(\lambda + j\delta\right)/4},
+$$
+
+which provides a nuanced approach to assessing CDS risk premia in relation to cash-flow maturity. Our empirical analysis utilizes the dataset sourced from Markit-Credit Default Swap, encompassing a time span from January 1, 2001, to January 31, 2024. This dataset allows for a thorough examination of the CDS market over a significant period, offering insights into its evolution and the dynamics of risk premia within it.
+
+Furthermore, we integrate data from the Federal Reserve Economic Data (FRED) database and the Federal Reserve (FED). This integration involves the extraction of rate data ranging from 3 to 6 months from the FRED, with the interest rates from 12 to 120 months from the FED from (31 January 2001 to 31 January 2024). Finally, we combine the datasets from the Markit-Credit Default Swap with the merged rates data. The inclusion of this rate data from FRED is instrumental in providing a more rounded and comprehensive understanding of the financial environment in which these CDS markets operate. 
 
 # Quick Start
-
 To quickest way to run code in this repo is to use the following steps. First, note that you must have TexLive installed on your computer and available in your path.
 You can do this by downloading and installing it from here ([windows](https://tug.org/texlive/windows.html#install) and [mac](https://tug.org/mactex/mactex-download.html) installers).
 Having installed LaTeX, open a terminal and navigate to the root directory of the project and create a conda environment using the following command:
@@ -24,7 +41,14 @@ doit
 ```
 # General Directory Structure
 
- - The `assets` folder is used for things like hand-drawn figures or other pictures that were not generated from code. These things cannot be easily recreated if they are deleted.
+ - The `data/manual` folder is used for the inclusion of datasets from the Federal Reserve (FED), the Federal Reserve Economic Data (FRED), and Markit. It also contains the `He_Kelly_Manela_Factors_And_Test_Assets_monthly.csv` file, which includes the CDS_01 to CDS_20 columns that we aim to replicate in our analysis. This comprehensive compilation of data provides a foundational base for our replication and extension of the empirical analysis presented by He, Kelly, and Manela.
+
+The specific datasets included in the `data/manual` folder are:
+- `He_Kelly_Manela_Factors.zip`: An archive containing the factors identified by He, Kelly, and Manela in their study.
+- `He_Kelly_Manela_Factors_And_Test_Assets_monthly.csv`: A monthly breakdown of test assets and factors related to CDS markets.
+- `crsp_a_treasuries_monthly.csv`: Monthly data on treasury securities, which is crucial for understanding the financial instruments in the broader market context.
+
+By leveraging these datasets, we can closely follow the methodologies employed by He, Kelly, and Manela, while also incorporating additional data points from FED and FRED to enrich our analysis and provide a more rounded perspective on the evolution of CDS markets and risk premia dynamics.
 
  - The `output` folder, on the other hand, contains tables and figures that are generated from code. The entire folder should be able to be deleted, because the code can be run again, which would again generate all of the contents.
 
