@@ -14,7 +14,7 @@
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 
 \title{Cash-flow maturity and risk premia in CDS markets.}
-\author{Antonio Pineda Acosta, Nidhi Beeravolu, Kausthub Keshava and Diana Castellanos Polina}
+\author{Antonio Pineda, Nidhi Beeravolu, Kausthub Keshava and Diana Castellanos}
 
 \begin{document}
 \maketitle
@@ -25,11 +25,52 @@ Professor: Jeremy Bejerano.
 
 \section{Introduction}
 
-The present project is an academic exercise designed to replicate and analyze the Credit Default Swap (CDS) returns specified by \cite{kelly2017}. The dataset, sourced from the comprehensive repositories of Markit, provides the empirical foundation upon which our replication model is constructed. This model is designed to not only corroborate the meticulous work of \cite{kelly2017} but also to substantiate the theoretical implications proposed by \cite{Palhares2013} concerning the maturation of cash-flows and their correlation with the risk premia observed in the market for credit default swaps.
-This project is committed to the application of rigorous methodological practices to ensure the fidelity of the replication process. It is the intention of this study to contribute to the existing body of knowledge on CDS market mechanisms, offering nuanced insights into the determinants of risk premia as influenced by the maturity structure of cash flows.
+The present project is an academic exercise designed to replicate and analyze the Credit Default Swap (CDS) returns specified by \cite{kelly2017}. The dataset, sourced from the repositories of Markit on Wharthon Research Data Services (WRDS), provides the data foundation upon which our replication model is constructed. \\
+
+This work is designed to not only corroborate the meticulous work of \cite{kelly2017} but also to substantiate the theoretical implications proposed by \cite{Palhares2013} concerning the maturation of cash-flows and their correlation with the risk premia observed in the market for credit default swaps.\\
+
+The paper is structured as follows. Section 2 introduces the model of CDS returns, detailing the theoretical framework and the mathematical underpinnings that guide the analysis. Section 3 provides a description of the data sourced from Markit and presents summary statistics to offer insights into the dataset's characteristics and the underlying market dynamics. Section 4 delves into the estimated CDS returns, employing the proposed model to analyze the dataset and interpret the results. The findings reveal that [WRITE RESULTS], highlighting the implications of [WRITE KEY VARIABLES] on CDS returns.  In conclusion, the paper demonstrates [WRITE MAIN CONCLUSION].
 
 
-\section{CDS Returns}
+\section{Credit default swap returns definition.}
+
+According to  \cite{Palhares2013}, CDS returns are definite as:
+
+\begin{equation}
+    CDS_{t}^{ret} = \frac{CDS_{t-1}}{250} + \Delta CDS_{t} \times RD_{t-1}.
+
+\end{equation}
+
+The right-hand side of the equation is composed of two parts: the carry component and the capital gain return. \
+
+The carry component reflects the return accrued from the seller’s receipt of insurance premium payments. The second term represents the capital gain return, which is calculated by multiplying the change in the credit default swap (CDS) spread by the lagged risky duration of the contract, denoted as \( RD_{t-1} \). This risky duration adjusts the future CDS spread received by the seller to its present value. When this value is multiplied by the change in spread, it estimates the logarithmic capital gain for the seller who is in a short position.\\
+
+The risky duration for CDS of maturity $M$ years with quarterly premium payments is computed as
+
+
+\begin{equation}
+RD_t = \frac{1}{4} \sum_{j=1}^{4M} e^{-\frac{j\lambda}{4}} \cdot e^{-\frac{j(r_{\frac{j}{4}, t})}{4}},
+\end{equation}
+
+
+where:\
+
+$e^{-\frac{j\lambda}{4}}$ is the quarterly survival probability, \ 
+
+$r^{\frac{j}{4}}_t$ is the risk-free rate for the quarter $\frac{j}{4}$,\
+
+and $e^{-j\frac{j(r^{\frac{j}{4}})}_{4}}$ is the quarterly discount function. And  $\lambda$ each day from the 5-year spread as
+
+\[
+\lambda = 4 \log \left(1 + \frac{\text{CDS}}{4L}\right),
+\]
+
+where $\text{CDS}$ is the spread and $L$ is the loss given default (assumed to be 60\%). The risk-free term structure is constructed using swap rates for maturities 3 and 6 months and US Treasury yields for maturities from 1 year to 10 years.
+
+
+\section{Data.}
+
+\section{Results.}
 
 \subsection{Definition}
 
@@ -47,22 +88,6 @@ Note that your figure will automatically be placed in the most appropriate place
 \caption{\label{fig:myplot}This image was uploaded via the file-tree menu.}
 \end{figure}
 
-\subsection{How to add Tables}
-
-Use the table and tabular environments for basic tables --- see Table~\ref{tab:widgets}, for example. For more information, please see this help article on \href{https://www.overleaf.com/learn/latex/tables}{tables}. 
-The following website is helpful for generating tables manually: 
-\url{https://www.tablesgenerator.com/}. You can also automatically generate tables from Pandas DataFrames with this method: 
-\url{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_latex.html}
-
-\begin{table}
-\centering
-\begin{tabular}{l|r}
-Item & Quantity \\\hline
-Widgets & 42 \\
-Gadgets & 13
-\end{tabular}
-\caption{\label{tab:widgets}An example table.}
-\end{table}
 
 \subsection{How to add Comments and Track Changes}
 
