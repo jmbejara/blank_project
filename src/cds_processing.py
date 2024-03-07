@@ -13,19 +13,43 @@ DATA_DIR = Path(config.DATA_DIR)
 WRDS_USERNAME = config.WRDS_USERNAME
 
 def assign_quantiles(group, n_quantiles=20):
-    # Use qcut to assign quantile bins; add 1 because bins are zero-indexed by default
+    """
+    Assigns quantile rankings to a DataFrame based on the 'parspread' column.
+
+    Parameters:
+    - group (DataFrame): The input pandas DataFrame containing at least the 'parspread' column.
+    - n_quantiles (int): The number of quantiles to divide the data into. Default is 20.
+
+    Returns:
+    - DataFrame: The modified input DataFrame with a new 'quantile' column indicating the quantile ranking of each 'parspread'.
+    """
     group['quantile'] = pd.qcut(group['parspread'], n_quantiles, labels=False) + 1
     return group
 
 # Create a function to resample and select the last value for each month
 def resample_end_of_month(data):
+    """
+    Resamples a time series DataFrame to the end of each month, selecting the last available value for each month.
+
+    Parameters:
+    - data (DataFrame): The input pandas DataFrame with a DateTimeIndex.
+
+    Returns:
+    - DataFrame: A DataFrame resampled to the end of each month with the last value of the month.
+    """
     return data.resample('M').last()
 
 # Uncomment to pull fresh data
 #cds_data_dict = get_cds_data()
 
 def process_cds_data():
+    """
+    Processes the CDS data to prepare it for analysis. It consolidates CDS data from multiple years, 
+    averages data by date and ticker, resamples to end of month, sorts, and assigns quantiles.
 
+    Returns:
+    - DataFrame: The processed CDS data with quantiles assigned and resampled to the end of each month.
+    """
     cds_data = pd.concat(cds_data_dict.values(), axis=0)
 
     df = cds_data.groupby(['date','ticker']).mean().reset_index()
@@ -55,6 +79,15 @@ def process_cds_data():
     return end_of_month_data_quantiled
 
 def calc_cds_monthly(method = 'median'):
+    """
+    Calculates monthly CDS spreads based on the specified aggregation method (mean, median, or weighted).
+
+    Parameters:
+    - method (str): The aggregation method to use ('mean', 'median', or 'weighted'). Default is 'median'.
+
+    Returns:
+    - DataFrame: A pivot table of monthly CDS spreads with quantiles as columns and dates as rows.
+    """
     if Path(OUTPUT_DIR / 'cds_monthly_spread_median.csv').exists() and method == 'median':
         return pd.read_csv(OUTPUT_DIR / 'cds_monthly_spread_median.csv')
     elif Path(OUTPUT_DIR / 'cds_monthly_spread_mean.csv').exists() and method == 'mean':
@@ -90,6 +123,15 @@ def calc_cds_monthly(method = 'median'):
     return pivot_table
 
 def process_cds_monthly(method = 'median'):
+    """
+    Processes monthly CDS data to replace outliers with a rolling median or the specified aggregation method.
+
+    Parameters:
+    - method (str): The aggregation method to use for calculating the monthly CDS spreads. Default is 'median'.
+
+    Returns:
+    - DataFrame: The processed monthly CDS data with outliers replaced according to the specified method.
+    """
     df = calc_cds_monthly(method)
     #print(df['cds_20'].describe())
     mean = df['cds_20'].mean()
@@ -105,4 +147,3 @@ def process_cds_monthly(method = 'median'):
     df['cds_20'] = df['cds_20'].rolling(window=window_size).median()
     #print(df['cds_20'].describe())
     return df
-    
