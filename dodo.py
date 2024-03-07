@@ -3,9 +3,9 @@ from doit.tools import run_once
 from pathlib import Path
 import subprocess
 
-sys.path.insert(1, './src/') #change4
+sys.path.insert(1, './src/')
 
-import config  # Assuming config.py contains relevant configurations
+import config  # Dodo change 6
 
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 DATA_DIR = Path(config.DATA_DIR)
@@ -29,6 +29,8 @@ def task_interest_rates():
         'file_dep': ['src/interest_rates.py'],
     }
 
+# Add similar functions for each of your scripts
+
 def task_variables_analysis():
     return {
         'actions': ['jupyter nbconvert --to notebook --execute src/variables_analysis.ipynb'],
@@ -39,21 +41,19 @@ def run_tests():
     test_files = [
         'src/test_cds_data.py',
         'src/test_interest_rates.py',
-        'src/test_misc_tools.py',
         'src/test_rates_processing.py'
     ]
     for test_file in test_files:
         subprocess.run(['python', test_file], check=True)
 
-def task_run_tests():
+
+def task_compile_latex():
     return {
-        'actions': [run_tests],
-        'file_dep': [
-            'src/test_cds_data.py',
-            'src/test_interest_rates.py',
-        ],
+        'actions': ['pdflatex -output-directory=reports reports/Project_report.tex'],
+        'file_dep': ['reports/Project_report.tex'],
+        'targets': ['reports/Project_report.pdf']
     }
 
 DOIT_CONFIG = {
-    'default_tasks': ['cds_data_fetch', 'cds_processing', 'interest_rates', 'run_tests', 'variables_analysis']
+    'default_tasks': ['cds_data_fetch', 'cds_processing', 'interest_rates', 'run_tests', 'variables_analysis', 'compile_latex']
 }
