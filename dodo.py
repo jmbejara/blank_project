@@ -49,10 +49,11 @@ def run_tests():
 
 def task_compile_latex():
     return {
-        'actions': ['pdflatex -output-directory=reports reports/Project_report.tex'],
+        'actions': ['pdflatex -output-directory=reports -jobname=Report_P15_DANK reports/Project_report.tex'],
         'file_dep': ['reports/Project_report.tex'],
-        'targets': ['reports/Project_report.pdf']
+        'targets': ['reports/Report_P15_DANK.pdf']
     }
+
 
 DOIT_CONFIG = {
     'default_tasks': ['cds_data_fetch', 'cds_processing', 'interest_rates', 'run_tests', 'variables_analysis', 'compile_latex']
