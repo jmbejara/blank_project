@@ -1,6 +1,5 @@
 \documentclass{article}
 
-%change 
 % Language setting
 % Replace `english' with e.g. `spanish' to change the document language
 \usepackage[english]{babel}
@@ -15,7 +14,7 @@
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 
 \title{Cash-flow maturity and risk premia in CDS markets.}
-\author{Antonio Pineda Acosta, Nidhi Beeravolu, Kausthub Keshava and Diana Castellanos Polina}
+\author{Antonio Pineda, Nidhi Beeravolu, Kausthub Keshava and Diana Castellanos}
 
 \begin{document}
 \maketitle
@@ -26,15 +25,20 @@ Professor: Jeremy Bejerano.
 
 \section{Introduction}
 
-The present project is an academic exercise designed to replicate and analyze the Credit Default Swap (CDS) returns specified by \cite{kelly2017}. The dataset, sourced from the comprehensive repositories of Markit, provides the empirical foundation upon which our replication model is constructed. This model is designed to not only corroborate the work of \cite{kelly2017} but also to substantiate the theoretical implications proposed by \cite{Palhares2013} concerning the maturation of cash-flows and their correlation with the risk premia observed in the market for credit default swaps.
-This project is committed to the application of rigorous methodological practices to ensure the fidelity of the replication process. It is the intention of this study to contribute to the existing body of knowledge on CDS market mechanisms, offering nuanced insights into the determinants of risk premia as influenced by the maturity structure of cash flows.
+The present project is an academic exercise designed to replicate and analyze the Credit Default Swap (CDS) returns specified by \cite{kelly2017}. The dataset, sourced from the repositories of Markit on Wharthon Research Data Services (WRDS), provides the data foundation upon which our replication model is constructed. \\
+
+This work is designed to not only corroborate the meticulous work of \cite{kelly2017} but also to substantiate the theoretical implications proposed by \cite{Palhares2013} concerning the maturation of cash-flows and their correlation with the risk premia observed in the market for credit default swaps.\\
+
+The paper is structured as follows. Section 2 introduces the model of CDS returns, detailing the theoretical framework and the mathematical underpinnings that guide the analysis. Section 3 provides a description of the data sourced from Markit and presents summary statistics to offer insights into the dataset's characteristics and the underlying market dynamics. Section 4 delves into the estimated CDS returns, employing the proposed model to analyze the dataset and interpret the results. The findings reveal that [WRITE RESULTS], highlighting the implications of [WRITE KEY VARIABLES] on CDS returns.  In conclusion, the paper demonstrates [WRITE MAIN CONCLUSION].
 
 
-\section{CDS Returns definition and variables}
+\section{Credit default swap returns definition.}
 
-In particular, let $CDS_t$ be the credit spread at day $t$. The one-day return on a short CDS strategy (in the case of no default) is
+According to  \cite{Palhares2013}, CDS returns are definite as:
+
 \begin{equation}
-CDS^{ret}_t = \frac{CDS_{t-1}}{250} + \Delta CDS_t \times RD_{t-1}.
+    CDS_{t}^{ret} = \frac{CDS_{t-1}}{250} + \Delta CDS_{t} \times RD_{t-1}.
+
 \end{equation}
 
 The right-hand side of the equation is composed of two parts: the carry component and the capital gain return. \
@@ -49,7 +53,7 @@ RD_t = \frac{1}{4} \sum_{j=1}^{4M} e^{-\frac{j\lambda}{4}} \cdot e^{-\frac{j(r_{
 \end{equation}
 
 
-where:
+where:\
 
 $e^{-\frac{j\lambda}{4}}$ is the quarterly survival probability, \ 
 
@@ -65,6 +69,8 @@ where $\text{CDS}$ is the spread and $L$ is the loss given default (assumed to b
 
 
 \section{Data.}
+
+
 
 \section{Results.}
 
