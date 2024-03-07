@@ -10,9 +10,16 @@ from pandas.tseries.offsets import MonthEnd
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 DATA_DIR = Path(config.DATA_DIR)
 
-
+''' 
+In this file, we read the CDS returns which we have to replicate, calculate the returns based on the formula used in the paper
+and also return the difference between these two returns for CDS portfolios
+'''
 
 def process_real_cds_return():
+    '''
+    Reading the original returns which were to be replicated
+
+    '''
     actual_return = pd.read_csv('~/Documents/GitHub/P15_DANK/data/manual/He_Kelly_Manela_Factors_And_Test_Assets_monthly.csv')
     actual_return = actual_return[['yyyymm','CDS_01','CDS_02','CDS_03','CDS_04','CDS_05','CDS_06','CDS_07','CDS_08','CDS_09','CDS_10','CDS_11','CDS_12','CDS_13','CDS_14','CDS_15','CDS_16','CDS_17','CDS_18','CDS_19','CDS_20']]
     actual_return = actual_return.dropna(axis=0)
@@ -22,7 +29,13 @@ def process_real_cds_return():
     return actual_return
 
 def calc_cds_return(start_date, end_date,Method):
+    ''' 
+    Calculating CDS returns using spread data
 
+    Input - takes start and end date and method for calculation of cds spreads
+    Output - Calculated CDS return function based on He-Kelly formula
+
+    '''
     loss_given_default =0.6
 
     quarterly_discount = calc_discount(start_date, end_date)
