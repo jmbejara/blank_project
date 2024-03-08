@@ -28,7 +28,7 @@ def plot_cds_returns_mean(start_date, end_date,Method='mean'):
         print("No data available for the given date range.")
         return
 
-    plt.figure(figsize=(15, 10))
+    plt.figure(figsize=(8, 6))
     sns.boxplot(data=data)
     plt.title("Box Plot of CDS returns - mean method")
     plt.ylabel("Return (%)")
@@ -41,7 +41,7 @@ def plot_cds_returns_median(start_date, end_date,Method='median'):
         print("No data available for the given date range.")
         return
 
-    plt.figure(figsize=(15, 10))
+    plt.figure(figsize=(8, 6))
     sns.boxplot(data=data)
     plt.title("Box Plot of CDS returns - median method")
     plt.ylabel("Return (%)")
@@ -54,7 +54,7 @@ def plot_cds_returns_weighted(start_date, end_date,Method='weighted'):
         print("No data available for the given date range.")
         return
 
-    plt.figure(figsize=(15, 10))
+    plt.figure(figsize=(8, 6))
     sns.boxplot(data=data)
     plt.title("Box Plot of CDS returns - weighted method")
     plt.ylabel("Return (%)")
