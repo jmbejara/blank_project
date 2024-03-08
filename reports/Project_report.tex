@@ -87,8 +87,7 @@ We utilized the Par Spread data corresponding to a five-year tenor sourced from 
     \end{figure}
 
 For rates of 3-6 months we used Fred website and for rates of 1-10 years, FED website and filtered by the date of the CDS data. We used the rates for maturities 3 and 6 months and US Treasury yields for maturities from 1 year to 10 years and extrapolated it to construct the risk-free term structure.
-
-% WRITE ABOUT THE EXTRAPOLATION OF THE RATES
+We extrapolated these rates to quarterly frequency with a cubic function. This is a popular technique for datafitting, as this smooth approximation to the real value.
 
 \begin{figure}[H]
     \centering

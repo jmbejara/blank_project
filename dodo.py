@@ -1,11 +1,11 @@
+#change 3
+
 import sys
-from doit.tools import run_once
 from pathlib import Path
 import subprocess
 
 sys.path.insert(1, './src/')
-
-import config  # Dodo change 6
+import config  # Dodo change 7
 
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 DATA_DIR = Path(config.DATA_DIR)
@@ -29,14 +29,13 @@ def task_interest_rates():
         'file_dep': ['src/interest_rates.py'],
     }
 
-# Add similar functions for each of your scripts
-
 def task_variables_analysis():
     return {
         'actions': ['jupyter nbconvert --to notebook --execute src/variables_analysis.ipynb'],
         'file_dep': ['src/variables_analysis.ipynb'],
     }
 
+# Function to run tests
 def run_tests():
     test_files = [
         'src/test_cds_data.py',
@@ -46,13 +45,44 @@ def run_tests():
     for test_file in test_files:
         subprocess.run(['python', test_file], check=True)
 
+# Define a doit task for running tests
+def task_run_tests():
+    return {
+        'actions': [run_tests],
+    }
 
 def task_compile_latex():
+    """Compile the LaTeX document report_example.tex to PDF report_example.pdf"""
+    latex_file = "./reports/report_example.tex"
+    output_pdf = "./reports/report_example.pdf"
+
     return {
-        'actions': ['pdflatex -output-directory=reports -jobname=Report_P15_DANK reports/Project_report.tex'],
-        'file_dep': ['reports/Project_report.tex'],
-        'targets': ['reports/Report_P15_DANK.pdf']
+        'actions': [
+            f"latexmk -xelatex -cd -jobname=report_example {latex_file}",  # Compile
+            f"latexmk -c -cd {latex_file}",  # Clean auxiliary files
+        ],
+        'file_dep': [latex_file],
+        'targets': [output_pdf],
+        'clean': True,  # Clean by default
     }
+
+'''
+def task_compile_latex():
+    """Compile the LaTeX document Project_report.tex to PDF Report_P15_DANK.pdf"""
+    latex_file = "./reports/Project_report.tex"
+    output_pdf = "./reports/Report_P15_DANK.pdf"
+
+    return {
+        'actions': [
+            f"latexmk -xelatex -cd -jobname=Report_P15_DANK {latex_file}",  # Compile
+            f"latexmk -c -cd {latex_file}",  # Clean auxiliary files
+        ],
+        'file_dep': [latex_file],
+        'targets': [output_pdf],
+        'clean': True,  
+    }
+
+'''
 
 
 DOIT_CONFIG = {
