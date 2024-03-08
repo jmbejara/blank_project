@@ -42,7 +42,7 @@ def calc_cds_return(start_date, end_date,Method):
     quarterly_discount = quarterly_discount[:-1]
 
     cds_spread = process_cds_monthly(method=Method)
-    cds_spread = cds_spread[(cds_spread['Date']>= start_date) & (cds_spread['Date']<=end_date)]
+    cds_spread = cds_spread[(cds_spread['Date']>= start_date) & (cds_spread['Date']<end_date)]
     cds_spread= cds_spread.bfill()
     cds_spread = cds_spread.set_index('Date')
     cds_spread.index = pd.to_datetime(cds_spread.index)
