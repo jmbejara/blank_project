@@ -1,9 +1,11 @@
+#change 3
+
 import sys
 from pathlib import Path
 import subprocess
 
 sys.path.insert(1, './src/')
-import config  # Dodo change 6
+import config  # Dodo change 7
 
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 DATA_DIR = Path(config.DATA_DIR)
