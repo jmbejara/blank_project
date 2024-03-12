@@ -3,6 +3,7 @@ like a Makefile, but is Python-based
 """
 
 import sys
+
 sys.path.insert(1, "./src/")
 
 
@@ -147,74 +148,63 @@ def task_example_plot():
     }
 
 
+notebooks_and_targets = {
+    "01_example_notebook.ipynb": [Path(OUTPUT_DIR) / "sine_graph.png"],
+    "02_interactive_plot_example.ipynb": [],
+}
+
+
 def task_convert_notebooks_to_scripts():
-    """Preps the notebooks for presentation format.
-    Execute notebooks with summary stats and plots and remove metadata.
+    """Convert notebooks to script form to detect changes to source code rather
+    than to the notebook's metadata.
     """
     build_dir = Path(OUTPUT_DIR)
     build_dir.mkdir(parents=True, exist_ok=True)
 
-    notebooks = [
-        "01_example_notebook.ipynb",
-        "02_interactive_plot_example.ipynb",
-    ]
-    file_dep = [Path("./src") / file for file in notebooks]
-    stems = [notebook.split(".")[0] for notebook in notebooks]
-    targets = [build_dir / f"_{stem}.py" for stem in stems]
-
-    actions = [
-        # *[jupyter_execute_notebook(notebook) for notebook in notebooks_to_run],
-        # *[jupyter_to_html(notebook) for notebook in notebooks_to_run],
-        *[jupyter_clear_output(notebook) for notebook in stems],
-        *[jupyter_to_python(notebook, build_dir) for notebook in stems],
-    ]
-    return {
-        "actions": actions,
-        "targets": targets,
-        "task_dep": [],
-        "file_dep": file_dep,
-        "clean": True,
-    }
+    stems = [notebook.split(".")[0] for notebook in notebooks_and_targets.keys()]
+    for notebook in stems:
+        yield {
+            "name": f"{notebook}.ipynb",
+            "actions": [
+                # jupyter_execute_notebook(notebook),
+                # jupyter_to_html(notebook),
+                # copy_notebook_to_folder(notebook, Path("./src"), "./docs/_notebook_build/"),
+                jupyter_clear_output(notebook),
+                jupyter_to_python(notebook, build_dir),
+            ],
+            "file_dep": [Path("./src") / f"{notebook}.ipynb"],
+            "targets": [build_dir / f"_{notebook}.py"],
+            "clean": True,
+            'verbosity': 0,
+        }
 
 
 def task_run_notebooks():
     """Preps the notebooks for presentation format.
-    Execute notebooks with summary stats and plots and remove metadata.
+    Execute notebooks if the script version of it has been changed.
     """
-    notebooks = [
-        "01_example_notebook.ipynb",
-        "02_interactive_plot_example.ipynb",
-    ]
-    stems = [notebook.split(".")[0] for notebook in notebooks]
 
-    file_dep = [
-        # 'load_other_data.py',
-        *[Path(OUTPUT_DIR) / f"_{stem}.py" for stem in stems],
-    ]
-
-    targets = [
-        ## 01_example_notebook.ipynb output
-        OUTPUT_DIR / "sine_graph.png",
-        ## Notebooks converted to HTML
-        *[OUTPUT_DIR / f"{stem}.html" for stem in stems],
-    ]
-
-    actions = [
-        *[jupyter_execute_notebook(notebook) for notebook in stems],
-        *[jupyter_to_html(notebook) for notebook in stems],
-        *[copy_notebook_to_folder(notebook, Path("./src"), "./docs/_notebook_build/") for notebook in stems],
-        *[jupyter_clear_output(notebook) for notebook in stems],
-        # *[jupyter_to_python(notebook, build_dir) for notebook in notebooks_to_run],
-    ]
-    return {
-        "actions": actions,
-        "targets": targets,
-        "task_dep": [],
-        "file_dep": file_dep,
-        "clean": True,
-    }
-
-
+    stems = [notebook.split(".")[0] for notebook in notebooks_and_targets.keys()]
+    for notebook in stems:
+        yield {
+            "name": f"{notebook}.ipynb",
+            "actions": [
+                jupyter_execute_notebook(notebook),
+                jupyter_to_html(notebook),
+                copy_notebook_to_folder(
+                    notebook, Path("./src"), "./docs/_notebook_build/"
+                ),
+                jupyter_clear_output(notebook),
+                # jupyter_to_python(notebook, build_dir),
+            ],
+            "file_dep": [OUTPUT_DIR / f"_{notebook}.py"],
+            "targets": [
+                *notebooks_and_targets[f"{notebook}.ipynb"],
+                OUTPUT_DIR / f"{notebook}.html",
+            ],
+            "clean": True,
+            'verbosity': 0,
+        }
 
 
 def task_compile_latex_docs():
