@@ -11,6 +11,28 @@ import sys
 
 sys.path.insert(1, "./src/")
 
+## Custom reporter: Print PyDoit Text in Green
+# This is helpful because some tasks write to sterr and pollute the output in
+# the console. I don't want to mute this output, because this can sometimes
+# cause issues when, for example, LaTeX hangs on an error and requires
+# presses on the keyboard before continuing. However, I want to be able
+# to easily see the task lines printed by PyDoit. I want them to stand out
+# from among all the other lines printed to the console.
+from doit.reporter import ConsoleReporter
+from colorama import Fore, Style, init
+
+
+class GreenReporter(ConsoleReporter):
+    def write(self, stuff, **kwargs):
+        self.outstream.write(Fore.GREEN + stuff + Style.RESET_ALL)
+
+
+DOIT_CONFIG = {
+    "reporter": GreenReporter,
+    # other config here...
+}
+init(autoreset=True)
+
 ## Helper for determining OS
 import platform
 
