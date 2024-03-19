@@ -1,31 +1,26 @@
-###########################################
-# Project Environment Variables and Secrets
-###########################################
-.env*
 
+##########################
+# Project Input and Output
+##########################
 
-############
-# NOTES    #
-############
-# I am not excluding pdfs here because some of the papers
-# include pdfs as images. Maybe there is a good way to get
-# around this.
-
-Exclude data folder
+# Exclude data folder, since it should all be pulled automatically (unless in the manual folder)
 /data/*
 !/data/manual/
+
+# Exclude output directory since it's should generated automatically
+/output/*
+
+# Exclude PDFs generated from source LaTeX files, which are kept in the reports directory
+/reports/*.pdf
+
+# Secrets saved in environment files
+.env*
+
+# Other
 temp*.csv
 */_build/
 */_notebook_build/
-
-###################
-# Product Specific
-###################
-# I'm excluding *.graphml files. They're too large. Just run the appropriate files
-# to generate them when you need them.
-*.graphml
-~*
-
+drafts/draft_bp.pdf
 
 ##############
 #Excluded PDFs
@@ -102,16 +97,10 @@ docs/_build/
 # PyBuilder
 target/
 
-
 # emacs
 *~
-
-
 # C extensions
 *.so
-
-
-
 
 ##############
 # LaTex Files
@@ -142,13 +131,11 @@ target/
 .RData
 .Rapp.history
 
-
 ################
 # Database Files
 ################
 *.hdf5
 *.npz
-
 
 ###################################
 # Exclude Output From Scripted Jobs
@@ -224,27 +211,20 @@ vignettes/*.pdf
 ########
 # *.zip
 # *.tar.gz
-*.ini
-*.xdv
-\.pytest_cache/
-src/temp\.csv
-src/temp_notebook\.ipynb
-src/data/temp\.csv
-*.bcf
 *.aux
 *.bbl
+*.bcf
 *.blg
+*.dat
+*.dir
 *.fdb_latexmk
 *.fls
+*.graphml
+*.gz
+*.ini
 *.log
 *.out
-*.gz
-*.xdv
-
-*.dat
-
-*.dir
-
-drafts/draft_bp.pdf
-
 *.vrb
+*.xdv
+*.xdv
+\.pytest_cache/
