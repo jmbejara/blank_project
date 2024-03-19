@@ -212,7 +212,7 @@ def task_convert_notebooks_to_scripts():
                 jupyter_to_python(notebook_name, build_dir),
             ],
             "file_dep": [Path("./src") / notebook],
-            "targets": [],
+            "targets": [OUTPUT_DIR / f"_{notebook_name}.py"],
             "clean": True,
             "verbosity": 0,
         }
@@ -265,10 +265,16 @@ def task_compile_latex_docs():
 
     return {
         "actions": [
+            # My custom LaTeX templates
             "latexmk -xelatex -cd ./reports/report_example.tex",  # Compile
             "latexmk -xelatex -c -cd ./reports/report_example.tex",  # Clean
             "latexmk -xelatex -cd ./reports/slides_example.tex",  # Compile
             "latexmk -xelatex -c -cd ./reports/slides_example.tex",  # Clean
+            # Simple templates based on small adjustments to Overleaf templates
+            "latexmk -xelatex -cd ./reports/report_simple_example.tex",  # Compile
+            "latexmk -xelatex -c -cd ./reports/report_simple_example.tex",  # Clean
+            "latexmk -xelatex -cd ./reports/slides_simple_example.tex",  # Compile
+            "latexmk -xelatex -c -cd ./reports/slides_simple_example.tex",  # Clean
             # "latexmk -CA -cd ../reports/",
         ],
         "targets": targets,
