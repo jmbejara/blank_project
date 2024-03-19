@@ -2,34 +2,17 @@
 like a Makefile, but is Python-based
 """
 
+#######################################
+## Configuration and Helpers for PyDoit
+#######################################
+
+## Make sure the src folder is in the path
 import sys
 
 sys.path.insert(1, "./src/")
 
-
-import config
-from pathlib import Path
-from doit.tools import run_once
+## Helper for determining OS
 import platform
-
-OUTPUT_DIR = Path(config.OUTPUT_DIR)
-DATA_DIR = Path(config.DATA_DIR)
-
-# fmt: off
-## Helper functions for automatic execution of Jupyter notebooks
-def jupyter_execute_notebook(notebook):
-    return f"jupyter nbconvert --execute --to notebook --ClearMetadataPreprocessor.enabled=True --inplace ./src/{notebook}.ipynb"
-def jupyter_to_html(notebook, output_dir=OUTPUT_DIR):
-    return f"jupyter nbconvert --to html --output-dir={output_dir} ./src/{notebook}.ipynb"
-def jupyter_to_md(notebook, output_dir=OUTPUT_DIR):
-    """Requires jupytext"""
-    return f"jupytext --to markdown --output-dir={output_dir} ./src/{notebook}.ipynb"
-def jupyter_to_python(notebook, build_dir):
-    """Convert a notebook to a python script"""
-    return f"jupyter nbconvert --to python ./src/{notebook}.ipynb --output _{notebook}.py --output-dir {build_dir}"
-def jupyter_clear_output(notebook):
-    return f"jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --inplace ./src/{notebook}.ipynb"
-# fmt: on
 
 
 def get_os():
@@ -45,6 +28,34 @@ def get_os():
 
 
 os_type = get_os()
+
+##################################
+## Begin rest of PyDoit tasks here
+##################################
+import config
+from pathlib import Path
+from doit.tools import run_once
+
+OUTPUT_DIR = Path(config.OUTPUT_DIR)
+DATA_DIR = Path(config.DATA_DIR)
+
+
+## Helpers for handling Jupyter Notebook tasks
+# fmt: off
+## Helper functions for automatic execution of Jupyter notebooks
+def jupyter_execute_notebook(notebook):
+    return f"jupyter nbconvert --execute --to notebook --ClearMetadataPreprocessor.enabled=True --inplace ./src/{notebook}.ipynb"
+def jupyter_to_html(notebook, output_dir=OUTPUT_DIR):
+    return f"jupyter nbconvert --to html --output-dir={output_dir} ./src/{notebook}.ipynb"
+def jupyter_to_md(notebook, output_dir=OUTPUT_DIR):
+    """Requires jupytext"""
+    return f"jupytext --to markdown --output-dir={output_dir} ./src/{notebook}.ipynb"
+def jupyter_to_python(notebook, build_dir):
+    """Convert a notebook to a python script"""
+    return f"jupyter nbconvert --to python ./src/{notebook}.ipynb --output _{notebook}.py --output-dir {build_dir}"
+def jupyter_clear_output(notebook):
+    return f"jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --inplace ./src/{notebook}.ipynb"
+# fmt: on
 
 
 def copy_notebook_to_folder(notebook_stem, origin_folder, destination_folder):
@@ -148,9 +159,15 @@ def task_example_plot():
     }
 
 
-notebooks_and_targets = {
-    "01_example_notebook.ipynb": [Path(OUTPUT_DIR) / "sine_graph.png"],
-    "02_interactive_plot_example.ipynb": [],
+notebook_tasks = {
+    "01_example_notebook.ipynb": {
+        "file_dep": ["./src/load_fred.py"],
+        "targets": [Path(OUTPUT_DIR) / "GDP_graph.png"],
+    },
+    "02_interactive_plot_example.ipynb": {
+        "file_dep": [],
+        "targets": [],
+    },
 }
 
 
@@ -161,21 +178,21 @@ def task_convert_notebooks_to_scripts():
     build_dir = Path(OUTPUT_DIR)
     build_dir.mkdir(parents=True, exist_ok=True)
 
-    stems = [notebook.split(".")[0] for notebook in notebooks_and_targets.keys()]
-    for notebook in stems:
+    for notebook in notebook_tasks.keys():
+        notebook_name = notebook.split(".")[0]
         yield {
-            "name": f"{notebook}.ipynb",
+            "name": notebook,
             "actions": [
-                # jupyter_execute_notebook(notebook),
-                # jupyter_to_html(notebook),
-                # copy_notebook_to_folder(notebook, Path("./src"), "./docs/_notebook_build/"),
-                jupyter_clear_output(notebook),
-                jupyter_to_python(notebook, build_dir),
+                # jupyter_execute_notebook(notebook_name),
+                # jupyter_to_html(notebook_name),
+                # copy_notebook_to_folder(notebook_name, Path("./src"), "./docs/_notebook_build/"),
+                jupyter_clear_output(notebook_name),
+                jupyter_to_python(notebook_name, build_dir),
             ],
-            "file_dep": [Path("./src") / f"{notebook}.ipynb"],
-            "targets": [build_dir / f"_{notebook}.py"],
+            "file_dep": [Path("./src") / notebook],
+            "targets": [],
             "clean": True,
-            'verbosity': 0,
+            "verbosity": 0,
         }
 
 
@@ -184,26 +201,29 @@ def task_run_notebooks():
     Execute notebooks if the script version of it has been changed.
     """
 
-    stems = [notebook.split(".")[0] for notebook in notebooks_and_targets.keys()]
-    for notebook in stems:
+    for notebook in notebook_tasks.keys():
+        notebook_name = notebook.split(".")[0]
         yield {
-            "name": f"{notebook}.ipynb",
+            "name": notebook,
             "actions": [
-                jupyter_execute_notebook(notebook),
-                jupyter_to_html(notebook),
+                jupyter_execute_notebook(notebook_name),
+                jupyter_to_html(notebook_name),
                 copy_notebook_to_folder(
-                    notebook, Path("./src"), "./docs/_notebook_build/"
+                    notebook_name, Path("./src"), "./docs/_notebook_build/"
                 ),
-                jupyter_clear_output(notebook),
-                # jupyter_to_python(notebook, build_dir),
+                jupyter_clear_output(notebook_name),
+                # jupyter_to_python(notebook_name, build_dir),
             ],
-            "file_dep": [OUTPUT_DIR / f"_{notebook}.py"],
+            "file_dep": [
+                OUTPUT_DIR / f"_{notebook_name}.py",
+                *notebook_tasks[notebook]["file_dep"],
+            ],
             "targets": [
-                *notebooks_and_targets[f"{notebook}.ipynb"],
-                OUTPUT_DIR / f"{notebook}.html",
+                OUTPUT_DIR / f"{notebook_name}.html",
+                *notebook_tasks[notebook]["targets"],
             ],
             "clean": True,
-            'verbosity': 0,
+            "verbosity": 0,
         }
 
 
