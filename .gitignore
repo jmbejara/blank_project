@@ -7,10 +7,10 @@
 /data/*
 
 # Exclude output directory since it's should generated automatically
-/output/*
+# /output/*
 
 # Exclude PDFs generated from source LaTeX files, which are kept in the reports directory
-/reports/*.pdf
+# /reports/*.pdf
 
 # Secrets saved in environment files
 .env*
@@ -152,7 +152,6 @@ coverage.xml
 # Sphinx documentation
 docs/
 /docs_src/apidocs
-
 
 # PyBuilder
 target/
