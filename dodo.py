@@ -254,28 +254,34 @@ def task_compile_latex_docs():
     file_dep = [
         "./reports/report_example.tex",
         "./reports/slides_example.tex",
+        "./reports/report_simple_example.tex",
+        "./reports/slides_simple_example.tex",
         "./src/example_plot.py",
         "./src/example_table.py",
     ]
-    file_output = [
+    targets = [
         "./reports/report_example.pdf",
         "./reports/slides_example.pdf",
+        "./reports/report_simple_example.pdf",
+        "./reports/slides_simple_example.pdf",
     ]
-    targets = [file for file in file_output]
 
     return {
         "actions": [
             # My custom LaTeX templates
-            "latexmk -xelatex -cd ./reports/report_example.tex",  # Compile
-            "latexmk -xelatex -c -cd ./reports/report_example.tex",  # Clean
-            "latexmk -xelatex -cd ./reports/slides_example.tex",  # Compile
-            "latexmk -xelatex -c -cd ./reports/slides_example.tex",  # Clean
+            "latexmk -xelatex -halt-on-error -cd ./reports/report_example.tex",  # Compile
+            "latexmk -xelatex -halt-on-error -c -cd ./reports/report_example.tex",  # Clean
+            "latexmk -xelatex -halt-on-error -cd ./reports/slides_example.tex",  # Compile
+            "latexmk -xelatex -halt-on-error -c -cd ./reports/slides_example.tex",  # Clean
             # Simple templates based on small adjustments to Overleaf templates
-            "latexmk -xelatex -cd ./reports/report_simple_example.tex",  # Compile
-            "latexmk -xelatex -c -cd ./reports/report_simple_example.tex",  # Clean
-            "latexmk -xelatex -cd ./reports/slides_simple_example.tex",  # Compile
-            "latexmk -xelatex -c -cd ./reports/slides_simple_example.tex",  # Clean
-            # "latexmk -CA -cd ../reports/",
+            "latexmk -xelatex -halt-on-error -cd ./reports/report_simple_example.tex",  # Compile
+            "latexmk -xelatex -halt-on-error -c -cd ./reports/report_simple_example.tex",  # Clean
+            "latexmk -xelatex -halt-on-error -cd ./reports/slides_simple_example.tex",  # Compile
+            "latexmk -xelatex -halt-on-error -c -cd ./reports/slides_simple_example.tex",  # Clean
+            #
+            # Example of compiling and cleaning in another directory. This often fails, so I don't use it
+            # f"latexmk -xelatex -halt-on-error -cd -output-directory=../output/ ./reports/report_example.tex",  # Compile
+            # f"latexmk -xelatex -halt-on-error -c -cd -output-directory=../output/ ./reports/report_example.tex",  # Clean
         ],
         "targets": targets,
         "file_dep": file_dep,
