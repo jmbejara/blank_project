@@ -113,36 +113,41 @@ def task_pull_fred():
 #     Run several data pulls
 
 #     This will run commands like this:
-#     presto-cli --output-format=CSV_HEADER --file=/data/unixhome/src/sql_gross_performance.sql > /data/unixhome/src/sometest.csv
+#     presto-cli --output-format=CSV_HEADER --file=presto_something.sql > ../data/pulled/presto_something.csv
+
+#     May need to do this first:
+#     sed -ri "/^presto/d" ~/.ssh/known_hosts
+#     sed -ri "/^presto/d" ~/.ssh/known_hosts
+#     ssh -t presto.YOURURL.edu "kinit jdoe@YOURURL.edu"
+
 
 #     """
-#     sql_pulls_dict = {
-#         'sometest.sql':'sometest.csv',
-#     }
-#     file_dep = list(sql_pulls_dict.keys())
-#     file_output = list(sql_pulls_dict.values())
+#     sql_pulls = [
+#         'sql_something.sql',
+#         'sql_something2.sql',
+#     ]
 
-#     targets = [PRIVATE_DATA_DIR / 'sql_pulled' / file for file in file_output]
-
-#     def action_string(sql_file, csv_output):
+#     def sql_action_to_csv_command(sql_file, csv_output):
 #         s = f"""
-#             ssh sql.someurl.com <<-'ENDSSH'
+#             ssh presto.YOURURL.edu <<-'ENDSSH' 
 #             echo Starting Presto Pull Command for {sql_file}
-#             cd {getcwd()}
-#             presto-cli --output-format=CSV_HEADER --file={sql_file} > {csv_output}
+#             cd {getcwd()} 
+#             presto-cli --output-format=CSV_HEADER --file=./src/{sql_file} > {csv_output}
 #             """
 #         return s
-#     actions = [
-#                 action_string(sql_file,
-#                               (PRIVATE_DATA_DIR / 'sql_pulled' / sql_pulls_dict[sql_file])
-#                               ) for sql_file in sql_pulls_dict
-#             ]
-#     return {
-#         "actions":actions,
-#         "targets": targets,
-#         'task_dep':[],
-#         "file_dep": file_dep,
-#     }
+
+#     stems = [file.split(".")[0] for file in sql_pulls]
+#     for file in stems:
+#         target = DATA_DIR / "pulled" / f"{file}.csv"
+#         yield {
+#             "name": f"{file}.sql",
+#             "actions": [sql_action_to_csv_command(f"{file}.sql", target)],
+#             "file_dep": [Path("./src") / f"{file}.sql"],
+#             "targets": [target],
+#             "clean": True,
+#             # "verbosity": 0,
+#         }
+
 
 
 def task_summary_stats():
