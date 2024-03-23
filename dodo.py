@@ -30,6 +30,7 @@ class GreenReporter(ConsoleReporter):
 DOIT_CONFIG = {
     "reporter": GreenReporter,
     # other config here...
+    # "cleanforget": True, # Doit will forget about tasks that have been cleaned.
 }
 init(autoreset=True)
 
@@ -104,7 +105,14 @@ def task_pull_fred():
         ],
         "targets": targets,
         "file_dep": file_dep,
-        "clean": True,
+        "clean": [], # Don't clean these files by default. The ideas
+        # is that a data pull might be expensive, so we don't want to
+        # redo it unless we really mean it. So, when you run
+        # doit clean, all other tasks will have their targets
+        # cleaned and will thus be rerun the next time you call doit.
+        # But this one wont.
+        # Use doit forget --all to redo all tasks. Use doit clean
+        # to clean and forget the cheaper tasks.
     }
 
 
@@ -116,7 +124,7 @@ def task_pull_fred():
 #     presto-cli --output-format=CSV_HEADER --file=presto_something.sql > ../data/pulled/presto_something.csv
 
 #     May need to do this first:
-#     sed -ri "/^presto/d" ~/.ssh/known_hosts
+
 #     sed -ri "/^presto/d" ~/.ssh/known_hosts
 #     ssh -t presto.YOURURL.edu "kinit jdoe@YOURURL.edu"
 
@@ -129,9 +137,9 @@ def task_pull_fred():
 
 #     def sql_action_to_csv_command(sql_file, csv_output):
 #         s = f"""
-#             ssh presto.YOURURL.edu <<-'ENDSSH' 
+#             ssh presto.YOURURL.edu <<-'ENDSSH'
 #             echo Starting Presto Pull Command for {sql_file}
-#             cd {getcwd()} 
+#             cd {getcwd()}
 #             presto-cli --output-format=CSV_HEADER --file=./src/{sql_file} > {csv_output}
 #             """
 #         return s
@@ -144,10 +152,9 @@ def task_pull_fred():
 #             "actions": [sql_action_to_csv_command(f"{file}.sql", target)],
 #             "file_dep": [Path("./src") / f"{file}.sql"],
 #             "targets": [target],
-#             "clean": True,
+#             "clean": [],
 #             # "verbosity": 0,
 #         }
-
 
 
 def task_summary_stats():
@@ -322,28 +329,31 @@ def task_compile_sphinx_docs():
 #     This will knit the RMarkdown files for easier sharing of results.
 #     """
 #     files_to_knit = [
-#         'shift_share.Rmd',
-#         ]
+#         "shift_share.Rmd",
+#     ]
 
-#     files_to_knit_stems = [file.split('.')[0] for file in files_to_knit]
+#     files_to_knit_stems = [file.split(".")[0] for file in files_to_knit]
 
 #     file_dep = [
-#         'load_performance_and_loan_merged.py',
+#         "load_performance_and_loan_merged.py",
 #         *[file + ".Rmd" for file in files_to_knit_stems],
-#         ]
+#     ]
 
-#     file_output = [file + '.html' for file in files_to_knit_stems]
+#     file_output = [file + ".html" for file in files_to_knit_stems]
 #     targets = [OUTPUT_DIR / file for file in file_output]
 
 #     def knit_string(file):
 #         return f"""Rscript -e 'library(rmarkdown); rmarkdown::render("{file}.Rmd", output_format="html_document", OUTPUT_DIR="../output/")'"""
+
 #     actions = [knit_string(file) for file in files_to_knit_stems]
 #     return {
 #         "actions": [
-#                     "module use -a /opt/aws_opt/Modulefiles",
-#                     "module load R/4.2.2",
-#                     *actions],
+#             "module use -a /opt/aws_opt/Modulefiles",
+#             "module load R/4.2.2",
+#             *actions,
+#         ],
 #         "targets": targets,
-#         'task_dep':[],
+#         "task_dep": [],
 #         "file_dep": file_dep,
+#         "clean": True,
 #     }
