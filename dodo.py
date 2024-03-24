@@ -105,7 +105,7 @@ def task_pull_fred():
         ],
         "targets": targets,
         "file_dep": file_dep,
-        "clean": [], # Don't clean these files by default. The ideas
+        "clean": [],  # Don't clean these files by default. The ideas
         # is that a data pull might be expensive, so we don't want to
         # redo it unless we really mean it. So, when you run
         # doit clean, all other tasks will have their targets
@@ -257,7 +257,7 @@ def task_run_notebooks():
                 *notebook_tasks[notebook]["targets"],
             ],
             "clean": True,
-            "verbosity": 0,
+            # "verbosity": 1,
         }
 
 
@@ -324,36 +324,61 @@ def task_compile_sphinx_docs():
     }
 
 
+###############################################################
+## Uncomment the task below if you have R installed. See README
+###############################################################
+# rmarkdown_tasks = {
+#     "03_example_regressions.Rmd": {
+#         "file_dep": ["./src/load_fred.py"],
+#         "targets": [],
+#     },
+#     # "03_example_regressions.Rmd": {
+#     #     "file_dep": ["./src/load_fred.py"],
+#     #     "targets": [],
+#     # },
+# }
+
+
 # def task_knit_RMarkdown_files():
 #     """Preps the RMarkdown files for presentation format.
 #     This will knit the RMarkdown files for easier sharing of results.
 #     """
-#     files_to_knit = [
-#         "shift_share.Rmd",
-#     ]
-
-#     files_to_knit_stems = [file.split(".")[0] for file in files_to_knit]
-
-#     file_dep = [
-#         "load_performance_and_loan_merged.py",
-#         *[file + ".Rmd" for file in files_to_knit_stems],
-#     ]
-
-#     file_output = [file + ".html" for file in files_to_knit_stems]
-#     targets = [OUTPUT_DIR / file for file in file_output]
-
+#     # def knit_string(file):
+#     #     return f"""Rscript -e "library(rmarkdown); rmarkdown::render('./src/03_example_regressions.Rmd', output_format='html_document', output_dir='./output/')"""
+#     str_output_dir = str(OUTPUT_DIR).replace("\\", "/")
 #     def knit_string(file):
-#         return f"""Rscript -e 'library(rmarkdown); rmarkdown::render("{file}.Rmd", output_format="html_document", OUTPUT_DIR="../output/")'"""
+#         """
+#         Properly escapes the quotes and concatenates so that this will run.
+#         The single line version above was harder to get right because of weird
+#         quotation escaping errors.
 
-#     actions = [knit_string(file) for file in files_to_knit_stems]
-#     return {
-#         "actions": [
-#             "module use -a /opt/aws_opt/Modulefiles",
-#             "module load R/4.2.2",
-#             *actions,
-#         ],
-#         "targets": targets,
-#         "task_dep": [],
-#         "file_dep": file_dep,
-#         "clean": True,
-#     }
+#         Example command:
+#         Rscript -e "library(rmarkdown); rmarkdown::render('./src/03_example_regressions.Rmd', output_format='html_document', output_dir='./output/')
+#         """
+#         return (
+#             "Rscript -e "
+#             '"library(rmarkdown); '
+#             f"rmarkdown::render('./src/{file}.Rmd', "
+#             "output_format='html_document', "
+#             f"output_dir='{str_output_dir}')\""
+#         )
+
+#     for notebook in rmarkdown_tasks.keys():
+#         notebook_name = notebook.split(".")[0]
+#         file_dep = [f"./src/{notebook}", *rmarkdown_tasks[notebook]["file_dep"]]
+#         html_file = f"{notebook_name}.html"
+#         targets = [f"{OUTPUT_DIR / html_file}", *rmarkdown_tasks[notebook]["targets"]]
+#         actions = [
+#             # "module use -a /opt/aws_opt/Modulefiles",
+#             # "module load R/4.2.2",
+#             knit_string(notebook_name)
+#         ]
+
+#         yield {
+#             "name": notebook,
+#             "actions": actions,
+#             "file_dep": file_dep,
+#             "targets": targets,
+#             "clean": True,
+#             # "verbosity": 1,
+#         }

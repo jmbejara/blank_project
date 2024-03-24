@@ -30,6 +30,17 @@ doit
 ```
 And that's it!
 
+If you would also like to run the R code included in this project, you can either install
+R and the required packages manually, or you can use the included `environment.yml` file.
+To do this, run
+```
+mamba env create -f environment.yml
+```
+I'm using `mamba` here because `conda` is too slow. Activate the environment. 
+Then, make sure to uncomment
+out the RMarkdown task from the `dodo.py` file. Then,
+run `doit` as before.
+
 ## Other commands
 
 You can run the unit test, including doctests, with the following command:
