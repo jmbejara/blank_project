@@ -116,6 +116,41 @@ def task_pull_fred():
     }
 
 
+##############################$
+## Demo: Other misc. data pulls
+##############################$
+# def task_pull_fred():
+#     """ """
+#     file_dep = [
+#         "./src/load_bloomberg.py",
+#         "./src/load_CRSP_Compustat.py",
+#         "./src/load_CRSP_stock.py",
+#         "./src/load_fed_yield_curve.py",
+#         ]
+#     file_output = [
+#         "bloomberg.parquet",
+#         "CRSP_Compustat.parquet",
+#         "CRSP_stock.parquet",
+#         "fed_yield_curve.parquet",
+#         ]
+#     targets = [DATA_DIR / "pulled" / file for file in file_output]
+
+#     return {
+#         "actions": [
+#             "ipython ./src/load_bloomberg.py",
+#             "ipython ./src/load_CRSP_Compustat.py",
+#             "ipython ./src/load_CRSP_stock.py",
+#             "ipython ./src/load_fed_yield_curve.py",
+#         ],
+#         "targets": targets,
+#         "file_dep": file_dep,
+#         "clean": [],  # Don't clean these files by default.
+#     }
+
+
+##################################################
+# Demo for automated SQL pulls from another server
+##################################################
 # def task_pull_data_via_presto():
 #     """
 #     Run several data pulls
