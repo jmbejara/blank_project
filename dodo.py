@@ -11,6 +11,8 @@ import sys
 
 sys.path.insert(1, "./src/")
 
+from os import getcwd
+
 ## Custom reporter: Print PyDoit Text in Green
 # This is helpful because some tasks write to sterr and pollute the output in
 # the console. I don't want to mute this output, because this can sometimes
