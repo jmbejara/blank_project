@@ -4,6 +4,7 @@
 
 import numpy as np
 import pandas as pd
+import polars as pl
 from matplotlib import pyplot as plt
 import matplotlib.dates as mdates
 
@@ -67,6 +68,58 @@ def merge_stats(df_left, df_right, on=[]):
     df_stats["intersection/left"] = len(intersection) / len(left_index)
     df_stats["intersection/right"] = len(intersection) / len(right_index)
     return df_stats
+
+
+
+
+def dataframe_set_difference(dff, df, library="pandas", show="rows_and_numbers"):
+    """
+    Gives the rows that appear in dff but not in df
+    
+    Example
+    -------
+    rows = data_frame_set_difference(dff, df)
+
+    """
+    if library == "pandas":
+        # Reset index to ensure the row numbers are captured as a column
+        # This is important for tracking the original row numbers after operations
+        dff_reset = dff.reset_index().rename(columns={"index": "original_row_number"})
+        df_reset = df.reset_index(drop=True)
+
+        # Perform an outer merge with an indicator to identify rows present only in dff
+        merged = dff_reset.merge(
+            df_reset, how="left", indicator=True, on=dff.columns.tolist()
+        )
+
+        # Filter to rows only in dff (left_only)
+        only_in_dff = merged[merged["_merge"] == "left_only"]
+
+        # Extract the original row numbers of these rows
+        row_numbers = only_in_dff["original_row_number"].tolist()
+        ret = row_numbers
+
+    elif library == "polars":
+        # Assuming dff and df have the same schema (column names and types)
+        # First, add a temporary column to each DataFrame with row numbers
+        dff_with_index = dff.with_columns(pl.arange(0, dff.height).alias("row_number"))
+        df_with_index = df.with_columns(pl.arange(0, df.height).alias("dummy_row_number"))
+
+        # Perform an anti join to find rows in dff not present in df
+        # Note: This requires the DataFrames to have columns to join on that define row uniqueness
+        diff = dff_with_index.join(df_with_index, on=list(dff.columns), how="anti")
+
+        # Extract the row numbers of the differing rows
+        row_numbers = diff.select("row_number").to_series(0).to_list()
+        ret = row_numbers
+
+    else:
+        raise ValueError("Unknown library")
+    if show == "rows_and_numbers":
+        rows = dff[row_numbers]
+        ret = row_numbers, rows
+
+    return ret
 
 
 def move_column_inplace(df, col, pos=0):
