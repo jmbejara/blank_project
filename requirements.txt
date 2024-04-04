@@ -14,6 +14,7 @@
 altair==5.2.0
 beautifulsoup4==4.12.3
 black==24.3.0
+colorama
 doit==0.36.0
 ipython==8.22.2
 jupyter==1.0.0
@@ -21,6 +22,7 @@ jupyter-book==1.0.0
 jupyterlab==4.1.5
 linearmodels==5.4
 matplotlib==3.8.3
+myst-nb
 myst-parser==2.0.0
 notebook==7.1.2
 numpy==1.26.4
