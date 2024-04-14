@@ -71,7 +71,6 @@ def merge_stats(df_left, df_right, on=[]):
 
 
 
-
 def dataframe_set_difference(dff, df, library="pandas", show="rows_and_numbers"):
     """
     Gives the rows that appear in dff but not in df
@@ -101,13 +100,16 @@ def dataframe_set_difference(dff, df, library="pandas", show="rows_and_numbers")
 
     elif library == "polars":
         # Assuming dff and df have the same schema (column names and types)
+        assert dff.columns == df.columns
+        
         # First, add a temporary column to each DataFrame with row numbers
         dff_with_index = dff.with_columns(pl.arange(0, dff.height).alias("row_number"))
         df_with_index = df.with_columns(pl.arange(0, df.height).alias("dummy_row_number"))
-
+        
         # Perform an anti join to find rows in dff not present in df
         # Note: This requires the DataFrames to have columns to join on that define row uniqueness
-        diff = dff_with_index.join(df_with_index, on=list(dff.columns), how="anti")
+
+        diff = dff_with_index.join(df_with_index, on=list(dff.columns), how="anti", join_nulls=True)
 
         # Extract the row numbers of the differing rows
         row_numbers = diff.select("row_number").to_series(0).to_list()
