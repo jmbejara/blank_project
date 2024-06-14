@@ -228,3 +228,5 @@ vignettes/*.pdf
 *.xdv
 *.xdv
 \.pytest_cache/
+
+.doit.db.db
