@@ -43,6 +43,8 @@ run `doit` as before.
 
 ## Other commands
 
+### Unit Tests and Doc Tests
+
 You can run the unit test, including doctests, with the following command:
 ```
 pytest --doctest-modules
@@ -54,6 +56,18 @@ jupyter-book build -W ./
 ```
 Use `del` instead of rm on Windows
 
+### Setting Environment Variables
+
+This can be done easily in a Linux or Mac terminal with the following command:
+```
+set -a
+source .env
+set +a
+```
+In Windows, this can be done with the included `set_env.bat` file,
+```
+set_env.bat
+```
 
 # General Directory Structure
 
