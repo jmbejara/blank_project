@@ -277,6 +277,7 @@ def task_run_notebooks():
         yield {
             "name": notebook,
             "actions": [
+                'python -c "import sys; from datetime import datetime; print(datetime.now(), file=sys.stderr)"',
                 jupyter_execute_notebook(notebook_name),
                 jupyter_to_html(notebook_name),
                 copy_notebook_to_folder(
