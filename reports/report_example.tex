@@ -1,17 +1,17 @@
 % !TeX root = report_example.tex
-\newcommand*{\MyHeaderPath}{.}% This path definition is also passed to inside the header files.
 \newcommand*{\PathToAssets}{../assets}%
-\newcommand*{\PathToOutput}{../output/}%
+\newcommand*{\PathToOutput}{../output}%
 % \newcommand*{\PathToBibFile}{bibliography.bib}%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% This file is compiled with XeLaTex.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\input{\MyHeaderPath/_article_header.tex}
-\input{\MyHeaderPath/_lean_header.tex}
-
+\documentclass[12pt]{article}
+%\documentclass[reqno]{amsart}
+%\documentclass[titlepage]{amsart}
+\usepackage{my_article_header}
+\usepackage{my_common_header}
 
 \begin{document}
 \title{

@@ -1,11 +1,11 @@
-\newcommand*{\MyHeaderPath}{.}% This path definition is also passed to inside the header files.
 \newcommand*{\PathToAssets}{../assets}%
 \newcommand*{\PathToOutput}{../output}%
 % \newcommand*{\PathToBibFile}{../../../bibliography.bib}%
 
 
-\input{\MyHeaderPath/_beamer_header.tex}
-\input{\MyHeaderPath/_lean_header.tex}
+\documentclass[ignorenonframetext, 9pt]{beamer}
+\usepackage{my_beamer_header}
+\usepackage{my_common_header}
 
 
 \title[Short Title]{

@@ -303,7 +303,10 @@ def task_compile_latex_docs():
     """Compile the LaTeX documents to PDFs"""
     file_dep = [
         "./reports/report_example.tex",
+        "./reports/my_article_header.sty",
         "./reports/slides_example.tex",
+        "./reports/my_beamer_header.sty",
+        "./reports/my_common_header.sty",
         "./reports/report_simple_example.tex",
         "./reports/slides_simple_example.tex",
         "./src/example_plot.py",
