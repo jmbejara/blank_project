@@ -123,6 +123,33 @@ def dataframe_set_difference(dff, df, library="pandas", show="rows_and_numbers")
 
     return ret
 
+def freq_counts(df, col=None, with_count=True, with_cum_freq=True):
+    """Like value_counts, but normalizes to give frequency
+    Polars function
+    df is a polars dataframe
+
+    Example
+    -------
+    ```
+    df.filter(
+        (pl.col("fdate") > pl.datetime(2020,1,1)) &
+        (pl.col("bus_dt") == pl.col("fdate")) 
+    ).pipe(freq_counts, col="bus_tenor_bin")
+    ```
+    """
+    s = df[col]
+    ret = s.value_counts(sort=True).with_columns(
+        freq = pl.col("count") / s.shape[0] * 100,
+    ).with_columns(
+        cum_freq = pl.col("freq").cum_sum()
+    )
+    if not with_count:
+        ret = ret.drop("count")
+    if not with_cum_freq:
+        ret = ret.drop("cum_freq")
+
+    return ret
+
 
 def move_column_inplace(df, col, pos=0):
     """
