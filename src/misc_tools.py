@@ -172,13 +172,15 @@ def weighted_average(data_col=None, weight_col=None, data=None):
 
     Examples
     --------
-
+    ```
     >>> df_nccb = pd.DataFrame({
     ...     'rate': [2, 3, 2],
     ...     'start_leg_amount': [100, 200, 100]},
     ... )
     >>> weighted_average(data_col='rate', weight_col='start_leg_amount', data=df_nccb)
     2.5
+
+    ```
     """
     weights_function = lambda row: data.loc[row.index, weight_col]
     wm = lambda row: np.average(row, weights=weights_function(row))
@@ -202,6 +204,8 @@ def groupby_weighted_average(
 
     Examples
     --------
+
+    ```
     >>> df_nccb = pd.DataFrame({
     ...     'trade_direction': ['RECEIVED', 'RECEIVED', 'DELIVERED'],
     ...     'rate': [2, 3, 2],
@@ -212,6 +216,9 @@ def groupby_weighted_average(
     DELIVERED   2.00
     RECEIVED    2.67
     dtype: float64
+
+    ```
+
     """
     data["_data_times_weight"] = data[data_col] * data[weight_col]
     data["_weight_where_notnull"] = data[weight_col] * pd.notnull(data[data_col])
@@ -241,6 +248,7 @@ def groupby_weighted_std(
     Examples
     --------
 
+    ```
     >>> df_nccb = pd.DataFrame({
     ...     'trade_direction': ['RECEIVED', 'RECEIVED', 'RECEIVED', 'RECEIVED',
     ...         'DELIVERED', 'DELIVERED', 'DELIVERED', 'DELIVERED'],
@@ -265,6 +273,9 @@ def groupby_weighted_std(
     0.4330127018922193
     >>> np.std([2,2,2])
     0.0
+
+    ```
+
     """
 
     def weighted_sd(input_df):
@@ -515,7 +526,9 @@ def _with_lagged_column_no_resample(
 ):
     """This can be easily accomplished with the shift method. For example,
 
+    ```
     df.groupby("id")["value"].shift(1)
+    ```
 
     This function is
     to remind myself of this older method.
@@ -559,6 +572,8 @@ def with_lagged_columns(
 
     Examples
     --------
+    
+    ```
     >>> a=[
     ... ["A",'1990/1/1',1],
     ... ["A",'1990/2/1',2],
@@ -619,7 +634,10 @@ def with_lagged_columns(
     11  B 1990-05-01    NaN      4.00
     13  B 1990-06-01   6.00       NaN
 
+    ```
+
     Some valid frequencies are
+    ```
     # "B": Business Day
     # "D": Calendar day
     # "W": Weekly
@@ -641,7 +659,10 @@ def with_lagged_columns(
     # "L" or "ms": Milliseconds
     # "U": Microseconds
     # "N": Nanoseconds
+    ```
+
     as seen here: https://business-science.github.io/pytimetk/guides/03_pandas_frequency.html
+
     """
     if resample:
         df_wide = df.pivot(index=date_col, columns=id_column, values=column_to_lag)
@@ -677,6 +698,7 @@ def leave_one_out_sums(df, groupby=[], summed_col=""):
     Examples
     --------
 
+    ```
     >>> df = pd.DataFrame({
     ...     'A' : ['foo', 'bar', 'foo', 'bar', 'foo', 'bar'],
     ...     'B' : ['one', 'one', 'one', 'two', 'two', 'two'],
@@ -695,6 +717,9 @@ def leave_one_out_sums(df, groupby=[], summed_col=""):
     ...     df['LOO_Sum_C_groupby_B'],
     ...     s,
     ...     check_names=False)
+
+    ```
+
     """
     s = df.groupby(groupby)[summed_col].transform(lambda x: x.sum() - x)
     return s
@@ -704,9 +729,12 @@ def get_most_recent_quarter_end(d):
     """
     Take a datetime and find the most recent quarter end date
 
+    ```
     >>> d = pd.to_datetime('2019-10-21')
     >>> get_most_recent_quarter_end(d)
     datetime.datetime(2019, 9, 30, 0, 0)
+
+    ```
     """
     quarter_month = (d.month - 1) // 3 * 3 + 1
     quarter_end = datetime.datetime(d.year, quarter_month, 1) - relativedelta(days=1)
@@ -717,9 +745,12 @@ def get_next_quarter_start(d):
     """
     Take a datetime and find the start date of the next quarter
 
+    ```
     >>> d = pd.to_datetime('2019-10-21')
     >>> get_next_quarter_start(d)
     datetime.datetime(2020, 1, 1, 0, 0)
+
+    ```
     """
     quarter_month = (d.month - 1) // 3 * 3 + 4
     years_to_add = quarter_month // 12
@@ -733,6 +764,7 @@ def get_end_of_current_month(d):
     Take a datetime and find the last date of the current month
     and also reset time to zero.
 
+    ```
     >>> d = pd.to_datetime('2019-10-21')
     >>> get_end_of_current_month(d)
     Timestamp('2019-10-31 00:00:00')
@@ -740,6 +772,8 @@ def get_end_of_current_month(d):
     >>> d = pd.to_datetime('2023-03-31 12:00:00')
     >>> get_end_of_current_month(d)
     Timestamp('2023-03-31 00:00:00')
+
+    ```
 
     From https://stackoverflow.com/a/13565185
     """
@@ -758,6 +792,7 @@ def get_end_of_current_quarter(d):
     Take a datetime and find the last date of the current quarter
     and also reset time to zero.
 
+    ```
     >>> d = pd.to_datetime('2019-10-21')
     >>> get_end_of_current_quarter(d)
     datetime.datetime(2019, 12, 31, 0, 0)
@@ -767,6 +802,8 @@ def get_end_of_current_quarter(d):
     >>> d = pd.to_datetime('2023-03-31 12:00:00')
     >>> get_end_of_current_quarter(d)
     datetime.datetime(2023, 3, 31, 0, 0)
+
+    ```
     """
     quarter_start = get_next_quarter_start(d)
     quarter_end = quarter_start - datetime.timedelta(days=1)
@@ -822,11 +859,11 @@ def plot_weighted_median_with_distribution_bars(
     xlabel=None,
     label=None,
 ):
-    """
-    Plot the weighted median of a variable over time. Optionally, plot the 25th and 75th percentiles
+    """Plot the weighted median of a variable over time. Optionally, plot the 25th and 75th percentiles
 
     Examples
     --------
+
     ```
     ax = plot_weighted_median_with_distribution_bars(
             data=df,
