@@ -266,7 +266,7 @@ def task_convert_notebooks_to_scripts():
             "verbosity": 0,
         }
 
-
+# fmt: off
 def task_run_notebooks():
     """Preps the notebooks for presentation format.
     Execute notebooks if the script version of it has been changed.
@@ -277,7 +277,7 @@ def task_run_notebooks():
         yield {
             "name": notebook,
             "actions": [
-                'python -c "import sys; from datetime import datetime; print(datetime.now(), file=sys.stderr)"',
+                """python -c "import sys; from datetime import datetime; print(f'Start """ + notebook + """: {datetime.now()}', file=sys.stderr)" """,
                 jupyter_execute_notebook(notebook_name),
                 jupyter_to_html(notebook_name),
                 copy_notebook_to_folder(
@@ -285,6 +285,7 @@ def task_run_notebooks():
                 ),
                 jupyter_clear_output(notebook_name),
                 # jupyter_to_python(notebook_name, build_dir),
+                """python -c "import sys; from datetime import datetime; print(f'End """ + notebook + """: {datetime.now()}', file=sys.stderr)" """,
             ],
             "file_dep": [
                 OUTPUT_DIR / f"_{notebook_name}.py",
@@ -297,7 +298,7 @@ def task_run_notebooks():
             "clean": True,
             # "verbosity": 1,
         }
-
+# fmt: on
 
 def task_compile_latex_docs():
     """Compile the LaTeX documents to PDFs"""
