@@ -347,15 +347,13 @@ def task_compile_sphinx_docs():
     file_dep = [
         "./docs_src/conf.py",
         "./docs_src/index.rst",
-        "./docs_src/api_references.md",
-        "./docs_src/examples/myst_markdown_demos.md",
-        "./docs_src/examples/api.rst",
+        "./docs_src/myst_markdown_demos.md",
+        "./docs_src/notebooks.md",
     ]
     targets = [
         "./docs/html/index.html",
-        "./docs/html/api_references.html",
-        "./docs/html/examples/myst_markdown_demos.html",
-        "./docs/html/examples/api.html",
+        "./docs/html/myst_markdown_demos.html",
+        "./docs/html/apidocs/index.html",
     ]
 
     return {

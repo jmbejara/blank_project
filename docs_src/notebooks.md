@@ -1,14 +1,14 @@
-# 📖 API References
+# 📖 Notebooks
 
 Here is a demo of two things:
 
- - Demonstrating the addition of plain markdown files into the documentation.
+ - Demonstrating the inclusion of notebooks into the documentation.
  - Demonstrating the creation of a page with subsections, where the subsections appear
  as children in the main table of contents on the main page.
 
 ```{toctree}
-examples/myst_markdown_demos.md
-examples/api.rst
+_notebook_build/_01_example_notebook.ipynb
+_notebook_build/_02_interactive_plot_example.ipynb
 ```
 
 Vestibulum interdum orci ac viverra porta. Maecenas ut nunc id metus placerat

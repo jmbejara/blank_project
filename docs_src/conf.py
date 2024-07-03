@@ -13,7 +13,8 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath("../src/"))
+# Needed for sphinx-autodoc (but not autodoc2)
+# sys.path.insert(0, os.path.abspath("../src/"))
 
 
 # -- Project information -----------------------------------------------------
@@ -33,11 +34,21 @@ external_toc_exclude_missing = True
 # ones.
 extensions = [
     # "myst_parser",
-    "sphinx.ext.autodoc",
+    "autodoc2",
     "sphinx.ext.intersphinx",
-    "numpydoc",
+    # "numpydoc",
     'myst_nb',
 ]
+
+## Use autodoc2 to generate documentation from the source code
+# Here are some reasons why: https://sphinx-autodoc2.readthedocs.io/en/latest/autodoc_diff.html
+autodoc2_packages = [
+    # "../src",
+    "../src/misc_tools.py",
+]
+# Use MyST by default for all docstrings
+# https://sphinx-autodoc2.readthedocs.io/en/latest/quickstart.html#using-markdown-myst-docstrings
+autodoc2_render_plugin = "myst"
 
 myst_enable_extensions = [
     "amsmath",

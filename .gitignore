@@ -92,8 +92,9 @@ coverage.xml
 *.log
 
 # Sphinx documentation
-docs_src/_build/
-docs/_build/
+docs/
+/docs_src/apidocs
+
 
 # PyBuilder
 target/
@@ -231,5 +232,3 @@ vignettes/*.pdf
 \.pytest_cache/
 
 .doit.db.db
-
-docs/
