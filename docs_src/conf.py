@@ -95,7 +95,7 @@ html_theme_options = {
         "thebe": False,
         "colab_url": "",
     },
-    "path_to_docs": "docs",
+    "path_to_docs": "docs_src",
     "repository_url": "https://github.com/jmbejara/blank_project",
     "repository_branch": "master",
     "extra_footer": "",

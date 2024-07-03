@@ -256,7 +256,7 @@ def task_convert_notebooks_to_scripts():
             "actions": [
                 # jupyter_execute_notebook(notebook_name),
                 # jupyter_to_html(notebook_name),
-                # copy_notebook_to_folder(notebook_name, Path("./src"), "./docs/_notebook_build/"),
+                # copy_notebook_to_folder(notebook_name, Path("./src"), "./docs_src/_notebook_build/"),
                 jupyter_clear_output(notebook_name),
                 jupyter_to_python(notebook_name, build_dir),
             ],
@@ -281,7 +281,7 @@ def task_run_notebooks():
                 jupyter_execute_notebook(notebook_name),
                 jupyter_to_html(notebook_name),
                 copy_notebook_to_folder(
-                    notebook_name, Path("./src"), "./docs/_notebook_build/"
+                    notebook_name, Path("./src"), "./docs_src/_notebook_build/"
                 ),
                 jupyter_clear_output(notebook_name),
                 # jupyter_to_python(notebook_name, build_dir),
@@ -345,21 +345,22 @@ def task_compile_latex_docs():
 def task_compile_sphinx_docs():
     """Compile Sphinx Docs"""
     file_dep = [
-        "./docs/conf.py",
-        "./docs/index.rst",
-        "./docs/api_references.md",
-        "./docs/examples/myst_markdown_demos.md",
-        "./docs/examples/api.rst",
+        "./docs_src/conf.py",
+        "./docs_src/index.rst",
+        "./docs_src/api_references.md",
+        "./docs_src/examples/myst_markdown_demos.md",
+        "./docs_src/examples/api.rst",
     ]
     targets = [
-        "./docs/_build/html/index.html",
-        "./docs/_build/html/api_references.html",
-        "./docs/_build/html/examples/myst_markdown_demos.html",
-        "./docs/_build/html/examples/api.html",
+        "./docs/html/index.html",
+        "./docs/html/api_references.html",
+        "./docs/html/examples/myst_markdown_demos.html",
+        "./docs/html/examples/api.html",
     ]
 
     return {
-        "actions": ["sphinx-build -M html ./docs/ ./docs/_build"],
+        "actions": ["sphinx-build -M html ./docs_src/ ./docs"], # Use docs as build destination
+        # "actions": ["sphinx-build -M html ./docs/ ./docs/_build"], # Previous standard organization
         "targets": targets,
         "file_dep": file_dep,
         "task_dep": ["run_notebooks"],
