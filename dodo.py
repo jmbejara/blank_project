@@ -64,7 +64,7 @@ from doit.tools import run_once
 
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 DATA_DIR = Path(config.DATA_DIR)
-DOCS_PUBLISH_DIR = Path("./docs")
+DOCS_PUBLISH_DIR = Path(config.DOCS_PUBLISH_DIR)
 
 ## Helpers for handling Jupyter Notebook tasks
 # fmt: off
@@ -381,11 +381,16 @@ def copy_build_files_to_docs_publishing_dir():
 
     Additionally, this function creates a '.nojekyll' file in the
     'DOCS_PUBLISH_DIR' if it doesn't already exist.
+
+    Note that I'm using by default the "docs" directory as the build
+    directory. It is also the publishing directory. I just need
+    to copy the files out of the HTML sub-directory into the
+    root of the publishing directory.
     """
     # shutil.rmtree(DOCS_PUBLISH_DIR, ignore_errors=True)
     # shutil.copytree(BUILD_DIR, DOCS_PUBLISH_DIR)
 
-    for item in (Path("./docs") / "html").iterdir():
+    for item in (DOCS_PUBLISH_DIR / "html").iterdir():
         if item.is_file():
             target_file = DOCS_PUBLISH_DIR / item.name
             if target_file.exists():
