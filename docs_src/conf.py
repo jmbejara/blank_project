@@ -20,8 +20,8 @@ import sys
 # -- Project information -----------------------------------------------------
 
 project = "Blank Project"
-copyright = "2024, John Doe"
-author = "John Doe"
+copyright = "2024, Jeremiah Bejarano"
+author = "Jeremiah Bejarano"
 
 # The full version, including alpha/beta/rc tags
 release = "0.1"

@@ -12,6 +12,7 @@ import sys
 sys.path.insert(1, "./src/")
 
 from os import getcwd
+import shutil
 
 ## Custom reporter: Print PyDoit Text in Green
 # This is helpful because some tasks write to sterr and pollute the output in
@@ -63,7 +64,7 @@ from doit.tools import run_once
 
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 DATA_DIR = Path(config.DATA_DIR)
-
+DOCS_PUBLISH_DIR = Path("./docs")
 
 ## Helpers for handling Jupyter Notebook tasks
 # fmt: off
@@ -343,6 +344,13 @@ def task_compile_latex_docs():
     }
 
 
+
+sphinx_targets = [
+    "./docs/html/index.html",
+    "./docs/html/myst_markdown_demos.html",
+    "./docs/html/apidocs/index.html",
+]
+
 def task_compile_sphinx_docs():
     """Compile Sphinx Docs"""
     file_dep = [
@@ -351,18 +359,72 @@ def task_compile_sphinx_docs():
         "./docs_src/myst_markdown_demos.md",
         "./docs_src/notebooks.md",
     ]
-    targets = [
-        "./docs/html/index.html",
-        "./docs/html/myst_markdown_demos.html",
-        "./docs/html/apidocs/index.html",
-    ]
 
     return {
         "actions": ["sphinx-build -M html ./docs_src/ ./docs"], # Use docs as build destination
         # "actions": ["sphinx-build -M html ./docs/ ./docs/_build"], # Previous standard organization
-        "targets": targets,
+        "targets": sphinx_targets,
         "file_dep": file_dep,
         "task_dep": ["run_notebooks"],
+        "clean": True,
+    }
+
+def copy_build_files_to_docs_publishing_dir():
+    """
+    Copy build files to the docs build directory.
+
+    This function copies files and directories from the build directory to the
+    docs publishing directory. It iterates over the files and directories in the
+    'docs/html' directory and copies them to the corresponding location in the
+    'DOCS_PUBLISH_DIR'. If a file or directory already exists in the target
+    location, it is removed before copying.
+
+    Additionally, this function creates a '.nojekyll' file in the
+    'DOCS_PUBLISH_DIR' if it doesn't already exist.
+    """
+    # shutil.rmtree(DOCS_PUBLISH_DIR, ignore_errors=True)
+    # shutil.copytree(BUILD_DIR, DOCS_PUBLISH_DIR)
+
+    for item in (Path("./docs") / "html").iterdir():
+        if item.is_file():
+            target_file = DOCS_PUBLISH_DIR / item.name
+            if target_file.exists():
+                target_file.unlink()
+            shutil.copy2(item, DOCS_PUBLISH_DIR)
+        elif item.is_dir():
+            target_dir = DOCS_PUBLISH_DIR / item.name
+            if target_dir.exists():
+                shutil.rmtree(target_dir)
+            shutil.copytree(item, target_dir)
+
+    nojekyll_file = DOCS_PUBLISH_DIR / ".nojekyll"
+    if not nojekyll_file.exists():
+        nojekyll_file.touch()
+
+
+def task_copy_built_docs_to_publishing_dir():
+    """copy_built_docs_to_publishing_dir
+
+    # For example, convert this:
+    # Copy files from this:
+    ['./docs/html/index.html',
+    './docs/html/myst_markdown_demos.html',
+    './docs/html/apidocs/index.html']
+    
+    # to this:
+    [WindowsPath('docs/index.html'),
+    WindowsPath('docs/myst_markdown_demos.html'),
+    WindowsPath('docs/apidocs/index.html')]
+    """
+    file_dep = sphinx_targets
+    targets = [Path(DOCS_PUBLISH_DIR) / Path(*Path(file).parts[2:]) for file in sphinx_targets]
+
+    return {
+        "actions": [
+            copy_build_files_to_docs_publishing_dir,
+        ],
+        "targets": targets,
+        "file_dep": file_dep,
         "clean": True,
     }
 
