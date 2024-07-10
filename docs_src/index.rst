@@ -11,14 +11,14 @@ The idea is that you can substitute your own code and documentation into
 the placeholders here.
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+  :maxdepth: 2
+  :caption: Contents:
 
-   _notebook_build/_01_example_notebook.ipynb
-   _notebook_build/_02_interactive_plot_example.ipynb
-   myst_markdown_demos.md
-   notebooks.md
-   apidocs/index
+  _notebook_build/_01_example_notebook.ipynb
+  _notebook_build/_02_interactive_plot_example.ipynb
+  myst_markdown_demos.md
+  notebooks.md
+  apidocs/index
 
 Notes
 =====
