@@ -39,6 +39,10 @@ def demo():
 if __name__ == "__main__":
     dirpath = Path(config.DATA_DIR) / "pulled"
     dirpath.mkdir(exist_ok=True)
-    file_path = dirpath / "fred.parquet"
     df = pull_fred(start=START_DATE, end=END_DATE)
-    df = df.to_parquet(file_path)
+    
+    file_path = dirpath / "fred.parquet"
+    df.to_parquet(file_path)
+    
+    file_path = dirpath / "fred.csv"
+    df.to_csv(file_path)
