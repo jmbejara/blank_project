@@ -355,7 +355,7 @@ def task_compile_sphinx_docs():
     """Compile Sphinx Docs"""
     file_dep = [
         "./docs_src/conf.py",
-        "./docs_src/index.rst",
+        "./docs_src/index.md",
         "./docs_src/myst_markdown_demos.md",
         "./docs_src/notebooks.md",
     ]

@@ -1,4 +1,4 @@
-# 📖 Notebooks
+# Notebooks 📖
 
 Here is a demo of two things:
 
