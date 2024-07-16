@@ -16,6 +16,7 @@ estimatr
 feisr
 fixest
 foreign
+fs
 glmnet
 haven
 ivfixed

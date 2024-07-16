@@ -437,6 +437,29 @@ def task_copy_built_docs_to_publishing_dir():
 ###############################################################
 ## Uncomment the task below if you have R installed. See README
 ###############################################################
+
+# def task_example_r_script():
+#     """Example R plots"""
+#     file_dep = [
+#         "r_requirements.txt",
+#         "./src/install_packages.r",
+#         "./src/create_r_plot.r"
+#     ]
+#     targets = [
+#         OUTPUT_DIR / "r_gdp_plot.png",
+#     ]
+
+#     return {
+#         "actions": [
+#             "Rscript ./src/install_packages.r",
+#             "Rscript ./src/create_r_plot.r",
+#         ],
+#         "targets": targets,
+#         "file_dep": file_dep,
+#         "clean": True,
+#     }
+
+
 # rmarkdown_tasks = {
 #     "03_example_regressions.Rmd": {
 #         "file_dep": ["./src/load_fred.py"],
@@ -492,3 +515,8 @@ def task_copy_built_docs_to_publishing_dir():
 #             "clean": True,
 #             # "verbosity": 1,
 #         }
+
+###################################################################
+## Uncomment the task below if you have Stata installed. See README
+###################################################################
+
