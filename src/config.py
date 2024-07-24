@@ -40,16 +40,41 @@ def get_os():
 
 OS_TYPE = get_os()
 
-# fmt: off
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DATA_DIR = (BASE_DIR / config('DATA_DIR', default=Path('data'), cast=Path)).resolve()
-OUTPUT_DIR = (BASE_DIR / config('OUTPUT_DIR', default=Path('output'), cast=Path)).resolve()
-DOCS_PUBLISH_DIR = (BASE_DIR / config('DOCS_PUBLISH_DIR', default=Path('docs'), cast=Path)).resolve()
+def if_relative_make_abs(path):
+    """If a relative path is given, make it absolute, assuming
+    that it is relative to the project root directory (BASE_DIR)
+
+    Example
+    -------
+    ```
+    >>> if_relative_make_abs(Path('data'))
+    WindowsPath('C:/Users/jdoe/GitRepositories/blank_project/data')
+    
+    >>> if_relative_make_abs(Path("C:/Users/jdoe/GitRepositories/blank_project/output"))
+    WindowsPath('C:/Users/jdoe/GitRepositories/blank_project/output')
+    ```
+    """
+    path = Path(path)
+    if path.is_absolute():
+        abs_path = path.resolve()
+    else:
+        abs_path = (BASE_DIR / path).resolve()
+    return abs_path
+
+# fmt: off
+DATA_DIR = if_relative_make_abs(config('DATA_DIR', default=Path('data'), cast=Path))
+OUTPUT_DIR = if_relative_make_abs(config('OUTPUT_DIR', default=Path('output'), cast=Path))
+DOCS_PUBLISH_DIR = if_relative_make_abs(config('DOCS_PUBLISH_DIR', default=Path('docs'), cast=Path))
 WRDS_USERNAME = config("WRDS_USERNAME", default="")
 START_DATE = config("START_DATE", default="1913-01-01", cast=pd.to_datetime)
 END_DATE = config("END_DATE", default="2023-10-01", cast=pd.to_datetime)
 # fmt: on
+
+
+
 
 if OS_TYPE == "windows":
     STATA_EXE = config("STATA_EXE", default="StataMP-64.exe")
