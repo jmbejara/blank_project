@@ -421,12 +421,28 @@ def task_copy_built_docs_to_publishing_dir():
 ## Uncomment the task below if you have R installed. See README
 ###############################################################
 
+# def task_install_r_packages():
+#     """Example R plots"""
+#     file_dep = [
+#         "r_requirements.txt",
+#         "./src/install_packages.r",
+#     ]
+#     targets = [OUTPUT_DIR / "R_packages_installed.txt"]
+
+#     return {
+#         "actions": [
+#             "Rscript ./src/install_packages.r",
+#         ],
+#         "targets": targets,
+#         "file_dep": file_dep,
+#         "clean": True,
+#     }
+
+
 # def task_example_r_script():
 #     """Example R plots"""
 #     file_dep = [
 #         "./src/load_fred.py",
-#         "r_requirements.txt",
-#         "./src/install_packages.r",
 #         "./src/example_r_plot.r"
 #     ]
 #     targets = [
@@ -435,7 +451,6 @@ def task_copy_built_docs_to_publishing_dir():
 
 #     return {
 #         "actions": [
-#             "Rscript ./src/install_packages.r",
 #             "Rscript ./src/example_r_plot.r",
 #         ],
 #         "targets": targets,
