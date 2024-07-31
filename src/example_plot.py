@@ -8,7 +8,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 import seaborn as sns
 
-sns.set()
+sns.set_theme()
 
 df = load_fred.load_fred(data_dir=DATA_DIR)
 

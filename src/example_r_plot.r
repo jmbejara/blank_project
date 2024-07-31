@@ -9,11 +9,19 @@ pdf(NULL)
 # library(Cairo)
 # CairoPNG(file = path(OUTPUT_DIR, "example_r_plot.png"))
 
+#### <<< Load .env
+library(fs)
 library(dotenv)
-load_dot_env()
 
-DATA_DIR <- Sys.getenv("DATA_DIR")
-OUTPUT_DIR <- Sys.getenv("OUTPUT_DIR")
+if (file.exists(".env")) {
+  dotenvpath <- path(".env")
+} else {
+  dotenvpath <- path("../.env")
+}
+load_dot_env(dotenvpath)
+OUTPUT_DIR <- Sys.getenv("OUTPUT_DIR", unset = "./data")
+#### >>>
+
 
 # Print the value to stdout
 # cat("DATA_DIR:", DATA_DIR, "\n")

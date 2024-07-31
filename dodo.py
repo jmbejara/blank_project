@@ -425,13 +425,13 @@ def task_copy_built_docs_to_publishing_dir():
 #     """Example R plots"""
 #     file_dep = [
 #         "r_requirements.txt",
-#         "./src/install_packages.r",
+#         "./src/install_packages.R",
 #     ]
 #     targets = [OUTPUT_DIR / "R_packages_installed.txt"]
 
 #     return {
 #         "actions": [
-#             "Rscript ./src/install_packages.r",
+#             "Rscript ./src/install_packages.R",
 #         ],
 #         "targets": targets,
 #         "file_dep": file_dep,
@@ -443,7 +443,7 @@ def task_copy_built_docs_to_publishing_dir():
 #     """Example R plots"""
 #     file_dep = [
 #         "./src/load_fred.py",
-#         "./src/example_r_plot.r"
+#         "./src/example_r_plot.R"
 #     ]
 #     targets = [
 #         OUTPUT_DIR / "example_r_plot.png",
@@ -451,7 +451,7 @@ def task_copy_built_docs_to_publishing_dir():
 
 #     return {
 #         "actions": [
-#             "Rscript ./src/example_r_plot.r",
+#             "Rscript ./src/example_r_plot.R",
 #         ],
 #         "targets": targets,
 #         "file_dep": file_dep,
