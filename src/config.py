@@ -50,10 +50,10 @@ def if_relative_make_abs(path):
     Example
     -------
     ```
-    >>> if_relative_make_abs(Path('data'))
+    if_relative_make_abs(Path('data'))
     WindowsPath('C:/Users/jdoe/GitRepositories/blank_project/data')
     
-    >>> if_relative_make_abs(Path("C:/Users/jdoe/GitRepositories/blank_project/output"))
+    if_relative_make_abs(Path("C:/Users/jdoe/GitRepositories/blank_project/output"))
     WindowsPath('C:/Users/jdoe/GitRepositories/blank_project/output')
     ```
     """
