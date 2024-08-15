@@ -352,40 +352,41 @@ def task_compile_sphinx_docs():
         "clean": True,
     }
 
-def copy_build_files_to_docs_publishing_dir():
+def copy_build_files_to_docs_publishing_dir(docs_publish_dir=DOCS_PUBLISH_DIR):
     """
     Copy build files to the docs build directory.
 
     This function copies files and directories from the build directory to the
     docs publishing directory. It iterates over the files and directories in the
     'docs/html' directory and copies them to the corresponding location in the
-    'DOCS_PUBLISH_DIR'. If a file or directory already exists in the target
+    'docs_publish_dir'. If a file or directory already exists in the target
     location, it is removed before copying.
 
     Additionally, this function creates a '.nojekyll' file in the
-    'DOCS_PUBLISH_DIR' if it doesn't already exist.
+    'docs_publish_dir' if it doesn't already exist.
 
     Note that I'm using by default the "docs" directory as the build
     directory. It is also the publishing directory. I just need
     to copy the files out of the HTML sub-directory into the
     root of the publishing directory.
     """
-    # shutil.rmtree(DOCS_PUBLISH_DIR, ignore_errors=True)
-    # shutil.copytree(BUILD_DIR, DOCS_PUBLISH_DIR)
+    # shutil.rmtree(docs_publish_dir, ignore_errors=True)
+    # shutil.copytree(BUILD_DIR, docs_publish_dir)
+    docs_publish_dir = Path(docs_publish_dir)
 
-    for item in (DOCS_PUBLISH_DIR / "html").iterdir():
+    for item in (docs_publish_dir / "html").iterdir():
         if item.is_file():
-            target_file = DOCS_PUBLISH_DIR / item.name
+            target_file = docs_publish_dir / item.name
             if target_file.exists():
                 target_file.unlink()
-            shutil.copy2(item, DOCS_PUBLISH_DIR)
+            shutil.copy2(item, docs_publish_dir)
         elif item.is_dir():
-            target_dir = DOCS_PUBLISH_DIR / item.name
+            target_dir = docs_publish_dir / item.name
             if target_dir.exists():
                 shutil.rmtree(target_dir)
             shutil.copytree(item, target_dir)
 
-    nojekyll_file = DOCS_PUBLISH_DIR / ".nojekyll"
+    nojekyll_file = docs_publish_dir / ".nojekyll"
     if not nojekyll_file.exists():
         nojekyll_file.touch()
 
@@ -421,43 +422,43 @@ def task_copy_built_docs_to_publishing_dir():
 ## Uncomment the task below if you have R installed. See README
 ###############################################################
 
-def task_install_r_packages():
-    """Example R plots"""
-    file_dep = [
-        "r_requirements.txt",
-        "./src/install_packages.R",
-    ]
-    targets = [OUTPUT_DIR / "R_packages_installed.txt"]
+# def task_install_r_packages():
+#     """Example R plots"""
+#     file_dep = [
+#         "r_requirements.txt",
+#         "./src/install_packages.R",
+#     ]
+#     targets = [OUTPUT_DIR / "R_packages_installed.txt"]
 
-    return {
-        "actions": [
-            "Rscript ./src/install_packages.R",
-        ],
-        "targets": targets,
-        "file_dep": file_dep,
-        "clean": True,
-    }
+#     return {
+#         "actions": [
+#             "Rscript ./src/install_packages.R",
+#         ],
+#         "targets": targets,
+#         "file_dep": file_dep,
+#         "clean": True,
+#     }
 
 
-def task_example_r_script():
-    """Example R plots"""
-    file_dep = [
-        "./src/load_fred.py",
-        "./src/example_r_plot.R"
-    ]
-    targets = [
-        OUTPUT_DIR / "example_r_plot.png",
-    ]
+# def task_example_r_script():
+#     """Example R plots"""
+#     file_dep = [
+#         "./src/load_fred.py",
+#         "./src/example_r_plot.R"
+#     ]
+#     targets = [
+#         OUTPUT_DIR / "example_r_plot.png",
+#     ]
 
-    return {
-        "actions": [
-            "Rscript ./src/example_r_plot.R",
-        ],
-        "targets": targets,
-        "file_dep": file_dep,
-        "task_dep": ["pull_fred"],
-        "clean": True,       
-    }
+#     return {
+#         "actions": [
+#             "Rscript ./src/example_r_plot.R",
+#         ],
+#         "targets": targets,
+#         "file_dep": file_dep,
+#         "task_dep": ["pull_fred"],
+#         "clean": True,       
+#     }
 
 
 # rmarkdown_tasks = {
