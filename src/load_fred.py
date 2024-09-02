@@ -25,7 +25,7 @@ def load_fred(data_dir=DATA_DIR):
     """
     Must first run this module as main to pull and save data.
     """
-    file_path = Path(data_dir) / "pulled" / "fred.parquet"
+    file_path = Path(data_dir) / "fred.parquet"
     df = pd.read_parquet(file_path)
     # df = pd.read_csv(file_path, parse_dates=["DATE"])
     # df = df.set_index("DATE")
@@ -37,7 +37,7 @@ def demo():
 
 
 if __name__ == "__main__":
-    dirpath = Path(config.DATA_DIR) / "pulled"
+    dirpath = Path(config.DATA_DIR)
     dirpath.mkdir(exist_ok=True)
     df = pull_fred(start=START_DATE, end=END_DATE)
     

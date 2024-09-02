@@ -25,7 +25,7 @@ library(stargazer)
 
 ```{r}
 # Load data from FRED
-data <- read_parquet("../data/pulled/fred.parquet")
+data <- read_parquet("../data/fred.parquet")
 
 # Ensure data is sorted by DATE
 data <- data %>% arrange(DATE)

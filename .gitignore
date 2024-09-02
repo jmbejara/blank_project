@@ -2,9 +2,9 @@
 # Project Input and Output
 ##########################
 
-# Exclude data folder, since it should all be pulled automatically (unless in the manual folder)
+# Exclude data folder, since it should all be pulled automatically.
+# If it is not automatically pulled, it should be in the manual_data folder.
 /data/*
-!/data/manual/
 
 # Exclude output directory since it's should generated automatically
 /output/*

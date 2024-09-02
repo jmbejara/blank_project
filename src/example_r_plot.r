@@ -27,9 +27,9 @@ OUTPUT_DIR <- Sys.getenv("OUTPUT_DIR", unset = "./data")
 # cat("DATA_DIR:", DATA_DIR, "\n")
 
 # Use base R
-# filepath <- file.path(DATA_DIR, "pulled", "fred.parquet")
+# filepath <- file.path(DATA_DIR, "fred.parquet")
 # Use fs
-filepath <- path(DATA_DIR, "pulled", "fred.parquet")
+filepath <- path(DATA_DIR, "fred.parquet")
 
 # Read the Parquet file into a tibble
 fred_tibble <- read_parquet(filepath)

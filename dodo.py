@@ -37,9 +37,7 @@ DOIT_CONFIG = {
 }
 init(autoreset=True)
 
-##################################
-## Begin rest of PyDoit tasks here
-##################################
+
 import config
 from pathlib import Path
 from doit.tools import run_once
@@ -78,12 +76,16 @@ def copy_notebook_to_folder(notebook_stem, origin_folder, destination_folder):
         command = f"copy  {origin_path} {destination_path}"
     return command
 
+##################################
+## Begin rest of PyDoit tasks here
+##################################
+
 
 def task_pull_fred():
     """ """
     file_dep = ["./src/load_fred.py"]
     file_output = ["fred.parquet"]
-    targets = [DATA_DIR / "pulled" / file for file in file_output]
+    targets = [DATA_DIR / file for file in file_output]
 
     return {
         "actions": [
@@ -119,7 +121,7 @@ def task_pull_fred():
 #         "CRSP_stock.parquet",
 #         "fed_yield_curve.parquet",
 #         ]
-#     targets = [DATA_DIR / "pulled" / file for file in file_output]
+#     targets = [DATA_DIR / file for file in file_output]
 
 #     return {
 #         "actions": [
@@ -142,7 +144,7 @@ def task_pull_fred():
 #     Run several data pulls
 
 #     This will run commands like this:
-#     presto-cli --output-format=CSV_HEADER --file=presto_something.sql > ../data/pulled/presto_something.csv
+#     presto-cli --output-format=CSV_HEADER --file=./src/presto_something.sql > ./data/presto_something.csv
 
 #     May need to do this first:
 
@@ -167,7 +169,7 @@ def task_pull_fred():
 
 #     stems = [file.split(".")[0] for file in sql_pulls]
 #     for file in stems:
-#         target = DATA_DIR / "pulled" / f"{file}.csv"
+#         target = DATA_DIR / f"{file}.csv"
 #         yield {
 #             "name": f"{file}.sql",
 #             "actions": [sql_action_to_csv_command(f"{file}.sql", target)],

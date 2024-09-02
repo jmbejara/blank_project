@@ -32,5 +32,5 @@ def pull_bbg_data(end_date=END_DATE):
 if __name__ == "__main__":
     from xbbg import blp
     df = pull_bbg_data(end_date=END_DATE)
-    path = Path(DATA_DIR) / "pulled" / "bloomberg.parquet"
+    path = Path(data_dir) / "bloomberg.parquet"
     df.to_parquet(path)

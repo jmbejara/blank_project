@@ -5,7 +5,7 @@ doenv using ".env"
 local data_dir = "`r(DATA_DIR)'"
 local output_dir = "`r(OUTPUT_DIR)'"
 
-local filepath = "`data_dir'/pulled/fred.csv"
+local filepath = "`data_dir'/fred.csv"
 local output_filepath = "`output_dir'/example_stata_plot.png"
 
 * Display the paths to verify

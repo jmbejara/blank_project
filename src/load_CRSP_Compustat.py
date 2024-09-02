@@ -175,25 +175,25 @@ def pull_Fama_French_factors(wrds_username=WRDS_USERNAME):
 
 
 def load_compustat(data_dir=DATA_DIR):
-    path = Path(data_dir) / "pulled" / "Compustat.parquet"
+    path = Path(data_dir) / "Compustat.parquet"
     comp = pd.read_parquet(path)
     return comp
 
 
 def load_CRSP_stock_ciz(data_dir=DATA_DIR):
-    path = Path(data_dir) / "pulled" / "CRSP_stock_ciz.parquet"
+    path = Path(data_dir) / "CRSP_stock_ciz.parquet"
     crsp = pd.read_parquet(path)
     return crsp
 
 
 def load_CRSP_Comp_Link_Table(data_dir=DATA_DIR):
-    path = Path(data_dir) / "pulled" / "CRSP_Comp_Link_Table.parquet"
+    path = Path(data_dir) / "CRSP_Comp_Link_Table.parquet"
     ccm = pd.read_parquet(path)
     return ccm
 
 
 def load_Fama_French_factors(data_dir=DATA_DIR):
-    path = Path(data_dir) / "pulled" / "FF_FACTORS.parquet"
+    path = Path(data_dir) / "FF_FACTORS.parquet"
     ff = pd.read_parquet(path)
     return ff
 
@@ -206,13 +206,13 @@ def _demo():
 
 if __name__ == "__main__":
     comp = pull_compustat(wrds_username=WRDS_USERNAME)
-    comp.to_parquet(DATA_DIR / "pulled" / "Compustat.parquet")
+    comp.to_parquet(DATA_DIR / "Compustat.parquet")
 
     crsp = pull_CRSP_stock_ciz(wrds_username=WRDS_USERNAME)
-    crsp.to_parquet(DATA_DIR / "pulled" / "CRSP_stock_ciz.parquet")
+    crsp.to_parquet(DATA_DIR / "CRSP_stock_ciz.parquet")
 
     ccm = pull_CRSP_Comp_Link_Table(wrds_username=WRDS_USERNAME)
-    ccm.to_parquet(DATA_DIR / "pulled" / "CRSP_Comp_Link_Table.parquet")
+    ccm.to_parquet(DATA_DIR / "CRSP_Comp_Link_Table.parquet")
 
     ff = pull_Fama_French_factors(wrds_username=WRDS_USERNAME)
-    ff.to_parquet(DATA_DIR / "pulled" / "FF_FACTORS.parquet")
+    ff.to_parquet(DATA_DIR / "FF_FACTORS.parquet")

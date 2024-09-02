@@ -66,6 +66,7 @@ def if_relative_make_abs(path):
 
 # fmt: off
 DATA_DIR = if_relative_make_abs(config('DATA_DIR', default=Path('data'), cast=Path))
+MANUAL_DATA_DIR = if_relative_make_abs(config('MANUAL_DATA_DIR', default=Path('manual_data'), cast=Path))
 OUTPUT_DIR = if_relative_make_abs(config('OUTPUT_DIR', default=Path('output'), cast=Path))
 DOCS_PUBLISH_DIR = if_relative_make_abs(config('DOCS_PUBLISH_DIR', default=Path('docs'), cast=Path))
 WRDS_USERNAME = config("WRDS_USERNAME", default="")
@@ -87,7 +88,7 @@ else:
 if __name__ == "__main__":
 
     ## If they don't exist, create the data and output directories
-    (DATA_DIR / "pulled").mkdir(parents=True, exist_ok=True)
+    (DATA_DIR).mkdir(parents=True, exist_ok=True)
 
     # Sometimes, I'll create other folders to organize the data
     # (DATA_DIR / 'intermediate').mkdir(parents=True, exist_ok=True)
