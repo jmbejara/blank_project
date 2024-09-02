@@ -12,9 +12,9 @@ from pathlib import Path
 DATA_DIR = Path(config.DATA_DIR)
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 
-import load_fred
+import pull_fred
 
-df_level = load_fred.load_fred(data_dir=DATA_DIR).dropna()
+df_level = pull_fred.load_fred(data_dir=DATA_DIR).dropna()
 
 df_quarterly = 100 * df_level.pct_change()
 # df_quarterly.plot()

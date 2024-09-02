@@ -83,13 +83,13 @@ def copy_notebook_to_folder(notebook_stem, origin_folder, destination_folder):
 
 def task_pull_fred():
     """ """
-    file_dep = ["./src/load_fred.py"]
+    file_dep = ["./src/pull_fred.py"]
     file_output = ["fred.parquet"]
     targets = [DATA_DIR / file for file in file_output]
 
     return {
         "actions": [
-            "ipython ./src/load_fred.py",
+            "ipython ./src/pull_fred.py",
         ],
         "targets": targets,
         "file_dep": file_dep,
@@ -110,10 +110,10 @@ def task_pull_fred():
 # def task_pull_fred():
 #     """ """
 #     file_dep = [
-#         "./src/load_bloomberg.py",
-#         "./src/load_CRSP_Compustat.py",
-#         "./src/load_CRSP_stock.py",
-#         "./src/load_fed_yield_curve.py",
+#         "./src/pull_bloomberg.py",
+#         "./src/pull_CRSP_Compustat.py",
+#         "./src/pull_CRSP_stock.py",
+#         "./src/pull_fed_yield_curve.py",
 #         ]
 #     file_output = [
 #         "bloomberg.parquet",
@@ -125,10 +125,10 @@ def task_pull_fred():
 
 #     return {
 #         "actions": [
-#             "ipython ./src/load_bloomberg.py",
-#             "ipython ./src/load_CRSP_Compustat.py",
-#             "ipython ./src/load_CRSP_stock.py",
-#             "ipython ./src/load_fed_yield_curve.py",
+#             "ipython ./src/pull_bloomberg.py",
+#             "ipython ./src/pull_CRSP_Compustat.py",
+#             "ipython ./src/pull_CRSP_stock.py",
+#             "ipython ./src/pull_fed_yield_curve.py",
 #         ],
 #         "targets": targets,
 #         "file_dep": file_dep,
@@ -202,7 +202,7 @@ def task_summary_stats():
 
 def task_example_plot():
     """Example plots"""
-    file_dep = [Path("./src") / file for file in ["example_plot.py", "load_fred.py"]]
+    file_dep = [Path("./src") / file for file in ["example_plot.py", "pull_fred.py"]]
     file_output = ["example_plot.png"]
     targets = [OUTPUT_DIR / file for file in file_output]
 
@@ -218,7 +218,7 @@ def task_example_plot():
 
 notebook_tasks = {
     "01_example_notebook.ipynb": {
-        "file_dep": ["./src/load_fred.py"],
+        "file_dep": ["./src/pull_fred.py"],
         "targets": [Path(OUTPUT_DIR) / "GDP_graph.png"],
     },
     "02_interactive_plot_example.ipynb": {
@@ -445,7 +445,7 @@ def task_copy_built_docs_to_publishing_dir():
 # def task_example_r_script():
 #     """Example R plots"""
 #     file_dep = [
-#         "./src/load_fred.py",
+#         "./src/pull_fred.py",
 #         "./src/example_r_plot.R"
 #     ]
 #     targets = [
@@ -465,11 +465,11 @@ def task_copy_built_docs_to_publishing_dir():
 
 # rmarkdown_tasks = {
 #     "03_example_regressions.Rmd": {
-#         "file_dep": ["./src/load_fred.py"],
+#         "file_dep": ["./src/pull_fred.py"],
 #         "targets": [],
 #     },
 #     # "03_example_regressions.Rmd": {
-#     #     "file_dep": ["./src/load_fred.py"],
+#     #     "file_dep": ["./src/pull_fred.py"],
 #     #     "targets": [],
 #     # },
 # }
@@ -540,7 +540,7 @@ def task_copy_built_docs_to_publishing_dir():
 #     first to install the doenv package: https://github.com/vikjam/doenv.
 #     """
 #     file_dep = [
-#         "./src/load_fred.py",
+#         "./src/pull_fred.py",
 #         "./src/example_stata_plot.do",
 #     ]
 #     targets = [

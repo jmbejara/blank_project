@@ -120,6 +120,16 @@ The `config.py` file is the entry point for all other scripts to these
 definitions. That is, all code that references these variables and others are
 loading by importing `config`.
 
+# Naming Conventions
+
+ - **`pull_` vs `load_`**: Files or functions that pull data from an external
+ data source are prepended with "pull_", as in "pull_fred.py". Functions that
+ load data that has been cached in the "data" folder are prepended with "load_".
+ For example, inside of the `pull_CRSP_Compustat.py` file there is both a
+ `pull_compustat` function and a `load_compustat` function. The first pulls from
+ the web, whereas the other loads cached data from the "data" directory.
+
+
 
 # Dependencies and Virtual Environments
 
