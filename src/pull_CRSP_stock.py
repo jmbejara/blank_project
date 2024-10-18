@@ -178,9 +178,9 @@ def _demo():
 if __name__ == "__main__":
 
     df_msf = pull_CRSP_monthly_file(start_date=START_DATE, end_date=END_DATE)
-    path = Path(data_dir) / "CRSP_MSF_INDEX_INPUTS.parquet"
+    path = Path(DATA_DIR) / "CRSP_MSF_INDEX_INPUTS.parquet"
     df_msf.to_parquet(path)
 
     df_msix = pull_CRSP_index_files(start_date=START_DATE, end_date=END_DATE)
-    path = Path(data_dir) / f"CRSP_MSIX.parquet"
+    path = Path(DATA_DIR) / f"CRSP_MSIX.parquet"
     df_msix.to_parquet(path)

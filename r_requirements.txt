@@ -1,35 +1,40 @@
 AER
 arrow
+bizdays
 car
 caret
 censReg
 clusterSEs
 data.table
+datawizard
+DBI
 # DescTools
 devtools
 dotenv
 dtplyr
-dummies
+# dummies
 dynlm
 effects
 estimatr
 feisr
 fixest
 foreign
+forstringr
 fs
 glmnet
 haven
-ivfixed
-ivpack
-ivpanel
-ivprobit
-ivreg
+# ivfixed
+# ivpack
+# ivpanel
+# ivprobit
+# ivreg
+janitor
 jsonlite
 knitr
 lfe
 lme4
 lmtest
-lmtestmaps
+# lmtestmaps
 lubridate
 marginaleffects
 MASS
@@ -39,9 +44,9 @@ mlogit
 modelsummary
 multcomp
 nlme
-nse
+# nse
 orcutt
-Paneldata
+# Paneldata
 pcse
 plm
 quantmod
@@ -52,14 +57,16 @@ rdrobust
 readr
 rio
 rmarkdown
-roxygen
+# roxygen
+RPresto
 sampleSelection
 sandwich
 sem
+sm
 stargazer
 survival
 systemfit
-testhat
+# testhat
 tidymodels
 tidyquant
 tidyverse
@@ -70,10 +77,11 @@ vars
 vcd
 WDI
 wooldridge
+writexl
 XLConnect
 xlsx
-XML
+# XML
 xtable
 xts
-xtsparallel
+# xtsparallel
 zoo

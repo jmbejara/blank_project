@@ -58,9 +58,11 @@ Use `del` instead of rm on Windows
 
 ### Setting Environment Variables
 
-This can be done easily in a Linux or Mac terminal with the following command:
+You can 
+[export your environment variables](https://stackoverflow.com/questions/43267413/how-to-set-environment-variables-from-env-file) 
+from your `.env` files like so, if you wish. This can be done easily in a Linux or Mac terminal with the following command:
 ```
-set -a
+set -a ## automatically export all variables
 source .env
 set +a
 ```
@@ -69,19 +71,19 @@ In Windows, this can be done with the included `set_env.bat` file,
 set_env.bat
 ```
 
-# General Directory Structure
+## General Directory Structure
 
  - The `assets` folder is used for things like hand-drawn figures or other
    pictures that were not generated from code. These things cannot be easily
    recreated if they are deleted.
 
- - The `output` folder, on the other hand, contains tables and figures that are
+ - The `_output` folder, on the other hand, contains dataframes and figures that are
    generated from code. The entire folder should be able to be deleted, because
    the code can be run again, which would again generate all of the contents.
 
- - The `manual_data` is for data that cannot be easily recreated. This data
-   should be version controlled. Anything in the `data` folder or in
-   the `output` folder should be able to be recreated by running the code
+ - The `data_manual` is for data that cannot be easily recreated. This data
+   should be version controlled. Anything in the `_data` folder or in
+   the `_output` folder should be able to be recreated by running the code
    and can safely be deleted.
 
  - I'm using the `doit` Python module as a task runner. It works like `make` and
@@ -95,22 +97,22 @@ set_env.bat
    to each collaborator in the project. You can also use it for private
    credentials, if needed. It should not be tracked in Git.
 
-# Data and Output Storage
+## Data and Output Storage
 
 I'll often use a separate folder for storing data. Any data in the data folder
 can be deleted and recreated by rerunning the PyDoit command (the pulls are in
 the dodo.py file). Any data that cannot be automatically recreated should be
-stored in the "manual_data" folder. Because of the risk of manually-created data
+stored in the "data_manual" folder. Because of the risk of manually-created data
 getting changed or lost, I prefer to keep it under version control if I can.
-Thus, data in the "data" folder is excluded from Git (see the .gitignore file),
-while the "manual_data" folder is tracked by Git.
+Thus, data in the "_data" folder is excluded from Git (see the .gitignore file),
+while the "data_manual" folder is tracked by Git.
 
-Output is stored in the "output" directory. This includes tables, charts, and
+Output is stored in the "_output" directory. This includes dataframes, charts, and
 rendered notebooks. When the output is small enough, I'll keep this under
-version control. I like this because I can keep track of how tables change as my
+version control. I like this because I can keep track of how dataframes change as my
 analysis progresses, for example.
 
-Of course, the data directory and output directory can be kept elsewhere on the
+Of course, the _data directory and _output directory can be kept elsewhere on the
 machine. To make this easy, I always include the ability to customize these
 locations by defining the path to these directories in environment variables,
 which I intend to be defined in the `.env` file, though they can also simply be
@@ -120,20 +122,19 @@ The `config.py` file is the entry point for all other scripts to these
 definitions. That is, all code that references these variables and others are
 loading by importing `config`.
 
-# Naming Conventions
+## Naming Conventions
 
  - **`pull_` vs `load_`**: Files or functions that pull data from an external
  data source are prepended with "pull_", as in "pull_fred.py". Functions that
- load data that has been cached in the "data" folder are prepended with "load_".
+ load data that has been cached in the "_data" folder are prepended with "load_".
  For example, inside of the `pull_CRSP_Compustat.py` file there is both a
  `pull_compustat` function and a `load_compustat` function. The first pulls from
- the web, whereas the other loads cached data from the "data" directory.
+ the web, whereas the other loads cached data from the "_data" directory.
 
 
+## Dependencies and Virtual Environments
 
-# Dependencies and Virtual Environments
-
-## Working with `pip` requirements
+### Working with `pip` requirements
 
 `conda` allows for a lot of flexibility, but can often be slow. `pip`, however, is fast for what it does.  You can install the requirements for this project using the `requirements.txt` file specified here. Do this with the following command:
 ```
@@ -145,7 +146,7 @@ The requirements file can be created like this:
 pip list --format=freeze
 ```
 
-## Working with `conda` environments
+### Working with `conda` environments
 
 The dependencies used in this environment (along with many other environments commonly used in data science) are stored in the conda environment called `blank` which is saved in the file called `environment.yml`. To create the environment from the file (as a prerequisite to loading the environment), use the following command:
 
@@ -181,7 +182,7 @@ pip freeze > requirements.txt
 - Create blank conda environment: `conda create --name myenv --no-default-packages`
 - Create blank conda environment with different version of Python: `conda create --name myenv --no-default-packages python` Note that the addition of "python" will install the most up-to-date version of Python. Without this, it may use the system version of Python, which will likely have some packages installed already.
 
-## `mamba` and `conda` performance issues
+### `mamba` and `conda` performance issues
 
 Since `conda` has so many performance issues, it's recommended to use `mamba` instead. I recommend installing the `miniforge` distribution. See here: https://github.com/conda-forge/miniforge
 

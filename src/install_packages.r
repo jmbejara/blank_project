@@ -12,6 +12,7 @@ if (file.exists(".env")) {
   dotenvpath <- path("../.env")
 }
 load_dot_env(dotenvpath)
+USER <- Sys.getenv("USER")
 R_LIB <- Sys.getenv("R_LIB")
 OUTPUT_DIR <- Sys.getenv("OUTPUT_DIR")
 #### >>>
@@ -27,10 +28,11 @@ packages <- packages[!grepl("^#", packages)]
 Sys.setenv(NOT_CRAN = "true")
 
 # Function to install packages if not already installed
+r_lib = sprintf(R_LIB, USER)
 install_if_missing <- function(package) {
   if (!requireNamespace(package, quietly = TRUE)) {
     cat("Installing package:", package, "\n")
-    install.packages(package, repos = "https://cran.rstudio.com/", dependencies=TRUE, lib=R_LIB)
+    install.packages(package, repos = "https://cran.rstudio.com/", dependencies=TRUE, lib=r_lib)
 
     # uses library on each to see if its loadable, and if not calls quit with a non-0 status.
     # https://stackoverflow.com/a/52638148

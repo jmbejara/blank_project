@@ -1,4 +1,4 @@
-# Notebooks 📖
+# Notebooks
 
 Here is a demo of two things:
 
@@ -7,8 +7,9 @@ Here is a demo of two things:
  as children in the main table of contents on the main page.
 
 ```{toctree}
-_notebook_build/_01_example_notebook.ipynb
-_notebook_build/_02_interactive_plot_example.ipynb
+notebooks/01_example_notebook_interactive.ipynb
+notebooks/02_example_with_dependencies.ipynb
+notebooks/03_public_repo_summary_charts.ipynb
 ```
 
 Vestibulum interdum orci ac viverra porta. Maecenas ut nunc id metus placerat

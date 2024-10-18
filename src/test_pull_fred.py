@@ -7,7 +7,7 @@ import pull_fred
 DATA_DIR = config.DATA_DIR
 
 
-def test_load_fred_functionality():
+def test_pull_fred_functionality():
     df = pull_fred.pull_fred()
     # Test if the function returns a pandas DataFrame
     assert isinstance(df, pd.DataFrame)
@@ -20,7 +20,7 @@ def test_load_fred_functionality():
     with pytest.raises(FileNotFoundError):
         pull_fred.load_fred(data_dir="invalid_directory")
 
-def test_load_fred_data_validity():
+def test_pull_fred_data_validity():
     df = pull_fred.pull_fred()
     
     # Test if the default date range has the expected start date and end date

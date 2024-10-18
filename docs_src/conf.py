@@ -37,7 +37,12 @@ extensions = [
     "autodoc2",
     "sphinx.ext.intersphinx",
     # "numpydoc",
-    'myst_nb',
+    "myst_nb",
+    "ablog",
+    "sphinx_design",
+    "sphinx_copybutton",
+    # "sphinxext.opengraph",
+    # "sphinxext.rediraffe",
 ]
 
 ## Use autodoc2 to generate documentation from the source code
@@ -87,7 +92,17 @@ templates_path = ["_templates"]
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ["**.ipynb_checkpoints", ".DS_Store", "Thumbs.db", "_build"]
+exclude_patterns = [
+    "**.ipynb_checkpoints",
+    ".DS_Store",
+    "Thumbs.db",
+    "_build",
+]
+
+## For including date and time in MyST
+# https://myst-parser.readthedocs.io/en/latest/syntax/roles-and-directives.html#insert-the-date-and-reading-time
+# today_fmt = '%b %d, %Y'
+today_fmt = "%c"  # Locale’s appropriate date and time representation.
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -98,6 +113,7 @@ exclude_patterns = ["**.ipynb_checkpoints", ".DS_Store", "Thumbs.db", "_build"]
 html_theme = "sphinx_book_theme"
 
 html_theme_options = {
+    "navigation_with_keys": True,
     "search_bar_text": "Search this book...",
     "launch_buttons": {
         "notebook_interface": "classic",
@@ -122,6 +138,80 @@ html_title = "Blank Project Template"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-# html_static_path = ["_static"]
+html_static_path = ["_static"]
 
-html_js_files = ["https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"]
+html_js_files = [
+    "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js",
+]
+
+# -- Ablog options -----------------------------------------------------------
+blog_path = "charts/index"
+blog_post_pattern = [
+    # "notebooks/*.ipynb",
+    "charts/*.md",
+]
+
+html_sidebars = {
+    "**": [
+        # sphinx book theme default html sidebar elements: https://sphinx-book-theme.readthedocs.io/en/stable/sections/sidebar-primary.html
+        "navbar-logo.html",
+        "icon-links.html",
+        "search-button-field.html",
+        "sbt-sidebar-nav.html",
+        # ablog html sidebar elements
+        # "ablog/postcard.html",
+        # "ablog/recentposts.html",
+        "ablog/categories.html",
+        "ablog/tagcloud.html",
+        # "ablog/archives.html",
+    ]
+}
+
+# html_sidebars = {
+#     # "community/index": [
+#     #     "sidebar-nav-bs",
+#     #     "custom-template",
+#     # ],  # This ensures we test for custom sidebars
+#     # "examples/no-sidebar": [],  # Test what page looks like with no sidebar items
+#     # "examples/persistent-search-field": ["search-field"],
+#     ## Blog sidebars
+#     # ref: https://ablog.readthedocs.io/manual/ablog-configuration-options/#blog-sidebars
+#     "charts/*": [
+#         "navbar-logo.html",
+#         "icon-links.html",
+#         "search-button-field.html",
+#         "sbt-sidebar-nav.html",
+#         "ablog/categories.html",
+#         "ablog/tagcloud.html",
+#         # "ablog/postcard.html",
+#         # "ablog/recentposts.html",
+#         # "ablog/authors.html",
+#         # "ablog/languages.html",
+#         # "ablog/locations.html",
+#         # "ablog/archives.html",
+#     ],
+#     "charts": [
+#         "navbar-logo.html",
+#         "icon-links.html",
+#         "search-button-field.html",
+#         "sbt-sidebar-nav.html",
+#         "ablog/categories.html",
+#         "ablog/tagcloud.html",
+#         # "ablog/postcard.html",
+#         # "ablog/recentposts.html",
+#         # "ablog/authors.html",
+#         # "ablog/languages.html",
+#         # "ablog/locations.html",
+#         # "ablog/archives.html",
+#     ],
+#     # "index": [
+#     #     "navbar-logo.html",
+#     # ],
+# }
+
+##########################
+## Jinja Substitutions
+##########################
+myst_substitutions = {
+    "key1": "I'm a **substitution**",
+}

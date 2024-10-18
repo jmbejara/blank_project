@@ -20,14 +20,14 @@ over to the other configuration, for example.
 
 from decouple import config
 from pathlib import Path
-import pandas as pd
+from pandas import to_datetime
 
 ## Helper for determining OS
-import platform
+from platform import system
 
 
 def get_os():
-    os_name = platform.system()
+    os_name = system()
     if os_name == "Windows":
         return "windows"
     elif os_name == "Darwin":
@@ -40,7 +40,7 @@ def get_os():
 
 OS_TYPE = get_os()
 
-
+# Absolute path to root directory of the project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 def if_relative_make_abs(path):
@@ -50,11 +50,11 @@ def if_relative_make_abs(path):
     Example
     -------
     ```
-    if_relative_make_abs(Path('data'))
-    WindowsPath('C:/Users/jdoe/GitRepositories/blank_project/data')
+    >>> if_relative_make_abs(Path('_data'))
+    WindowsPath('C:/Users/jdoe/GitRepositories/blank_project/_data')
     
-    if_relative_make_abs(Path("C:/Users/jdoe/GitRepositories/blank_project/output"))
-    WindowsPath('C:/Users/jdoe/GitRepositories/blank_project/output')
+    >>> if_relative_make_abs(Path("C:/Users/jdoe/GitRepositories/blank_project/_output"))
+    WindowsPath('C:/Users/jdoe/GitRepositories/blank_project/_output')
     ```
     """
     path = Path(path)
@@ -64,19 +64,24 @@ def if_relative_make_abs(path):
         abs_path = (BASE_DIR / path).resolve()
     return abs_path
 
+
 # fmt: off
-DATA_DIR = if_relative_make_abs(config('DATA_DIR', default=Path('data'), cast=Path))
-MANUAL_DATA_DIR = if_relative_make_abs(config('MANUAL_DATA_DIR', default=Path('manual_data'), cast=Path))
-OUTPUT_DIR = if_relative_make_abs(config('OUTPUT_DIR', default=Path('output'), cast=Path))
-DOCS_PUBLISH_DIR = if_relative_make_abs(config('DOCS_PUBLISH_DIR', default=Path('docs'), cast=Path))
+## Other .env variables
 WRDS_USERNAME = config("WRDS_USERNAME", default="")
-START_DATE = config("START_DATE", default="1913-01-01", cast=pd.to_datetime)
-END_DATE = config("END_DATE", default="2023-10-01", cast=pd.to_datetime)
+START_DATE = config("START_DATE", default="1913-01-01", cast=to_datetime)
+END_DATE = config("END_DATE", default="2023-10-01", cast=to_datetime)
+PIPELINE_DEV_MODE = config("PIPELINE_DEV_MODE", default=True, cast=bool)
+PIPELINE_THEME = config("PIPELINE_THEME", default="pipeline")
+
+## Paths
+DATA_DIR = if_relative_make_abs(config('DATA_DIR', default=Path('_data'), cast=Path))
+MANUAL_DATA_DIR = if_relative_make_abs(config('MANUAL_DATA_DIR', default=Path('data_manual'), cast=Path))
+OUTPUT_DIR = if_relative_make_abs(config('OUTPUT_DIR', default=Path('_output'), cast=Path))
+DOCS_PUBLISH_DIR = if_relative_make_abs(config('DOCS_PUBLISH_DIR', default=Path('docs'), cast=Path))
 # fmt: on
 
 
-
-
+## Name of Stata Executable in path
 if OS_TYPE == "windows":
     STATA_EXE = config("STATA_EXE", default="StataMP-64.exe")
 elif OS_TYPE == "nix":
@@ -87,11 +92,14 @@ else:
 
 if __name__ == "__main__":
 
-    ## If they don't exist, create the data and output directories
+    ## If they don't exist, create the _data and _output directories
     (DATA_DIR).mkdir(parents=True, exist_ok=True)
+    (DATA_DIR / "intermediate").mkdir(parents=True, exist_ok=True)
+    (DATA_DIR / "scratch").mkdir(parents=True, exist_ok=True)
 
     # Sometimes, I'll create other folders to organize the data
     # (DATA_DIR / 'intermediate').mkdir(parents=True, exist_ok=True)
     # (DATA_DIR / 'derived').mkdir(parents=True, exist_ok=True)
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    (BASE_DIR / "_docs").mkdir(parents=True, exist_ok=True)

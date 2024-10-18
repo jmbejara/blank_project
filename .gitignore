@@ -2,12 +2,11 @@
 # Project Input and Output
 ##########################
 
-# Exclude data folder, since it should all be pulled automatically.
-# If it is not automatically pulled, it should be in the manual_data folder.
-/data/*
+# Exclude _data folder, since it should all be pulled automatically (unless in the manual folder)
+/_data/*
 
-# Exclude output directory since it's should generated automatically
-/output/*
+# Exclude _output directory since it's should generated automatically
+/_output/*
 
 # Exclude PDFs generated from source LaTeX files, which are kept in the reports directory
 /reports/*.pdf
@@ -18,8 +17,16 @@
 # Other
 temp*.csv
 */_build/
-*/_notebook_build/
 drafts/draft_bp.pdf
+
+# venv virtual environment folder
+/venv/*
+/.venv/*
+/.venv/*
+
+# Sphinx build files
+_docs/
+
 
 ##############
 #Excluded PDFs
@@ -34,81 +41,15 @@ drafts/draft_bp.pdf
 # !/papers/*
 # !/literature/*
 
-##############
-# LaTex Files
-##############
-reports/*.aux
-reports/*.bbl
-reports/*.blg
-reports/*.fdb_latexmk
-reports/*.fls
-reports/*.log
-reports/*.out
-reports/*.nav
-reports/*.pdfsync
-reports/*.synctex.gz
-reports/*.bak
-reports/*.snm
-reports/*.toc
-reports/*.tdo
-reports/*.run.xml
-reports/*.loe
-
-
-##########
-# R Files
-##########
-.Rproj.user
-.Rhistory
-.RData
-.Rapp.history
-.Ruserdata
-# RStudio files
-.Rproj.user/
-# produced vignettes
-vignettes/*.html
-vignettes/*.pdf
-# R Environment Variables
-.Renviron
-
-# OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
-.httr-oauth
-
-# knitr and R markdown default cache directories
-*_cache/
-/cache/
-
-# Temporary files created by R markdown
-*.utf8.md
-*.knit.md
-
-# Output files from R CMD check
-/*.Rcheck/
-
-
-########
-# MISC.
-########
-# *.zip
-# *.tar.gz
-\.pytest_cache/
-
-# Pydoit
-.doit.*
-
-# Exclude Sublime Text project files
-*.sublime*
-
-# Exclude Mac OSX system files
-.DS_Store
-
-# IPython/Jupyter Checkpoints
-.ipynb_checkpoints
-.ipynb_checkpoints/
-
-# Vagrant
-.vagrant/
-
+#########################
+# Exclude Compiled Files
+#########################
+bin/
+*.pyc
+*.exe
+SourceCode/build/
+bin/
+a.out
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -149,6 +90,13 @@ htmlcov/
 nosetests.xml
 coverage.xml
 
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+
 # Sphinx documentation
 docs/
 /docs_src/apidocs
@@ -161,3 +109,137 @@ target/
 *~
 # C extensions
 *.so
+
+##############
+# LaTex Files
+##############
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.nav
+*.pdfsync
+*.synctex.gz
+*.bak
+*.snm
+*.toc
+*.tdo
+*.run.xml
+*.loe
+
+
+##########
+# R Files
+##########
+.Rproj.user
+.Rhistory
+.RData
+.Rapp.history
+
+################
+# Database Files
+################
+*.hdf5
+*.npz
+
+###################################
+# Exclude Output From Scripted Jobs
+###################################
+*.o*
+
+####################################
+# Exclude Sublime Text project files
+####################################
+*.sublime*
+
+####################################
+# Exclude Mac OSX system files
+####################################
+.DS_Store
+
+####################################
+# IPython/Jupyter Checkpoints
+####################################
+.ipynb_checkpoints
+.ipynb_checkpoints/
+
+####################################
+# Vagrant
+####################################
+.vagrant/
+
+######################################
+## R files ##
+######################################
+# History files
+.Rhistory
+.Rapp.history
+
+# Session Data files
+.RData
+
+# User-specific files
+.Ruserdata
+
+# Example code in package build process
+*-Ex.R
+
+# Output files from R CMD build
+/*.tar.gz
+
+# Output files from R CMD check
+/*.Rcheck/
+
+# RStudio files
+.Rproj.user/
+
+# produced vignettes
+vignettes/*.html
+vignettes/*.pdf
+
+# OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
+.httr-oauth
+
+# knitr and R markdown default cache directories
+*_cache/
+/cache/
+
+# Temporary files created by R markdown
+*.utf8.md
+*.knit.md
+
+# R Environment Variables
+.Renviron
+
+########
+# MISC.
+########
+# *.zip
+# *.tar.gz
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.dat
+*.dir
+*.fdb_latexmk
+*.fls
+*.graphml
+*.gz
+*.ini
+*.log
+*.out
+*.vrb
+*.xdv
+*.xdv
+\.pytest_cache/
+~$*
+
+.doit.db.db
+
+src/z_scratch_project_template.ipynb
+
+*Thumbs.db

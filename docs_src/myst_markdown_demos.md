@@ -1,4 +1,4 @@
-# MyST Markdown Demos 💡
+# MyST Markdown Demos
 
 Here is a demo of MyST Markdown.
 

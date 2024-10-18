@@ -1,0 +1,105 @@
+{
+    "EX":{
+        "pipeline_name": "Pipeline Template - Example",
+        "pipeline_description": "Template for demonstrating how to construct a reproducible analytical pipeline. This template uses example charts and dataframes using public repo data.",
+        "lead_pipeline_developer": "Jeremiah Bejarano",
+        "contributors": [
+            "Jeremiah Bejarano",
+            "John Doe"
+        ],
+        "software_modules_command": "module load anaconda3/3.11.4 TeXLive/2023 R/4.4.0 pandoc/3.1.6 gcc/14.1.0 stata/17",
+        "runs_on_grid_or_windows_or_other": "Unix/Linux",
+        "bitbucket_repo_URL": "",
+        "pipeline_prod_directory": "",
+        "pipeline_dev_directory": "",
+        "dataframes": {
+            "repo_public": {
+                "dataframe_name": "Public Repo Data",
+                "short_description_df":"Public repo series and related economic and financial aggregates.",
+                "data_sources": [ "FRED", "Office of Financial Research"],
+                "data_providers": [ "FRED", "Office of Financial Research"],
+                "links_to_data_providers": ["https://fred.stlouisfed.org/", "https://www.financialresearch.gov/short-term-funding-monitor/api/"],
+                "topic_tags": ["Short Term Funding", "Repo"],
+                "type_of_data_access": "Public",
+                "data_license": "No",
+                "license_expiration_date": "N/A",
+                "need_to_contact_provider": "No",
+                "provider_contact_info": "",
+                "restriction_on_use": "No",
+                "how_is_pulled": "Web API via Python",
+                "path_to_parquet_data": "./_data/repo_public.parquet",
+                "path_to_excel_data": "./_data/repo_public.xlsx"
+            },
+            "repo_public_relative_fed": {
+                "dataframe_name": "Public Repo Data, Relative to the Fed Funds Target Midpoint",
+                "short_description_df":"Public repo series and related economic and financial aggregates. Rates are normalized relative to the midpoint of the Fed Funds target range.",
+                "data_sources": [ "FRED", "Office of Financial Research"],
+                "data_providers": [ "FRED", "Office of Financial Research"],
+                "links_to_data_providers": ["NA"],
+                "topic_tags": ["Short Term Funding", "Repo"],
+                "type_of_data_access": "Public",
+                "data_license": "No",
+                "license_expiration_date": "",
+                "need_to_contact_provider": "No",
+                "provider_contact_info": "",
+                "restriction_on_use": "No",
+                "how_is_pulled": "Web API via Python",
+                "path_to_parquet_data": "./_data/repo_public_relative_fed.parquet",
+                "path_to_excel_data": "./_data/repo_public_relative_fed.xlsx"
+            } 
+        },
+        "charts": {
+            "repo_rates": {
+                "chart_name": "Repo Rates",
+                "short_description_chart":"SOFR, the Effective Funds Rate, and the Fed's Target Range",
+                "dataframe_id": "repo_public",
+                "topic_tags": ["Short Term Funding", "Repo"],
+                "data_series_start_date": "2/29/2012",
+                "data_frequency": "Daily",
+                "observation_period": "Weekday",
+                "lag_in_data_release": "One day",
+                "data_release_dates": "Weekday",
+                "seasonal_adjustment": "None",
+                "units": "Percent",
+                "data_series": "",
+                "mnemonic": "",
+                "path_to_html_chart": "./_output/repo_rates.html",
+                "path_to_excel_chart": "./src/repo_rates.xlsx"
+            }, 
+            "repo_rates_normalized": {
+                "chart_name": "Repo Rates, Normalized",
+                "short_description_chart":"Repo rates relative to the midpoint of the Fed's target range.",
+                "dataframe_id": "repo_public_relative_fed",
+                "topic_tags": ["Short Term Funding", "Repo"],
+                "data_series_start_date": "2/29/2012",
+                "data_frequency": "Daily",
+                "observation_period": "Weekday",
+                "lag_in_data_release": "One day",
+                "data_release_dates": "Weekday",
+                "seasonal_adjustment": "None",
+                "units": "Percent",
+                "data_series": "",
+                "mnemonic": "",
+                "path_to_html_chart": "./_output/repo_rates_normalized.html",
+                "path_to_excel_chart": "./src/repo_rates_normalized.xlsx"
+            },
+            "repo_rates_normalized_w_balance_sheet": {
+                "chart_name": "Repo Rate Spikes and the Fed's Balance Sheet",
+                "short_description_chart":"Repo rate spikes relative to the size of the Fed's balance sheet.",
+                "dataframe_id": "repo_public_relative_fed",
+                "topic_tags": ["Short Term Funding", "Repo", "Monetary Policy"],
+                "data_series_start_date": "2/29/2012",
+                "data_frequency": "Daily",
+                "observation_period": "Weekday",
+                "lag_in_data_release": "One day",
+                "data_release_dates": "Weekday",
+                "seasonal_adjustment": "None",
+                "units": "Percent (left) and Ratio (right)",
+                "data_series": "",
+                "mnemonic": "",
+                "path_to_html_chart": "./_output/repo_rates_normalized_w_balance_sheet.html",
+                "path_to_excel_chart": "./src/repo_rates_normalized_w_balance_sheet.xlsx"
+            }
+        }
+    }
+}

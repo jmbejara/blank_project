@@ -1,17 +1,18 @@
 """Run or update the project. This file uses the `doit` Python package. It works
 like a Makefile, but is Python-based
+
 """
 
 #######################################
 ## Configuration and Helpers for PyDoit
 #######################################
-
 ## Make sure the src folder is in the path
 import sys
 
 sys.path.insert(1, "./src/")
 
 from os import getcwd
+from os import path
 import shutil
 
 ## Custom reporter: Print PyDoit Text in Green
@@ -27,7 +28,16 @@ from colorama import Fore, Style, init
 
 class GreenReporter(ConsoleReporter):
     def write(self, stuff, **kwargs):
-        self.outstream.write(Fore.GREEN + stuff + Style.RESET_ALL)
+        doit_mark = stuff.split(" ")[0].ljust(2)
+        task = " ".join(stuff.split(" ")[1:]).strip() + "\n"
+        output = (
+            Fore.GREEN
+            + doit_mark
+            + f" {path.basename(getcwd())}: "
+            + task
+            + Style.RESET_ALL
+        )
+        self.outstream.write(output)
 
 
 DOIT_CONFIG = {
@@ -37,11 +47,12 @@ DOIT_CONFIG = {
 }
 init(autoreset=True)
 
-
 import config
 from pathlib import Path
 from doit.tools import run_once
+import pipeline_publish
 
+BASE_DIR = Path(config.BASE_DIR)
 OUTPUT_DIR = Path(config.OUTPUT_DIR)
 DATA_DIR = Path(config.DATA_DIR)
 DOCS_PUBLISH_DIR = Path(config.DOCS_PUBLISH_DIR)
@@ -51,17 +62,17 @@ OS_TYPE = config.OS_TYPE
 # fmt: off
 ## Helper functions for automatic execution of Jupyter notebooks
 def jupyter_execute_notebook(notebook):
-    return f"jupyter nbconvert --execute --to notebook --ClearMetadataPreprocessor.enabled=True --inplace ./src/{notebook}.ipynb"
+    return f"PYDEVD_DISABLE_FILE_VALIDATION=1 jupyter nbconvert --execute --to notebook --ClearMetadataPreprocessor.enabled=True --log-level WARN --inplace ./src/{notebook}.ipynb"
 def jupyter_to_html(notebook, output_dir=OUTPUT_DIR):
-    return f"jupyter nbconvert --to html --output-dir={output_dir} ./src/{notebook}.ipynb"
+    return f"jupyter nbconvert --to html --log-level WARN --output-dir={output_dir} ./src/{notebook}.ipynb"
 def jupyter_to_md(notebook, output_dir=OUTPUT_DIR):
     """Requires jupytext"""
-    return f"jupytext --to markdown --output-dir={output_dir} ./src/{notebook}.ipynb"
+    return f"jupytext --to markdown --log-level WARN --output-dir={output_dir} ./src/{notebook}.ipynb"
 def jupyter_to_python(notebook, build_dir):
     """Convert a notebook to a python script"""
-    return f"jupyter nbconvert --to python ./src/{notebook}.ipynb --output _{notebook}.py --output-dir {build_dir}"
+    return f"jupyter nbconvert --log-level WARN --to python ./src/{notebook}.ipynb --output _{notebook}.py --output-dir {build_dir}"
 def jupyter_clear_output(notebook):
-    return f"jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --inplace ./src/{notebook}.ipynb"
+    return f"jupyter nbconvert --log-level WARN --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --inplace ./src/{notebook}.ipynb"
 # fmt: on
 
 
@@ -69,27 +80,34 @@ def copy_notebook_to_folder(notebook_stem, origin_folder, destination_folder):
     origin_path = Path(origin_folder) / f"{notebook_stem}.ipynb"
     destination_folder = Path(destination_folder)
     destination_folder.mkdir(parents=True, exist_ok=True)
-    destination_path = destination_folder / f"_{notebook_stem}.ipynb"
+    destination_path = destination_folder / f"{notebook_stem}.ipynb"
     if OS_TYPE == "nix":
         command = f"cp {origin_path} {destination_path}"
     else:
         command = f"copy  {origin_path} {destination_path}"
     return command
 
+
 ##################################
 ## Begin rest of PyDoit tasks here
 ##################################
 
-
 def task_pull_fred():
     """ """
-    file_dep = ["./src/pull_fred.py"]
-    file_output = ["fred.parquet"]
-    targets = [DATA_DIR / file for file in file_output]
+    file_dep = [
+        "./src/pull_fred.py",
+        "./src/pull_ofr_api_data.py",
+    ]
+    targets = [
+        DATA_DIR / "fred.parquet",
+        DATA_DIR / "ofr_public_repo_data.parquet",
+    ]
 
     return {
         "actions": [
+            "ipython ./src/config.py",
             "ipython ./src/pull_fred.py",
+            "ipython ./src/pull_ofr_api_data.py",
         ],
         "targets": targets,
         "file_dep": file_dep,
@@ -107,7 +125,7 @@ def task_pull_fred():
 ##############################$
 ## Demo: Other misc. data pulls
 ##############################$
-# def task_pull_fred():
+# def task_pull_all():
 #     """ """
 #     file_dep = [
 #         "./src/pull_bloomberg.py",
@@ -134,50 +152,6 @@ def task_pull_fred():
 #         "file_dep": file_dep,
 #         "clean": [],  # Don't clean these files by default.
 #     }
-
-
-##################################################
-# Demo for automated SQL pulls from another server
-##################################################
-# def task_pull_data_via_presto():
-#     """
-#     Run several data pulls
-
-#     This will run commands like this:
-#     presto-cli --output-format=CSV_HEADER --file=./src/presto_something.sql > ./data/presto_something.csv
-
-#     May need to do this first:
-
-#     sed -ri "/^presto/d" ~/.ssh/known_hosts
-#     ssh -t presto.YOURURL.edu "kinit jdoe@YOURURL.edu"
-
-
-#     """
-#     sql_pulls = [
-#         'sql_something.sql',
-#         'sql_something2.sql',
-#     ]
-
-#     def sql_action_to_csv_command(sql_file, csv_output):
-#         s = f"""
-#             ssh presto.YOURURL.edu <<-'ENDSSH'
-#             echo Starting Presto Pull Command for {sql_file}
-#             cd {getcwd()}
-#             presto-cli --output-format=CSV_HEADER --file=./src/{sql_file} > {csv_output}
-#             """
-#         return s
-
-#     stems = [file.split(".")[0] for file in sql_pulls]
-#     for file in stems:
-#         target = DATA_DIR / f"{file}.csv"
-#         yield {
-#             "name": f"{file}.sql",
-#             "actions": [sql_action_to_csv_command(f"{file}.sql", target)],
-#             "file_dep": [Path("./src") / f"{file}.sql"],
-#             "targets": [target],
-#             "clean": [],
-#             # "verbosity": 0,
-#         }
 
 
 def task_summary_stats():
@@ -208,6 +182,8 @@ def task_example_plot():
 
     return {
         "actions": [
+            # "date 1>&2",
+            # "time ipython ./src/example_plot.py",
             "ipython ./src/example_plot.py",
         ],
         "targets": targets,
@@ -216,14 +192,53 @@ def task_example_plot():
     }
 
 
+def task_chart_repo_rates():
+    """Example charts for Chart Book"""
+    file_dep = [
+        "./src/pull_fred.py",
+        "./src/chart_relative_repo_rates.py",
+    ]
+    targets = [
+        DATA_DIR / "repo_public.parquet",
+        DATA_DIR / "repo_public.xlsx",
+        DATA_DIR / "repo_public_relative_fed.parquet",
+        DATA_DIR / "repo_public_relative_fed.xlsx",
+        OUTPUT_DIR / "repo_rates.html",
+        OUTPUT_DIR / "repo_rates_normalized.html",
+        OUTPUT_DIR / "repo_rates_normalized_w_balance_sheet.html",
+    ]
+
+    return {
+        "actions": [
+            # "date 1>&2",
+            # "time ipython ./src/chart_relative_repo_rates.py",
+            "ipython ./src/chart_relative_repo_rates.py",
+        ],
+        "targets": targets,
+        "file_dep": file_dep,
+        "clean": True,
+    }
+
+
 notebook_tasks = {
-    "01_example_notebook.ipynb": {
+    "01_example_notebook_interactive.ipynb": {
+        "file_dep": [],
+        "targets": [],
+    },
+    "02_example_with_dependencies.ipynb": {
         "file_dep": ["./src/pull_fred.py"],
         "targets": [Path(OUTPUT_DIR) / "GDP_graph.png"],
     },
-    "02_interactive_plot_example.ipynb": {
-        "file_dep": [],
-        "targets": [],
+    "03_public_repo_summary_charts.ipynb": {
+        "file_dep": [
+            "./src/pull_fred.py",
+            "./src/pull_ofr_api_data.py",
+            "./src/pull_public_repo_data.py",
+        ],
+        "targets": [
+            OUTPUT_DIR / "repo_rate_spikes_and_relative_reserves_levels.png",
+            OUTPUT_DIR / "rates_relative_to_midpoint.png",
+        ],
     },
 }
 
@@ -242,7 +257,7 @@ def task_convert_notebooks_to_scripts():
             "actions": [
                 # jupyter_execute_notebook(notebook_name),
                 # jupyter_to_html(notebook_name),
-                # copy_notebook_to_folder(notebook_name, Path("./src"), "./docs_src/_notebook_build/"),
+                # copy_notebook_to_folder(notebook_name, Path("./src"), "./docs_src/notebooks/"),
                 jupyter_clear_output(notebook_name),
                 jupyter_to_python(notebook_name, build_dir),
             ],
@@ -251,6 +266,7 @@ def task_convert_notebooks_to_scripts():
             "clean": True,
             "verbosity": 0,
         }
+
 
 # fmt: off
 def task_run_notebooks():
@@ -267,7 +283,7 @@ def task_run_notebooks():
                 jupyter_execute_notebook(notebook_name),
                 jupyter_to_html(notebook_name),
                 copy_notebook_to_folder(
-                    notebook_name, Path("./src"), "./docs_src/_notebook_build/"
+                    notebook_name, Path("./src"), "./_docs/notebooks/"
                 ),
                 jupyter_clear_output(notebook_name),
                 # jupyter_to_python(notebook_name, build_dir),
@@ -279,12 +295,18 @@ def task_run_notebooks():
             ],
             "targets": [
                 OUTPUT_DIR / f"{notebook_name}.html",
+                BASE_DIR / "_docs" / "notebooks" / f"{notebook_name}.ipynb",
                 *notebook_tasks[notebook]["targets"],
             ],
             "clean": True,
             # "verbosity": 1,
         }
 # fmt: on
+
+
+# ###############################################################
+# ## Task below is for LaTeX compilation
+# ###############################################################
 
 def task_compile_latex_docs():
     """Compile the LaTeX documents to PDFs"""
@@ -320,39 +342,104 @@ def task_compile_latex_docs():
             "latexmk -xelatex -halt-on-error -c -cd ./reports/slides_simple_example.tex",  # Clean
             #
             # Example of compiling and cleaning in another directory. This often fails, so I don't use it
-            # f"latexmk -xelatex -halt-on-error -cd -output-directory=../output/ ./reports/report_example.tex",  # Compile
-            # f"latexmk -xelatex -halt-on-error -c -cd -output-directory=../output/ ./reports/report_example.tex",  # Clean
+            # f"latexmk -xelatex -halt-on-error -cd -output-directory=../_output/ ./reports/report_example.tex",  # Compile
+            # f"latexmk -xelatex -halt-on-error -c -cd -output-directory=../_output/ ./reports/report_example.tex",  # Clean
         ],
         "targets": targets,
         "file_dep": file_dep,
         "clean": True,
     }
 
+# ###############################################################
+# ## Sphinx documentation
+# ###############################################################
 
 
-sphinx_targets = [
-    "./docs/html/index.html",
-    "./docs/html/myst_markdown_demos.html",
-    "./docs/html/apidocs/index.html",
+
+pipeline_doc_file_deps = pipeline_publish.get_file_deps(base_dir=BASE_DIR)
+generated_md_targets = pipeline_publish.get_targets(base_dir=BASE_DIR)
+
+
+def task_pipeline_publish():
+    """Create Pipeline Docs for Use in Sphinx"""
+
+    file_dep = [
+        "./src/pipeline_publish.py",
+        "./docs_src/conf.py",
+        "./README.md",
+        "./pipeline.json",
+        "./docs_src/_templates/chart_entry_bottom.md",
+        "./docs_src/_templates/chart_entry_top.md",
+        "./docs_src/_templates/pipeline_specs.md",
+        "./docs_src/_templates/dataframe_specs.md",
+        "./docs_src/_templates/dataframe_entry_top.md",
+        "./docs_src/charts.md",
+        "./docs_src/index.md",
+        *pipeline_doc_file_deps,
+    ]
+
+    targets = [
+        *generated_md_targets,
+    ]
+
+    return {
+        "actions": ["ipython ./src/pipeline_publish.py"],
+        "targets": targets,
+        "file_dep": file_dep,
+        "clean": True,
+    }
+
+
+notebook_sphinx_pages = [
+    "./_docs/_build/html/notebooks/" + notebook.split(".")[0] + ".html"
+    for notebook in notebook_tasks.keys()
 ]
+sphinx_targets = [
+    "./_docs/_build/html/index.html",
+    "./_docs/_build/html/myst_markdown_demos.html",
+    "./_docs/_build/html/apidocs/index.html",
+    *notebook_sphinx_pages,
+]
+
 
 def task_compile_sphinx_docs():
     """Compile Sphinx Docs"""
+    notebook_scripts = [
+        OUTPUT_DIR / ("_" + notebook.split(".")[0] + ".py")
+        for notebook in notebook_tasks.keys()
+    ]
     file_dep = [
         "./docs_src/conf.py",
         "./docs_src/index.md",
         "./docs_src/myst_markdown_demos.md",
         "./docs_src/notebooks.md",
+        *notebook_scripts,
+        "./README.md",
+        "./pipeline.json",
+        "./src/pipeline_publish.py",
+        "./docs_src/charts.md",
+        # Pipeline docs
+        "./src/pipeline_publish.py",
+        "./docs_src/_templates/chart_entry_bottom.md",
+        "./docs_src/_templates/chart_entry_top.md",
+        "./docs_src/_templates/pipeline_specs.md",
+        "./docs_src/_templates/dataframe_specs.md",
+        "./docs_src/_templates/dataframe_entry_top.md",
+        *pipeline_doc_file_deps,
     ]
 
     return {
-        "actions": ["sphinx-build -M html ./docs_src/ ./docs"], # Use docs as build destination
+        "actions": [
+            "rsync -lr --exclude=charts --exclude=dataframes --exclude=notebooks --exclude=index.md --exclude=pipelines.md --exclude=dataframes.md ./docs_src/ ./_docs/",
+            "sphinx-build -M html ./_docs/ ./_docs/_build",
+        ],  # Use docs as build destination     
         # "actions": ["sphinx-build -M html ./docs/ ./docs/_build"], # Previous standard organization
         "targets": sphinx_targets,
         "file_dep": file_dep,
-        "task_dep": ["run_notebooks"],
+        "task_dep": ["run_notebooks", "pipeline_publish"],
         "clean": True,
     }
+
 
 def copy_build_files_to_docs_publishing_dir(docs_publish_dir=DOCS_PUBLISH_DIR):
     """
@@ -376,7 +463,7 @@ def copy_build_files_to_docs_publishing_dir(docs_publish_dir=DOCS_PUBLISH_DIR):
     # shutil.copytree(BUILD_DIR, docs_publish_dir)
     docs_publish_dir = Path(docs_publish_dir)
 
-    for item in (docs_publish_dir / "html").iterdir():
+    for item in (Path("./docs") / "html").iterdir():
         if item.is_file():
             target_file = docs_publish_dir / item.name
             if target_file.exists():
@@ -393,36 +480,39 @@ def copy_build_files_to_docs_publishing_dir(docs_publish_dir=DOCS_PUBLISH_DIR):
         nojekyll_file.touch()
 
 
-def task_copy_built_docs_to_publishing_dir():
-    """copy_built_docs_to_publishing_dir
+# def task_copy_built_docs_to_publishing_dir():
+#     """copy_built_docs_to_publishing_dir
 
-    # For example, convert this:
-    # Copy files from this:
-    ['./docs/html/index.html',
-    './docs/html/myst_markdown_demos.html',
-    './docs/html/apidocs/index.html']
-    
-    # to this:
-    [WindowsPath('docs/index.html'),
-    WindowsPath('docs/myst_markdown_demos.html'),
-    WindowsPath('docs/apidocs/index.html')]
-    """
-    file_dep = sphinx_targets
-    targets = [Path(DOCS_PUBLISH_DIR) / Path(*Path(file).parts[2:]) for file in sphinx_targets]
+#     # For example, convert this:
+#     # Copy files from this:
+#     ['./docs/html/index.html',
+#     './docs/html/myst_markdown_demos.html',
+#     './docs/html/apidocs/index.html']
 
-    return {
-        "actions": [
-            copy_build_files_to_docs_publishing_dir,
-        ],
-        "targets": targets,
-        "file_dep": file_dep,
-        "clean": True,
-    }
+#     # to this:
+#     [WindowsPath('docs/index.html'),
+#     WindowsPath('docs/myst_markdown_demos.html'),
+#     WindowsPath('docs/apidocs/index.html')]
+#     """
+#     file_dep = sphinx_targets
+#     targets = [
+#         Path(DOCS_PUBLISH_DIR) / Path(*Path(file).parts[2:]) for file in sphinx_targets
+#     ]
+
+#     return {
+#         "actions": [
+#             copy_build_files_to_docs_publishing_dir,
+#         ],
+#         "targets": targets,
+#         "file_dep": file_dep,
+#         "clean": True,
+#     }
 
 
 ###############################################################
 ## Uncomment the task below if you have R installed. See README
 ###############################################################
+
 
 # def task_install_r_packages():
 #     """Example R plots"""
@@ -459,16 +549,16 @@ def task_copy_built_docs_to_publishing_dir():
 #         "targets": targets,
 #         "file_dep": file_dep,
 #         "task_dep": ["pull_fred"],
-#         "clean": True,       
+#         "clean": True,
 #     }
 
 
 # rmarkdown_tasks = {
-#     "03_example_regressions.Rmd": {
+#     "04_example_regressions.Rmd": {
 #         "file_dep": ["./src/pull_fred.py"],
 #         "targets": [],
 #     },
-#     # "03_example_regressions.Rmd": {
+#     # "04_example_regressions.Rmd": {
 #     #     "file_dep": ["./src/pull_fred.py"],
 #     #     "targets": [],
 #     # },
@@ -480,7 +570,7 @@ def task_copy_built_docs_to_publishing_dir():
 #     This will knit the RMarkdown files for easier sharing of results.
 #     """
 #     # def knit_string(file):
-#     #     return f"""Rscript -e "library(rmarkdown); rmarkdown::render('./src/03_example_regressions.Rmd', output_format='html_document', output_dir='./output/')"""
+#     #     return f"""Rscript -e "library(rmarkdown); rmarkdown::render('./src/04_example_regressions.Rmd', output_format='html_document', output_dir='./_output/')"""
 #     str_output_dir = str(OUTPUT_DIR).replace("\\", "/")
 #     def knit_string(file):
 #         """
@@ -489,7 +579,7 @@ def task_copy_built_docs_to_publishing_dir():
 #         quotation escaping errors.
 
 #         Example command:
-#         Rscript -e "library(rmarkdown); rmarkdown::render('./src/03_example_regressions.Rmd', output_format='html_document', output_dir='./output/')
+#         Rscript -e "library(rmarkdown); rmarkdown::render('./src/04_example_regressions.Rmd', output_format='html_document', output_dir='./_output/')
 #         """
 #         return (
 #             "Rscript -e "
@@ -519,6 +609,7 @@ def task_copy_built_docs_to_publishing_dir():
 #             # "verbosity": 1,
 #         }
 
+
 ###################################################################
 ## Uncomment the task below if you have Stata installed. See README
 ###################################################################
@@ -533,7 +624,7 @@ def task_copy_built_docs_to_publishing_dir():
 # def task_example_stata_script():
 #     """Example Stata plots
 
-#     Make sure to run 
+#     Make sure to run
 #     ```
 #     net install doenv, from(https://github.com/vikjam/doenv/raw/master/) replace
 #     ```
@@ -546,8 +637,6 @@ def task_copy_built_docs_to_publishing_dir():
 #     targets = [
 #         OUTPUT_DIR / "example_stata_plot.png",
 #     ]
-
-#     print(f"{STATA_COMMAND} do ./src/example_stata_plot.do"),
 #     return {
 #         "actions": [
 #             f"{STATA_COMMAND} do ./src/example_stata_plot.do",

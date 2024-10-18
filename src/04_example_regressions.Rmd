@@ -1,5 +1,5 @@
 ---
-title: "03_example_regressions"
+title: "04_example_regressions"
 output: html_notebook
 ---
 
@@ -25,7 +25,7 @@ library(stargazer)
 
 ```{r}
 # Load data from FRED
-data <- read_parquet("../data/fred.parquet")
+data <- read_parquet("../_data/fred.parquet")
 
 # Ensure data is sorted by DATE
 data <- data %>% arrange(DATE)
