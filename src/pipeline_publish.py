@@ -29,8 +29,12 @@ def read_specs(base_dir=BASE_DIR):
         specs = json.load(file)
     for pipeline_id in specs:
         pipeline_specs = specs[pipeline_id]
-        source_last_modified_date = get_most_recent_pipeline_source_modification(base_dir)
-        pipeline_specs["source_last_modified_date"] = source_last_modified_date
+        source_last_modified_date = get_most_recent_pipeline_source_modification(
+            base_dir
+        )
+        pipeline_specs["source_last_modified_date"] = (
+            source_last_modified_date.strftime("%Y-%m-%d %H:%M:%S")
+        )  # Format the date
         if "import_from" in pipeline_specs:
             sub_base_dir = Path(pipeline_specs["import_from"])
             sub_specs = read_specs(base_dir=sub_base_dir)
@@ -282,11 +286,27 @@ def generate_pipeline_docs(
 def generate_dataframe_docs(
     dataframe_id, pipeline_id, pipeline_specs, docs_build_dir, base_dir=BASE_DIR
 ):
+    """
+    Generates documentation for a specific dataframe, including the last updated timestamp.
 
+    Params
+    ------
+    dataframe_id: str
+        The identifier for the dataframe.
+    pipeline_id: str
+        The identifier for the pipeline.
+    pipeline_specs: dict
+        Specifications for the pipeline.
+    docs_build_dir: Path
+        The directory where the docs will be built.
+    base_dir: Path
+        The base directory of the pipeline production.
+    """
     path_to_docs_src = base_dir / "docs_src"
     environment = jinja2.Environment(loader=jinja2.FileSystemLoader(path_to_docs_src))
     template = environment.get_template(f"dataframes/{pipeline_id}_{dataframe_id}.md")
     dataframe_specs = pipeline_specs["dataframes"][dataframe_id]
+
     if PIPELINE_THEME == "pipeline":
         pipeline_page_link = f"../index.md"
     elif PIPELINE_THEME == "chart_base":
@@ -294,15 +314,22 @@ def generate_dataframe_docs(
     else:
         raise ValueError("Invalid Pipeline theme")
 
+    # Compute the absolute path to the parquet file
+    parquet_path = (base_dir / dataframe_specs["path_to_parquet_data"]).resolve()
+
+    # Fetch the last modified datetime of the parquet file
+    dataframe_last_updated = get_last_modified_datetime(parquet_path)
+
+    # Render the template with the additional "dataframe_last_updated" field
     table_page = template.render(
-        dataframe_specs,
         dataframe_specs=dataframe_specs,
         dataframe_id=dataframe_id,
         pipeline_id=pipeline_id,
         pipeline_specs=pipeline_specs,
         pipeline_page_link=pipeline_page_link,
+        dataframe_last_updated=dataframe_last_updated.strftime("%Y-%m-%d %H:%M:%S"),
     )
-    # print(table_page)
+
     (docs_build_dir / "dataframes").mkdir(parents=True, exist_ok=True)
     filename = f"{pipeline_id}_{dataframe_id}.md"
     filepath = docs_build_dir / "dataframes" / filename
@@ -317,7 +344,7 @@ def generate_chart_docs(
     environment = jinja2.Environment(loader=jinja2.FileSystemLoader(path_to_docs_src))
     template = environment.get_template(f"charts/{pipeline_id}_{chart_id}.md")
 
-    # Get all specs related to chart
+    # Get all specs related to the chart
     chart_specs = pipeline_specs["charts"][chart_id]
     dataframe_id = chart_specs["dataframe_id"]
     dataframe_specs = pipeline_specs["dataframes"][dataframe_id]
@@ -329,12 +356,18 @@ def generate_chart_docs(
     else:
         raise ValueError("Invalid Pipeline theme")
 
-    ## Get and format paths to charts
+    # Compute the absolute path to the parquet file
+    parquet_path = (base_dir / dataframe_specs["path_to_parquet_data"]).resolve()
+
+    # Fetch the last modified datetime of the parquet file
+    dataframe_last_updated = get_last_modified_datetime(parquet_path)
+
+    # Get and format paths to charts
     path_to_html_chart_unix = base_dir / Path(chart_specs["path_to_html_chart"])
 
-    ## Render chart page
+    # Render chart page
     chart_page = template.render(
-        chart_specs,
+        chart_specs=chart_specs,
         chart_id=chart_id,
         dataframe_id=dataframe_id,
         dataframe_specs=dataframe_specs,
@@ -342,8 +375,8 @@ def generate_chart_docs(
         pipeline_specs=pipeline_specs,
         path_to_html_chart_unix=path_to_html_chart_unix,
         pipeline_page_link=pipeline_page_link,
+        dataframe_last_updated=dataframe_last_updated.strftime("%Y-%m-%d %H:%M:%S"),
     )
-    # print(table_page)
 
     (docs_build_dir / "charts").mkdir(parents=True, exist_ok=True)
     filename = f"{pipeline_id}_{chart_id}.md"
