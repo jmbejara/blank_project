@@ -24,26 +24,70 @@ DOCS_BUILD_DIR = BASE_DIR / Path("_docs")
 
 
 def read_specs(base_dir=BASE_DIR):
-    base_dir = Path(base_dir)
+    """
+    Read the pipeline specifications from a JSON file and process them.
+    This will also handle imported pipeline specifications. It
+    will also create a mapping of dataframe_id to linked chart_ids
+    and a mapping of data
+
+    Parameters
+    ----------
+    base_dir : Union[str, Path]
+        The base directory where the pipeline.json file is located.
+
+    Returns
+    -------
+    dict
+        A dictionary containing the specifications for all pipelines,
+        including linked charts for each dataframe and linked dataframes
+        for each pipeline.
+    """
+    base_dir = Path(base_dir)  # Convert base_dir to a Path object
     with open(base_dir / "pipeline.json", "r") as file:
-        specs = json.load(file)
+        specs = json.load(file)  # Load the JSON specifications
+
     for pipeline_id in specs:
-        pipeline_specs = specs[pipeline_id]
+        pipeline_specs = specs[pipeline_id]  # Get specs for the current pipeline
         source_last_modified_date = get_most_recent_pipeline_source_modification(
             base_dir
-        )
+        )  # Get the last modified date
         pipeline_specs["source_last_modified_date"] = (
             source_last_modified_date.strftime("%Y-%m-%d %H:%M:%S")
-        )  # Format the date
+        )  # Format and store the last modified date
+
+        # Handle imported pipeline specifications if applicable
         if "import_from" in pipeline_specs:
             sub_base_dir = Path(pipeline_specs["import_from"])
-            sub_specs = read_specs(base_dir=sub_base_dir)
-            pipeline_specs = sub_specs[pipeline_id]
+            sub_specs = read_specs(base_dir=sub_base_dir)  # Recursively read specs
+            pipeline_specs = sub_specs[pipeline_id]  # Update with imported specs
             pipeline_specs["pipeline_prod_directory"] = (
                 Path(sub_base_dir).resolve().as_posix()
-            )
-            specs[pipeline_id] = pipeline_specs
-    return specs
+            )  # Set the production directory
+
+            specs[pipeline_id] = pipeline_specs  # Update the main specs
+
+        # Create a mapping of dataframe_id to linked chart_ids
+        dataframe_to_charts = {
+            dataframe_id: [] for dataframe_id in pipeline_specs["dataframes"]
+        }  # Initialize mapping
+
+        for chart_id in pipeline_specs["charts"]:
+            chart_specs = pipeline_specs["charts"][
+                chart_id
+            ]  # Get specs for the current chart
+            dataframe_id = chart_specs["dataframe_id"]  # Identify the linked dataframe
+            if dataframe_id in dataframe_to_charts:
+                dataframe_to_charts[dataframe_id].append(
+                    chart_id
+                )  # Link chart_id to dataframe_id
+
+        # Update dataframe_specs with the linked charts
+        for dataframe_id, chart_ids in dataframe_to_charts.items():
+            pipeline_specs["dataframes"][dataframe_id][
+                "linked_charts"
+            ] = chart_ids  # Add linked charts
+
+    return specs  # Return the complete specifications
 
 
 def get_file_publish_plan(base_dir=BASE_DIR, pipeline_dev_mode=PIPELINE_DEV_MODE):
@@ -524,3 +568,4 @@ if __name__ == "__main__":
         docs_build_dir=DOCS_BUILD_DIR,
         pipeline_dev_mode=PIPELINE_DEV_MODE,
     )
+

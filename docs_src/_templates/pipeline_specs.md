@@ -8,6 +8,8 @@
 | Development Directory           | {{pipeline_specs.pipeline_dev_directory}}              |
 | Date of Last Code Update        | {{pipeline_specs.source_last_modified_date}}           |
 | Runs on Unix/Linux, Windows, or Other? |{{pipeline_specs.runs_on_grid_or_windows_or_other}}|
+| Linked Dataframes               | {% for dataframe_id, dataframe_specs in pipeline_specs.dataframes.items() %} [{{pipeline_id}}_{{dataframe_id}}](./dataframes/{{pipeline_id}}_{{dataframe_id}}.md)<br> {% endfor %} |
+
 
 In addition to the `requirements.txt` and `r_requirements.txt`, the pipeline code relies
 on first loading modules using the following command:

@@ -1,11 +1,11 @@
 Project Title HERE
 ==================
 
-# About this project
+## About this project
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-# Quick Start
+## Quick Start
 
 To quickest way to run code in this repo is to use the following steps. First, you must have the `conda`  
 package manager installed (e.g., via Anaconda). However, I recommend using `mamba`, via [miniforge]
@@ -41,9 +41,9 @@ Then, make sure to uncomment
 out the RMarkdown task from the `dodo.py` file. Then,
 run `doit` as before.
 
-## Other commands
+### Other commands
 
-### Unit Tests and Doc Tests
+#### Unit Tests and Doc Tests
 
 You can run the unit test, including doctests, with the following command:
 ```
@@ -56,7 +56,7 @@ jupyter-book build -W ./
 ```
 Use `del` instead of rm on Windows
 
-### Setting Environment Variables
+#### Setting Environment Variables
 
 You can 
 [export your environment variables](https://stackoverflow.com/questions/43267413/how-to-set-environment-variables-from-env-file) 
@@ -71,7 +71,7 @@ In Windows, this can be done with the included `set_env.bat` file,
 set_env.bat
 ```
 
-## General Directory Structure
+### General Directory Structure
 
  - The `assets` folder is used for things like hand-drawn figures or other
    pictures that were not generated from code. These things cannot be easily
@@ -97,7 +97,7 @@ set_env.bat
    to each collaborator in the project. You can also use it for private
    credentials, if needed. It should not be tracked in Git.
 
-## Data and Output Storage
+### Data and Output Storage
 
 I'll often use a separate folder for storing data. Any data in the data folder
 can be deleted and recreated by rerunning the PyDoit command (the pulls are in
@@ -122,7 +122,7 @@ The `config.py` file is the entry point for all other scripts to these
 definitions. That is, all code that references these variables and others are
 loading by importing `config`.
 
-## Naming Conventions
+### Naming Conventions
 
  - **`pull_` vs `load_`**: Files or functions that pull data from an external
  data source are prepended with "pull_", as in "pull_fred.py". Functions that
@@ -132,9 +132,9 @@ loading by importing `config`.
  the web, whereas the other loads cached data from the "_data" directory.
 
 
-## Dependencies and Virtual Environments
+### Dependencies and Virtual Environments
 
-### Working with `pip` requirements
+#### Working with `pip` requirements
 
 `conda` allows for a lot of flexibility, but can often be slow. `pip`, however, is fast for what it does.  You can install the requirements for this project using the `requirements.txt` file specified here. Do this with the following command:
 ```
@@ -146,7 +146,7 @@ The requirements file can be created like this:
 pip list --format=freeze
 ```
 
-### Working with `conda` environments
+#### Working with `conda` environments
 
 The dependencies used in this environment (along with many other environments commonly used in data science) are stored in the conda environment called `blank` which is saved in the file called `environment.yml`. To create the environment from the file (as a prerequisite to loading the environment), use the following command:
 
@@ -182,7 +182,7 @@ pip freeze > requirements.txt
 - Create blank conda environment: `conda create --name myenv --no-default-packages`
 - Create blank conda environment with different version of Python: `conda create --name myenv --no-default-packages python` Note that the addition of "python" will install the most up-to-date version of Python. Without this, it may use the system version of Python, which will likely have some packages installed already.
 
-### `mamba` and `conda` performance issues
+#### `mamba` and `conda` performance issues
 
 Since `conda` has so many performance issues, it's recommended to use `mamba` instead. I recommend installing the `miniforge` distribution. See here: https://github.com/conda-forge/miniforge
 

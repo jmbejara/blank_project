@@ -15,3 +15,4 @@
 | Data last updated              | {{dataframe_last_updated}}                                                           |
 | Download Data as Parquet       | [Parquet](../download_dataframe/{{pipeline_id}}_{{dataframe_id}}.parquet)            |
 | Download Data as Excel         | [Excel](../download_dataframe/{{pipeline_id}}_{{dataframe_id}}.xlsx)                 |
+| Linked Charts                  | {% if dataframe_specs.linked_charts %} {% for chart_id in dataframe_specs.linked_charts %} [{{pipeline_id}}_{{chart_id}}](../charts/{{pipeline_id}}_{{chart_id}}.md)<br> {% endfor %} {% else %} None {% endif %} |

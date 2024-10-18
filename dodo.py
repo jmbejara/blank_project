@@ -372,7 +372,6 @@ def task_pipeline_publish():
         "./docs_src/_templates/chart_entry_top.md",
         "./docs_src/_templates/pipeline_specs.md",
         "./docs_src/_templates/dataframe_specs.md",
-        "./docs_src/_templates/dataframe_entry_top.md",
         "./docs_src/charts.md",
         "./docs_src/index.md",
         *pipeline_doc_file_deps,
@@ -424,7 +423,6 @@ def task_compile_sphinx_docs():
         "./docs_src/_templates/chart_entry_top.md",
         "./docs_src/_templates/pipeline_specs.md",
         "./docs_src/_templates/dataframe_specs.md",
-        "./docs_src/_templates/dataframe_entry_top.md",
         *pipeline_doc_file_deps,
     ]
 
