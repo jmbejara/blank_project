@@ -13,6 +13,7 @@ sys.path.insert(1, "./src/")
 
 from os import getcwd
 from os import path
+from os import environ
 import shutil
 
 ## Custom reporter: Print PyDoit Text in Green
@@ -61,8 +62,9 @@ OS_TYPE = config.OS_TYPE
 ## Helpers for handling Jupyter Notebook tasks
 # fmt: off
 ## Helper functions for automatic execution of Jupyter notebooks
+environ['PYDEVD_DISABLE_FILE_VALIDATION'] = '1'
 def jupyter_execute_notebook(notebook):
-    return f"PYDEVD_DISABLE_FILE_VALIDATION=1 jupyter nbconvert --execute --to notebook --ClearMetadataPreprocessor.enabled=True --log-level WARN --inplace ./src/{notebook}.ipynb"
+    return f"jupyter nbconvert --execute --to notebook --ClearMetadataPreprocessor.enabled=True --log-level WARN --inplace ./src/{notebook}.ipynb"
 def jupyter_to_html(notebook, output_dir=OUTPUT_DIR):
     return f"jupyter nbconvert --to html --log-level WARN --output-dir={output_dir} ./src/{notebook}.ipynb"
 def jupyter_to_md(notebook, output_dir=OUTPUT_DIR):
