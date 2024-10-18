@@ -1,6 +1,6 @@
 | Dataframe Name                 | {{dataframe_specs.dataframe_name}}                                                   |
 |--------------------------------|--------------------------------------------------------------------------------------|
-| Dataframe ID                   | [{{dataframe_id}}](../dataframes/{{pipeline_id}}_{{dataframe_id}}.md)                |
+| Dataframe ID                   | [{{pipeline_id}}_{{dataframe_id}}](../dataframes/{{pipeline_id}}_{{dataframe_id}}.md)|
 | Data Sources                   | {{dataframe_specs.data_sources | join(', ')}}                                        |
 | Data Providers                 | {{dataframe_specs.data_providers | join(', ')}}                                      |
 | Links to Providers             | {{dataframe_specs.links_to_data_providers | join(', ')}}                             |

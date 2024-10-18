@@ -322,6 +322,7 @@ def generate_dataframe_docs(
 
     # Render the template with the additional "dataframe_last_updated" field
     table_page = template.render(
+        dataframe_specs,
         dataframe_specs=dataframe_specs,
         dataframe_id=dataframe_id,
         pipeline_id=pipeline_id,
@@ -367,6 +368,7 @@ def generate_chart_docs(
 
     # Render chart page
     chart_page = template.render(
+        chart_specs,
         chart_specs=chart_specs,
         chart_id=chart_id,
         dataframe_id=dataframe_id,
