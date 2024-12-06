@@ -1,6 +1,6 @@
 | Dataframe Name                 | {{dataframe_specs.dataframe_name}}                                                   |
 |--------------------------------|--------------------------------------------------------------------------------------|
-| Dataframe ID                   | [{{pipeline_id}}_{{dataframe_id}}](../dataframes/{{pipeline_id}}_{{dataframe_id}}.md)|
+| Dataframe ID                   | [{{pipeline_id}}_{{dataframe_id}}]({{link_to_dataframe_docs}})                       |
 | Data Sources                   | {{dataframe_specs.data_sources | join(', ')}}                                        |
 | Data Providers                 | {{dataframe_specs.data_providers | join(', ')}}                                      |
 | Links to Providers             | {{dataframe_specs.links_to_data_providers | join(', ')}}                             |
@@ -12,7 +12,8 @@
 | Provider Contact Information   | {{dataframe_specs.provider_contact_info}}                                            |
 | Restrictions on Use of Data    | {{dataframe_specs.restriction_on_use}}                                               |
 | How is data pulled?            | {{dataframe_specs.how_is_pulled}}                                                    |
-| Data last updated              | {{dataframe_last_updated}}                                                           |
+| Data available up to (min)     | {{most_recent_data_min}}                                                             |
+| Data available up to (max)     | {{most_recent_data_max}}                                                             |
 | Download Data as Parquet       | [Parquet](../download_dataframe/{{pipeline_id}}_{{dataframe_id}}.parquet)            |
 | Download Data as Excel         | [Excel](../download_dataframe/{{pipeline_id}}_{{dataframe_id}}.xlsx)                 |
 | Linked Charts                  | {% if dataframe_specs.linked_charts %} {% for chart_id in dataframe_specs.linked_charts %} [{{pipeline_id}}_{{chart_id}}](../charts/{{pipeline_id}}_{{chart_id}}.md)<br> {% endfor %} {% else %} None {% endif %} |

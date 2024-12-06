@@ -19,7 +19,7 @@ if (file.exists(".env")) {
   dotenvpath <- path("../.env")
 }
 load_dot_env(dotenvpath)
-OUTPUT_DIR <- Sys.getenv("OUTPUT_DIR", unset="./_output")
+OUTPUT_DIR <- Sys.getenv("OUTPUT_DIR")
 #### >>>
 
 

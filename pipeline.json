@@ -1,17 +1,17 @@
 {
     "EX":{
+        "chartbook_format_version": "0.0.1",
         "pipeline_name": "Pipeline Template - Example",
-        "pipeline_description": "Template for demonstrating how to construct a reproducible analytical pipeline. This template uses example charts and dataframes using public repo data.",
+        "pipeline_description": "Template for demonstrating how to construct a ChartBook pipeline. This template uses example charts and dataframes using public repo data.",
         "lead_pipeline_developer": "Jeremiah Bejarano",
         "contributors": [
             "Jeremiah Bejarano",
             "John Doe"
         ],
         "software_modules_command": "module load anaconda3/3.11.4 TeXLive/2023 R/4.4.0 pandoc/3.1.6 gcc/14.1.0 stata/17",
-        "runs_on_grid_or_windows_or_other": "Unix/Linux",
-        "bitbucket_repo_URL": "",
-        "pipeline_prod_directory": "",
-        "pipeline_dev_directory": "",
+        "runs_on_grid_or_windows_or_other": "Windows/Linux/MacOS",
+        "git_repo_URL": "https://github.com/jmbejara/blank_project",
+        "README_file_path": "./README.md",
         "dataframes": {
             "repo_public": {
                 "dataframe_name": "Public Repo Data",
@@ -28,7 +28,9 @@
                 "restriction_on_use": "No",
                 "how_is_pulled": "Web API via Python",
                 "path_to_parquet_data": "./_data/repo_public.parquet",
-                "path_to_excel_data": "./_data/repo_public.xlsx"
+                "path_to_excel_data": "./_data/repo_public.xlsx",
+                "date_col": "date",
+                "path_to_dataframe_doc": "./docs_src/dataframes/repo_public.md"
             },
             "repo_public_relative_fed": {
                 "dataframe_name": "Public Repo Data, Relative to the Fed Funds Target Midpoint",
@@ -45,7 +47,9 @@
                 "restriction_on_use": "No",
                 "how_is_pulled": "Web API via Python",
                 "path_to_parquet_data": "./_data/repo_public_relative_fed.parquet",
-                "path_to_excel_data": "./_data/repo_public_relative_fed.xlsx"
+                "path_to_excel_data": "./_data/repo_public_relative_fed.xlsx",
+                "date_col": "date",
+                "path_to_dataframe_doc": "./docs_src/dataframes/repo_public_relative_fed.md"
             } 
         },
         "charts": {
@@ -64,7 +68,8 @@
                 "data_series": "",
                 "mnemonic": "",
                 "path_to_html_chart": "./_output/repo_rates.html",
-                "path_to_excel_chart": "./src/repo_rates.xlsx"
+                "path_to_excel_chart": "./src/repo_rates.xlsx",
+                "path_to_chart_doc": "./docs_src/charts/repo_rates.md"
             }, 
             "repo_rates_normalized": {
                 "chart_name": "Repo Rates, Normalized",
@@ -81,7 +86,8 @@
                 "data_series": "",
                 "mnemonic": "",
                 "path_to_html_chart": "./_output/repo_rates_normalized.html",
-                "path_to_excel_chart": "./src/repo_rates_normalized.xlsx"
+                "path_to_excel_chart": "./src/repo_rates_normalized.xlsx",
+                "path_to_chart_doc": "./docs_src/charts/repo_rates_normalized.md"
             },
             "repo_rates_normalized_w_balance_sheet": {
                 "chart_name": "Repo Rate Spikes and the Fed's Balance Sheet",
@@ -98,7 +104,8 @@
                 "data_series": "",
                 "mnemonic": "",
                 "path_to_html_chart": "./_output/repo_rates_normalized_w_balance_sheet.html",
-                "path_to_excel_chart": "./src/repo_rates_normalized_w_balance_sheet.xlsx"
+                "path_to_excel_chart": "./src/repo_rates_normalized_w_balance_sheet.xlsx",
+                "path_to_chart_doc": "./docs_src/charts/repo_rates_normalized_w_balance_sheet.md"
             }
         }
     }

@@ -37,7 +37,7 @@ apidocs/index
 
 ## Pipeline Specs
 {% for pipeline_id, pipeline_specs in specs.items() %}
-  {% include "_templates/pipeline_specs.md" with context %}
+  {% include "docs_src/_templates/pipeline_specs.md" with context %}
 {% endfor %}
 
 

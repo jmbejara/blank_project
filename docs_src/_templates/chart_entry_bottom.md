@@ -17,8 +17,8 @@
 
 ## Data
 
-{% include "_templates/dataframe_specs.md" %}
+{% include "docs_src/_templates/dataframe_specs.md" %}
 
 ## Pipeline
 
-{% include "_templates/pipeline_specs.md" %}
+{% include "docs_src/_templates/pipeline_specs.md" %}

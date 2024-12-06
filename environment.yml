@@ -1,51 +1,66 @@
 name: blank
 channels:
-  - conda-forge
   - defaults
 dependencies:
   - python>=3.12
-  - altair>=5.2.0
-  - beautifulsoup4>=4.12.3
-  - black>=24.3.0
-  - doit>=0.36.0
-  - ipython>=8.22.2
-  - jupyter>=1.0.0
-  - jupyter-book>=1.0.0
-  - jupyterlab>=4.1.5
-  - linearmodels>=5.4
-  - matplotlib>=3.8.3
-  - myst-parser>=2.0.0
-  - notebook>=7.1.2
-  - numpy>=1.26.4
-  - numpydoc>=1.6.0
-  - openpyxl>=3.1.2
-  - pandas>=2.2.1
-  - pandas-datareader>=0.10.0
-  - pandas-market-calendars>=4.4.0
-  - plotly
-  - plotnine>=0.13.2
-  - polars>=0.20.16
-  - pytest>=8.1.1
-  - python-decouple>=3.8
-  - python-dotenv>=1.0.1
-  - pyxlsb>=1.0.10
-  - requests>=2.31.0
-  - scikit-learn>=1.4.1.post1
-  - scipy>=1.12.0
-  - seaborn>=0.13.2
-  - sphinx-book-theme>=1.1.2
-  - statsmodels>=0.14.1
-  - streamlit>=1.32.2
-  - vega_datasets>=0.9.0
-  # - wrds>=3.2.0 # Not available in conda-forge
-  - xbbg>=0.7.7
-  - xlrd>=2.0.1
-  - zstandard>=0.22.0
-  # R dependencies
+  - ABlog==0.11.11
+  - black==24.8.0
+  - colorama
+  - doit==0.36.0
+  - fabric==3.2.2
+  - holidays
+  - ipython
+  - jaydebeapi
+  - jupyter
+  - jupyter-book
+  - jupyterlab
+  - linearmodels==6.1
+  - linkify-it-py
+  - matplotlib==3.9.2
+  - myst-nb
+  - myst-parser==2.0.0
+  - notebook
+  - numpy==1.26.4
+  - numpydoc==1.8.0
+  - openpyxl==3.1.5
+  - pandas-datareader==0.10.0
+  - pandas-market-calendars==4.4.1
+  - pandas==2.2.3
+  - paramiko==3.5.0
+  - plotly==5.24.1
+  - polars==1.9.0
+  - pyarrow
+  - pydata-sphinx-theme==0.15.4
+  - pytest==8.3.3
+  - python-decouple==3.8
+  - python-dotenv==1.0.1
+  - pyxlsb==1.0.10
+  - requests==2.32.3
+  - scikit-learn==1.5.2
+  - scipy==1.12.0
+  - seaborn==0.13.2
+  - sphinx-autodoc2
+  - sphinx-book-theme==1.1.3
+  - sphinx-design
+  - sphinx==7.3.7
+  - sphinxext-opengraph
+  - sphinxcontrib-applehelp==2.0.0
+  - sphinxcontrib-htmlhelp==2.1.0
+  - sphinxext-rediraffe
+  - statsmodels==0.14.4
+  - xbbg==0.7.7
+  - xlrd==2.0.1
+  - xlwings==0.33.3
+  - zstandard==0.23.0
   - r-base
   - r-arrow
   - r-fixest
   - r-ggplot2
   - r-tidyverse
   - r-zoo
-  - r-stargazer
+  - r-stargazer 
+  - pip
+  # Fallback to PyPI for wrds installation if not available on conda-forge.
+  - pip:
+      - wrds==3.* # Specify the version if needed; otherwise, use just 'wrds'
+  

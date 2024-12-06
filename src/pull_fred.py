@@ -79,7 +79,7 @@ manual_ONRRP_cntypty_limits = {  # in $ Billions
 }
 
 
-def pull_fred(start_date=START_DATE, end_date=END_DATE, ffill=True):
+def pull_fred(start_date, end_date, ffill=True):
     """
     Lookup series code, e.g., like this:
     https://fred.stlouisfed.org/series/RPONTSYD
@@ -124,11 +124,11 @@ def pull_fred(start_date=START_DATE, end_date=END_DATE, ffill=True):
     df.loc["2021-Jul-28", "ONRP_AGG_LIMIT"] = 500
     df["ONRP_AGG_LIMIT"] = df["ONRP_AGG_LIMIT"].ffill()
 
-    # df_focused = df.drop(columns=["IORR", "IOER", "IORB"])
+    df_focused = df.drop(columns=["IORR", "IOER", "IORB"])
     # df_focused.isna().sum()
     # df_focused['WTREGEN'].plot()
     # df_focused['WTREGEN'].ffill().plot()
-    return df
+    return df, df_focused
 
 
 def load_fred(data_dir=DATA_DIR):

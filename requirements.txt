@@ -56,4 +56,5 @@ statsmodels==0.14.4
 wrds==3.2.0
 xbbg==0.7.7
 xlrd==2.0.1
+xlwings==0.33.3
 zstandard==0.23.0

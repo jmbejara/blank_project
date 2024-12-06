@@ -1,3 +1,4 @@
+
 ##########################
 # Project Input and Output
 ##########################
@@ -13,6 +14,8 @@
 
 # Secrets saved in environment files
 .env*
+# Allow example environment file
+!.env.example*
 
 # Other
 temp*.csv
@@ -239,7 +242,10 @@ vignettes/*.pdf
 ~$*
 
 .doit.db.db
+.doit-db.sqlite
 
 src/z_scratch_project_template.ipynb
 
 *Thumbs.db
+
+src/z_scratch_pipeline_template.ipynb

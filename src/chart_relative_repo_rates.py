@@ -142,7 +142,8 @@ col_name_to_short_name = {
     "Total_Reserves_over_GDP": "Total Reserves / GDP",
     "SOFR_extended_with_Triparty": "SOFR (extended with Tri-Party)",
 }
-
+df_formatted.index.name = "date"
+df_norm_formatted.index.name = "date"
 
 filepath = DATA_DIR / "repo_public.parquet"
 df_formatted.to_parquet(filepath)

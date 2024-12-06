@@ -1,5 +1,5 @@
-Project Title HERE
-==================
+Example Project Using the ChartBook Template
+=============================================
 
 ## About this project
 

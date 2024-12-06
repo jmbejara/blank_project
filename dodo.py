@@ -11,10 +11,12 @@ import sys
 
 sys.path.insert(1, "./src/")
 
-from os import getcwd
-from os import path
-from os import environ
-import shutil
+from os import environ, getcwd, path
+from pathlib import Path
+
+import config
+import pipeline_publish
+from colorama import Fore, Style, init
 
 ## Custom reporter: Print PyDoit Text in Green
 # This is helpful because some tasks write to sterr and pollute the output in
@@ -24,7 +26,11 @@ import shutil
 # to easily see the task lines printed by PyDoit. I want them to stand out
 # from among all the other lines printed to the console.
 from doit.reporter import ConsoleReporter
-from colorama import Fore, Style, init
+
+try:
+    in_slurm = environ["SLURM_JOB_ID"] is not None
+except:
+    in_slurm = False
 
 
 class GreenReporter(ConsoleReporter):
@@ -41,28 +47,34 @@ class GreenReporter(ConsoleReporter):
         self.outstream.write(output)
 
 
-DOIT_CONFIG = {
-    "reporter": GreenReporter,
-    # other config here...
-    # "cleanforget": True, # Doit will forget about tasks that have been cleaned.
-}
+if not in_slurm:
+    DOIT_CONFIG = {
+        "reporter": GreenReporter,
+        # other config here...
+        # "cleanforget": True, # Doit will forget about tasks that have been cleaned.
+        'backend': 'sqlite3',
+        'dep_file': './.doit-db.sqlite'
+    }
+else:
+    DOIT_CONFIG = {
+        'backend': 'sqlite3',
+        'dep_file': './.doit-db.sqlite'
+    }
 init(autoreset=True)
 
-import config
-from pathlib import Path
-from doit.tools import run_once
-import pipeline_publish
 
 BASE_DIR = Path(config.BASE_DIR)
-OUTPUT_DIR = Path(config.OUTPUT_DIR)
 DATA_DIR = Path(config.DATA_DIR)
-DOCS_PUBLISH_DIR = Path(config.DOCS_PUBLISH_DIR)
+MANUAL_DATA_DIR = Path(config.MANUAL_DATA_DIR)
+OUTPUT_DIR = Path(config.OUTPUT_DIR)
 OS_TYPE = config.OS_TYPE
+PUBLISH_DIR = Path(config.PUBLISH_DIR)
+USER = config.USER
 
 ## Helpers for handling Jupyter Notebook tasks
 # fmt: off
 ## Helper functions for automatic execution of Jupyter notebooks
-environ['PYDEVD_DISABLE_FILE_VALIDATION'] = '1'
+environ["PYDEVD_DISABLE_FILE_VALIDATION"] = "1"
 def jupyter_execute_notebook(notebook):
     return f"jupyter nbconvert --execute --to notebook --ClearMetadataPreprocessor.enabled=True --log-level WARN --inplace ./src/{notebook}.ipynb"
 def jupyter_to_html(notebook, output_dir=OUTPUT_DIR):
@@ -93,6 +105,7 @@ def copy_notebook_to_folder(notebook_stem, origin_folder, destination_folder):
 ##################################
 ## Begin rest of PyDoit tasks here
 ##################################
+
 
 def task_pull_fred():
     """ """
@@ -127,7 +140,7 @@ def task_pull_fred():
 ##############################$
 ## Demo: Other misc. data pulls
 ##############################$
-# def task_pull_all():
+# def task_pull_other():
 #     """ """
 #     file_dep = [
 #         "./src/pull_bloomberg.py",
@@ -432,81 +445,13 @@ def task_compile_sphinx_docs():
         "actions": [
             "rsync -lr --exclude=charts --exclude=dataframes --exclude=notebooks --exclude=index.md --exclude=pipelines.md --exclude=dataframes.md ./docs_src/ ./_docs/",
             "sphinx-build -M html ./_docs/ ./_docs/_build",
-        ],  # Use docs as build destination     
+        ],  # Use docs as build destination
         # "actions": ["sphinx-build -M html ./docs/ ./docs/_build"], # Previous standard organization
         "targets": sphinx_targets,
         "file_dep": file_dep,
         "task_dep": ["run_notebooks", "pipeline_publish"],
         "clean": True,
     }
-
-
-def copy_build_files_to_docs_publishing_dir(docs_publish_dir=DOCS_PUBLISH_DIR):
-    """
-    Copy build files to the docs build directory.
-
-    This function copies files and directories from the build directory to the
-    docs publishing directory. It iterates over the files and directories in the
-    'docs/html' directory and copies them to the corresponding location in the
-    'docs_publish_dir'. If a file or directory already exists in the target
-    location, it is removed before copying.
-
-    Additionally, this function creates a '.nojekyll' file in the
-    'docs_publish_dir' if it doesn't already exist.
-
-    Note that I'm using by default the "docs" directory as the build
-    directory. It is also the publishing directory. I just need
-    to copy the files out of the HTML sub-directory into the
-    root of the publishing directory.
-    """
-    # shutil.rmtree(docs_publish_dir, ignore_errors=True)
-    # shutil.copytree(BUILD_DIR, docs_publish_dir)
-    docs_publish_dir = Path(docs_publish_dir)
-
-    for item in (Path("./docs") / "html").iterdir():
-        if item.is_file():
-            target_file = docs_publish_dir / item.name
-            if target_file.exists():
-                target_file.unlink()
-            shutil.copy2(item, docs_publish_dir)
-        elif item.is_dir():
-            target_dir = docs_publish_dir / item.name
-            if target_dir.exists():
-                shutil.rmtree(target_dir)
-            shutil.copytree(item, target_dir)
-
-    nojekyll_file = docs_publish_dir / ".nojekyll"
-    if not nojekyll_file.exists():
-        nojekyll_file.touch()
-
-
-# def task_copy_built_docs_to_publishing_dir():
-#     """copy_built_docs_to_publishing_dir
-
-#     # For example, convert this:
-#     # Copy files from this:
-#     ['./docs/html/index.html',
-#     './docs/html/myst_markdown_demos.html',
-#     './docs/html/apidocs/index.html']
-
-#     # to this:
-#     [WindowsPath('docs/index.html'),
-#     WindowsPath('docs/myst_markdown_demos.html'),
-#     WindowsPath('docs/apidocs/index.html')]
-#     """
-#     file_dep = sphinx_targets
-#     targets = [
-#         Path(DOCS_PUBLISH_DIR) / Path(*Path(file).parts[2:]) for file in sphinx_targets
-#     ]
-
-#     return {
-#         "actions": [
-#             copy_build_files_to_docs_publishing_dir,
-#         ],
-#         "targets": targets,
-#         "file_dep": file_dep,
-#         "clean": True,
-#     }
 
 
 ###############################################################

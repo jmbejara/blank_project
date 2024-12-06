@@ -41,7 +41,7 @@ def get_os():
 OS_TYPE = get_os()
 
 # Absolute path to root directory of the project
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).absolute().parent.parent
 
 def if_relative_make_abs(path):
     """If a relative path is given, make it absolute, assuming
@@ -70,6 +70,7 @@ def if_relative_make_abs(path):
 WRDS_USERNAME = config("WRDS_USERNAME", default="")
 START_DATE = config("START_DATE", default="1913-01-01", cast=to_datetime)
 END_DATE = config("END_DATE", default="2023-10-01", cast=to_datetime)
+USER = config("USER", default="")
 PIPELINE_DEV_MODE = config("PIPELINE_DEV_MODE", default=True, cast=bool)
 PIPELINE_THEME = config("PIPELINE_THEME", default="pipeline")
 
@@ -77,7 +78,7 @@ PIPELINE_THEME = config("PIPELINE_THEME", default="pipeline")
 DATA_DIR = if_relative_make_abs(config('DATA_DIR', default=Path('_data'), cast=Path))
 MANUAL_DATA_DIR = if_relative_make_abs(config('MANUAL_DATA_DIR', default=Path('data_manual'), cast=Path))
 OUTPUT_DIR = if_relative_make_abs(config('OUTPUT_DIR', default=Path('_output'), cast=Path))
-DOCS_PUBLISH_DIR = if_relative_make_abs(config('DOCS_PUBLISH_DIR', default=Path('docs'), cast=Path))
+PUBLISH_DIR = if_relative_make_abs(config('PUBLISH_DIR', default=Path('_output/publish'), cast=Path))
 # fmt: on
 
 
