@@ -79,7 +79,7 @@ manual_ONRRP_cntypty_limits = {  # in $ Billions
 }
 
 
-def pull_fred(start_date, end_date, ffill=True):
+def pull_fred(start_date=START_DATE, end_date=END_DATE, ffill=True):
     """
     Lookup series code, e.g., like this:
     https://fred.stlouisfed.org/series/RPONTSYD
@@ -128,7 +128,7 @@ def pull_fred(start_date, end_date, ffill=True):
     # df_focused.isna().sum()
     # df_focused['WTREGEN'].plot()
     # df_focused['WTREGEN'].ffill().plot()
-    return df, df_focused
+    return df_focused
 
 
 def load_fred(data_dir=DATA_DIR):
@@ -150,10 +150,8 @@ if __name__ == "__main__":
 
     today = pd.Timestamp.today().strftime("%Y-%m-%d")
     end_date = today
-    df, df_focused = pull_fred(START_DATE, end_date)
+    df = pull_fred(START_DATE, end_date)
     filedir = Path(DATA_DIR) 
     filedir.mkdir(parents=True, exist_ok=True)
     df.to_parquet(filedir / "fred.parquet")
     df.to_csv(filedir / "fred.csv")
-
-    df_focused.to_parquet(filedir / "fred_focused.parquet")
