@@ -5,26 +5,89 @@ NOTES:
 
 """
 
-from datetime import date, datetime
-from pathlib import Path
-from typing import Union
-import config
-import jinja2
 import json
 import os
-import polars as pl
 import shutil
 import time
+from datetime import datetime
+from pathlib import Path
+from typing import Union
 
+import jinja2
+import polars as pl
+
+import config
 
 BASE_DIR = config.BASE_DIR
 OUTPUT_DIR = config.OUTPUT_DIR
 PIPELINE_DEV_MODE = config.PIPELINE_DEV_MODE
 PIPELINE_THEME = config.PIPELINE_THEME
-USER = config.USER
 PUBLISH_DIR = config.PUBLISH_DIR
+USER = config.USER
 
 DOCS_BUILD_DIR = BASE_DIR / Path("_docs")
+
+
+def validate_pipeline_json_path(path: Path) -> bool:
+    """
+    Validates that a pipeline.json file exists in the specified directory.
+    """
+    pipeline_json = path / "pipeline.json"
+    if not pipeline_json.is_file():
+        raise ValueError(f"No pipeline.json found in directory: {path}")
+    return True
+
+
+def resolve_path(path_input: Union[str, dict]) -> Path:
+    """
+    Resolves a path that can be either a direct path string or a dictionary
+    of platform-specific paths.
+
+    Parameters
+    ----------
+    path_input : Union[str, dict]
+        Either a string representing a direct path, or a dictionary containing
+        platform-specific paths with 'Windows' and/or 'Unix' keys
+
+    Returns
+    -------
+    Path
+        The resolved path appropriate for the current platform
+
+    Raises
+    ------
+    ValueError
+        If using a dict input and no valid path is found for the current platform
+
+    Examples
+    --------
+    >>> resolve_path('/path/to/dir')  # Direct path
+    PosixPath('/path/to/dir')
+    >>> resolve_path({'Windows': 'C:/data', 'Unix': '/home/data'})  # Platform-specific
+    WindowsPath('C:/data')  # or PosixPath('/home/data') depending on platform
+    """
+    result_path = None
+
+    if isinstance(path_input, str):
+        result_path = Path(path_input)
+    else:
+        # Handle dict case (platform-specific paths)
+        import platform
+
+        is_windows = platform.system().lower() == "windows"
+
+        if is_windows and "Windows" in path_input:
+            result_path = Path(path_input["Windows"])
+        elif not is_windows and "Unix" in path_input:
+            result_path = Path(path_input["Unix"])
+
+        if result_path is None:
+            raise ValueError(
+                f"No valid path found for current platform ({platform.system()}). "
+                f"Available paths: {list(path_input.keys())}"
+            )
+
+    return result_path
 
 
 def read_specs(base_dir=BASE_DIR):
@@ -62,9 +125,11 @@ def read_specs(base_dir=BASE_DIR):
 
         # Handle imported pipeline specifications if applicable
         if "import_from" in pipeline_specs:
-            sub_base_dir = Path(pipeline_specs["import_from"])
+            sub_base_dir = resolve_path(pipeline_specs["import_from"])
+            validate_pipeline_json_path(sub_base_dir)
             sub_specs = read_specs(base_dir=sub_base_dir)  # Recursively read specs
             pipeline_specs = sub_specs[pipeline_id]  # Update with imported specs
+            # Set the production directory
             pipeline_specs["pipeline_base_dir"] = sub_base_dir.resolve().as_posix()
 
             specs[pipeline_id] = pipeline_specs  # Update the main specs
@@ -86,9 +151,9 @@ def read_specs(base_dir=BASE_DIR):
 
         # Update dataframe_specs with the linked charts
         for dataframe_id, chart_ids in dataframe_to_charts.items():
-            pipeline_specs["dataframes"][dataframe_id][
-                "linked_charts"
-            ] = chart_ids  # Add linked charts
+            pipeline_specs["dataframes"][dataframe_id]["linked_charts"] = (
+                chart_ids  # Add linked charts
+            )
 
     return specs  # Return the complete specifications
 
@@ -109,7 +174,6 @@ def get_sphinx_file_alignment_plan(base_dir=BASE_DIR, docs_build_dir=DOCS_BUILD_
     download_chart_dir_static.mkdir(parents=True, exist_ok=True)
 
     for pipeline_id in pipeline_ids:
-
         pipeline_specs = specs[pipeline_id]
         pipeline_base_dir = Path(pipeline_specs["pipeline_base_dir"])
 
@@ -169,14 +233,14 @@ def copy_according_to_plan(publish_plan, mkdir=False):
         # Ensure both source and destination are Path objects
         source_path = Path(source)
         destination_path = Path(destination)
-        
+
         # Create parent directories if needed
         if mkdir:
             destination_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         # Copy the file content only, without attempting to copy permissions
         shutil.copyfile(source_path, destination_path)
-        
+
         # Try to set reasonable permissions after copying
         try:
             os.chmod(destination_path, 0o644)  # rw-r--r-- for files
@@ -303,7 +367,7 @@ def generate_all_pipeline_docs(
             dataframe_file_list=dataframe_file_list,
             pipeline_specs=pipeline_specs,
             readme_text=readme_text,
-            pipeline_page_link=f"./index.md",
+            pipeline_page_link="./index.md",
             dot_or_dotdot=".",
         )
         file_path = docs_build_dir / "index.md"
@@ -324,7 +388,6 @@ def generate_pipeline_docs(
     base_dir=BASE_DIR,
 ):
     for dataframe_id in pipeline_specs["dataframes"]:
-
         generate_dataframe_docs(
             dataframe_id,
             pipeline_id,
@@ -378,7 +441,7 @@ def generate_dataframe_docs(
     date_col = dataframe_specs["date_col"]
 
     if PIPELINE_THEME == "pipeline":
-        pipeline_page_link = f"../index.md"
+        pipeline_page_link = "../index.md"
         dataframe_path_prefix = "../dataframes/"
     elif PIPELINE_THEME == "chart_base":
         pipeline_page_link = f"../pipelines/{pipeline_id}_README.md"
@@ -474,7 +537,7 @@ def generate_chart_docs(
     template = environment.get_template(path_to_chart_doc)
 
     if PIPELINE_THEME == "pipeline":
-        pipeline_page_link = f"../index.md"
+        pipeline_page_link = "../index.md"
         dataframe_path_prefix = "../dataframes/"
     elif PIPELINE_THEME == "chart_base":
         pipeline_page_link = f"../pipelines/{pipeline_id}_README.md"
@@ -524,12 +587,10 @@ def generate_chart_docs(
 
 
 def _get(base_dir=BASE_DIR, dep_or_target="dep", pipeline_dev_mode=True):
-
     specs = read_specs(base_dir=base_dir)
     pipeline_ids = get_pipeline_id_list(specs)
     file_list = []
     for pipeline_id in pipeline_ids:
-
         pipeline_specs = specs[pipeline_id]
         pipeline_base_dir = Path(pipeline_specs["pipeline_base_dir"])
 
@@ -600,7 +661,7 @@ def get_last_modified_datetime(file_path: Union[Path, str]) -> datetime:
 
 
 def get_most_recent_pipeline_source_modification(
-    base_dir: Union[str, Path]
+    base_dir: Union[str, Path],
 ) -> datetime:
     base_dir = Path(base_dir)
 
@@ -775,7 +836,7 @@ def copy_publishable_pipeline_files(specs, base_dir, publish_dir):
 
     # Create the destination directory and ensure it exists
     os.makedirs(destination_dir, exist_ok=True)
-    
+
     # Manually copy each file instead of using copytree
     for item in os.listdir(source_dir):
         s = source_dir / item
@@ -790,7 +851,6 @@ def copy_publishable_pipeline_files(specs, base_dir, publish_dir):
 
 
 if __name__ == "__main__":
-
     DOCS_BUILD_DIR.mkdir(parents=True, exist_ok=True)
 
     ## Align files for use by Sphinx
