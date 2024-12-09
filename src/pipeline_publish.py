@@ -848,6 +848,67 @@ def copy_publishable_pipeline_files(specs, base_dir, publish_dir, verbose=True):
             except (OSError, PermissionError):
                 pass
 
+def copy_docs_src_to_build(docs_src_dir, docs_build_dir, exclude_list=None):
+    """
+    Copies files from docs_src to _docs directory while excluding specified paths.
+    Similar to: rsync -lr --exclude=... ./docs_src/ ./_docs/
+
+    Parameters
+    ----------
+    docs_src_dir : Union[str, Path]
+        Source directory (docs_src)
+    docs_build_dir : Union[str, Path]
+        Destination directory (_docs)
+    exclude_list : list, optional
+        List of files and directories to exclude. Defaults to common exclusions.
+    """
+    if exclude_list is None:
+        exclude_list = [
+            'charts',
+            'dataframes',
+            'notebooks',
+            'index.md',
+            'pipelines.md',
+            'dataframes.md'
+        ]
+
+    docs_src_dir = Path(docs_src_dir)
+    docs_build_dir = Path(docs_build_dir)
+
+    # Create the destination directory if it doesn't exist
+    docs_build_dir.mkdir(parents=True, exist_ok=True)
+
+    def should_copy(path):
+        """Check if the path should be copied based on exclusion rules"""
+        for excluded in exclude_list:
+            if excluded in path.parts:
+                return False
+        return True
+
+    # Walk through the source directory
+    for src_path in docs_src_dir.rglob('*'):
+        # Skip if path matches exclusion rules
+        if not should_copy(src_path):
+            continue
+
+        # Calculate relative path to maintain directory structure
+        rel_path = src_path.relative_to(docs_src_dir)
+        dst_path = docs_build_dir / rel_path
+
+        if src_path.is_file():
+            # Create parent directories if they don't exist
+            dst_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Copy the file content only, without attempting to copy permissions
+            shutil.copyfile(src_path, dst_path)
+
+            # Try to set reasonable permissions after copying
+            try:
+                os.chmod(dst_path, 0o644)  # rw-r--r-- for files
+            except (OSError, PermissionError):
+                # If we can't set permissions, just continue
+                pass
+
 if __name__ == "__main__":
     DOCS_BUILD_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -865,6 +926,12 @@ if __name__ == "__main__":
     generate_all_pipeline_docs(
         specs,
         docs_build_dir=DOCS_BUILD_DIR,
+    )
+
+    # Copy remaining docs_src files to build directory
+    copy_docs_src_to_build(
+        BASE_DIR / "docs_src",
+        DOCS_BUILD_DIR
     )
 
     if PIPELINE_THEME == "pipeline":

@@ -399,7 +399,6 @@ def task_pipeline_publish():
     return {
         "actions": [
             "ipython ./src/pipeline_publish.py",
-            "rsync -lr --exclude=charts --exclude=dataframes --exclude=notebooks --exclude=index.md --exclude=pipelines.md --exclude=dataframes.md ./docs_src/ ./_docs/",
             ],
         "targets": targets,
         "file_dep": file_dep,
