@@ -209,14 +209,6 @@ def get_sphinx_file_alignment_plan(base_dir=BASE_DIR, docs_build_dir=DOCS_BUILD_
                 download_chart_dir_static / f"{pipeline_id}_{chart_id}.html"
             )
 
-            # Plan for copying Excel chart to download folder
-            chart_specs = pipeline_specs["charts"][chart_id]
-            path_to_excel_chart = Path(chart_specs["path_to_excel_chart"])
-            file_path = pipeline_base_dir / path_to_excel_chart
-            chart_plan_download[file_path] = (
-                download_chart_dir_download / f"{pipeline_id}_{chart_id}.xlsx"
-            )
-
     return dataset_plan, chart_plan_download, chart_plan_static
 
 
@@ -286,7 +278,7 @@ def generate_all_pipeline_docs(
             docs_build_dir=docs_build_dir,
             base_dir=base_dir,
         )
-        if PIPELINE_THEME == "chart_base":
+        if PIPELINE_THEME == "chart_book":
             # Copy pipeline README to pipelines directory
             pipeline_readme_dir = docs_build_dir / "pipelines"
             pipeline_readme_dir.mkdir(parents=True, exist_ok=True)
@@ -317,7 +309,7 @@ def generate_all_pipeline_docs(
     dataframe_file_list = list(table_file_map.values())
     environment = jinja2.Environment(loader=jinja2.FileSystemLoader(base_dir))
 
-    if PIPELINE_THEME == "chart_base":
+    if PIPELINE_THEME == "chart_book":
         # Render dataframe.md
         template = environment.get_template("docs_src/dataframes.md")
         rendered_page = template.render(
@@ -443,7 +435,7 @@ def generate_dataframe_docs(
     if PIPELINE_THEME == "pipeline":
         pipeline_page_link = "../index.md"
         dataframe_path_prefix = "../dataframes/"
-    elif PIPELINE_THEME == "chart_base":
+    elif PIPELINE_THEME == "chart_book":
         pipeline_page_link = f"../pipelines/{pipeline_id}_README.md"
         dataframe_path_prefix = ""
     else:
@@ -539,7 +531,7 @@ def generate_chart_docs(
     if PIPELINE_THEME == "pipeline":
         pipeline_page_link = "../index.md"
         dataframe_path_prefix = "../dataframes/"
-    elif PIPELINE_THEME == "chart_base":
+    elif PIPELINE_THEME == "chart_book":
         pipeline_page_link = f"../pipelines/{pipeline_id}_README.md"
         dataframe_path_prefix = "../dataframes/"
     else:
@@ -600,7 +592,7 @@ def _get(base_dir=BASE_DIR, dep_or_target="dep", pipeline_dev_mode=True):
                 file_path = pipeline_base_dir / dataframe_specs["path_to_dataframe_doc"]
             elif dep_or_target == "target":
                 filename = f"{pipeline_id}_{dataframe_id}.md"
-                file_path = pipeline_base_dir / "_docs" / "dataframes" / filename
+                file_path = base_dir / "_docs" / "dataframes" / filename
             else:
                 raise ValueError
             file_list.append(file_path)
@@ -610,7 +602,7 @@ def _get(base_dir=BASE_DIR, dep_or_target="dep", pipeline_dev_mode=True):
                 file_path = pipeline_base_dir / chart_specs["path_to_chart_doc"]
             elif dep_or_target == "target":
                 filename = f"{pipeline_id}_{chart_id}.md"
-                file_path = pipeline_base_dir / "_docs" / "charts" / filename
+                file_path = base_dir / "_docs" / "charts" / filename
             else:
                 raise ValueError
             file_list.append(file_path)
@@ -748,7 +740,6 @@ def get_pipeline_publishing_plan(specs, publish_dir=PUBLISH_DIR):
             chart_specs = pipeline_specs["charts"][chart_id]
 
             _add_file_to_plan(pipeline_base_dir, chart_specs["path_to_html_chart"])
-            _add_file_to_plan(pipeline_base_dir, chart_specs["path_to_excel_chart"])
             _add_file_to_plan(pipeline_base_dir, chart_specs["path_to_chart_doc"])
 
     return publishing_plan
@@ -801,8 +792,7 @@ def create_dodo_file_with_mod_date(date, dodo_path, publish_dir=PUBLISH_DIR):
 
     # print(f"File '{filename}' created in '{publish_dir}' with modification date set to {date}.")
 
-
-def copy_publishable_pipeline_files(specs, base_dir, publish_dir):
+def copy_publishable_pipeline_files(specs, base_dir, publish_dir, verbose=True):
     """
     Copy unaligned files to the publishing directory and Sphinx templates.
 
@@ -814,12 +804,17 @@ def copy_publishable_pipeline_files(specs, base_dir, publish_dir):
         The base directory where source files are located.
     publish_dir : Path
         The directory where files will be published.
+    verbose : bool, optional
+        Whether to print messages about copied files. Default is True.
     """
     # Copy unaligned files to publishing directory
     pipeline_publishing_plan = get_pipeline_publishing_plan(
         specs, publish_dir=publish_dir
     )
     copy_according_to_plan(pipeline_publishing_plan, mkdir=True)
+    if verbose:
+        for src, dst in pipeline_publishing_plan.items():
+            print(f"Copied to {dst}")
 
     src_modification_date = get_most_recent_pipeline_source_modification(
         base_dir=base_dir
@@ -829,6 +824,8 @@ def copy_publishable_pipeline_files(specs, base_dir, publish_dir):
         dodo_path=base_dir / "dodo.py",
         publish_dir=publish_dir,
     )
+    if verbose:
+        print(f"Copied to {publish_dir}/dodo.py")
 
     # Copy Sphinx Templates
     source_dir = base_dir / Path("./docs_src/_templates")
@@ -844,11 +841,12 @@ def copy_publishable_pipeline_files(specs, base_dir, publish_dir):
         if os.path.isfile(s):
             # Copy the file content only
             shutil.copyfile(s, d)
+            if verbose:
+                print(f"Copied to {d}")
             try:
                 os.chmod(d, 0o644)  # Try to set reasonable permissions
             except (OSError, PermissionError):
                 pass
-
 
 if __name__ == "__main__":
     DOCS_BUILD_DIR.mkdir(parents=True, exist_ok=True)

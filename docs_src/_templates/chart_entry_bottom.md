@@ -11,9 +11,7 @@
 | Seasonal Adjustment    | {{seasonal_adjustment}}                                    |
 | Units                  | {{units}}                                                  |
 | Data Series            | {{data_series}}                                            |
-| Mnemonic               | {{mnemonic}}                                               |
 | HTML Chart             | [HTML](../download_chart/{{pipeline_id}}_{{chart_id}}.html)    |
-| Excel Chart            | [Excel](../download_chart/{{pipeline_id}}_{{chart_id}}.xlsx)   |
 
 ## Data
 

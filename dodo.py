@@ -397,7 +397,10 @@ def task_pipeline_publish():
     ]
 
     return {
-        "actions": ["ipython ./src/pipeline_publish.py"],
+        "actions": [
+            "ipython ./src/pipeline_publish.py",
+            "rsync -lr --exclude=charts --exclude=dataframes --exclude=notebooks --exclude=index.md --exclude=pipelines.md --exclude=dataframes.md ./docs_src/ ./_docs/",
+            ],
         "targets": targets,
         "file_dep": file_dep,
         "clean": True,
@@ -443,7 +446,6 @@ def task_compile_sphinx_docs():
 
     return {
         "actions": [
-            "rsync -lr --exclude=charts --exclude=dataframes --exclude=notebooks --exclude=index.md --exclude=pipelines.md --exclude=dataframes.md ./docs_src/ ./_docs/",
             "sphinx-build -M html ./_docs/ ./_docs/_build",
         ],  # Use docs as build destination
         # "actions": ["sphinx-build -M html ./docs/ ./docs/_build"], # Previous standard organization
