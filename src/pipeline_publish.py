@@ -592,7 +592,7 @@ def _get(base_dir=BASE_DIR, dep_or_target="dep", pipeline_dev_mode=True):
                 file_path = pipeline_base_dir / dataframe_specs["path_to_dataframe_doc"]
             elif dep_or_target == "target":
                 filename = f"{pipeline_id}_{dataframe_id}.md"
-                file_path = base_dir / "_docs" / "dataframes" / filename
+                file_path = pipeline_base_dir / "_docs" / "dataframes" / filename
             else:
                 raise ValueError
             file_list.append(file_path)
@@ -602,7 +602,7 @@ def _get(base_dir=BASE_DIR, dep_or_target="dep", pipeline_dev_mode=True):
                 file_path = pipeline_base_dir / chart_specs["path_to_chart_doc"]
             elif dep_or_target == "target":
                 filename = f"{pipeline_id}_{chart_id}.md"
-                file_path = base_dir / "_docs" / "charts" / filename
+                file_path = pipeline_base_dir / "_docs" / "charts" / filename
             else:
                 raise ValueError
             file_list.append(file_path)
