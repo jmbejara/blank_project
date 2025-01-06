@@ -18,6 +18,32 @@ import datetime
 
 
 def df_to_literal(df):
+    """
+    Convert a pandas dataframe to a literal string.
+
+    Examples
+    --------
+    ```
+    df = pd.DataFrame(
+    {
+        'Name': ['Alice', 'Bob', 'Charlie'],
+        'Age': [25, 30, 35],
+        'City': ['New York', 'Los Angeles', 'Chicago']
+    }
+    )
+    print(df_to_literal(df))
+    ```
+    will return
+    ```
+    df = pd.DataFrame(
+    {
+        'Name': ['Alice', 'Bob', 'Charlie'],
+        'Age': [25, 30, 35],
+        'City': ['New York', 'Los Angeles', 'Chicago']
+    }
+    )
+    ```
+    """
     cols = df.to_dict("list")
     lines = []
     lines.append("df = pd.DataFrame(")
