@@ -9,15 +9,27 @@ from matplotlib import pyplot as plt
 import matplotlib.dates as mdates
 
 from dateutil.relativedelta import relativedelta
-from datetime import date
 import datetime
-from pathlib import Path
 
-import pandas_market_calendars
 
 ########################################################################################
 ## Pandas Helpers
 ########################################################################################
+
+
+def df_to_literal(df):
+    cols = df.to_dict("list")
+    lines = []
+    lines.append("df = pd.DataFrame(")
+    lines.append("{")
+    for idx, (col, values) in enumerate(cols.items()):
+        line = f"    '{col}': {values}"
+        if idx < len(cols) - 1:
+            line += ","
+        lines.append(line)
+    lines.append("}")
+    lines.append(")")
+    return "\n".join(lines)
 
 
 def merge_stats(df_left, df_right, on=[]):
@@ -70,11 +82,10 @@ def merge_stats(df_left, df_right, on=[]):
     return df_stats
 
 
-
 def dataframe_set_difference(dff, df, library="pandas", show="rows_and_numbers"):
     """
     Gives the rows that appear in dff but not in df
-    
+
     Example
     -------
     ```
@@ -102,15 +113,19 @@ def dataframe_set_difference(dff, df, library="pandas", show="rows_and_numbers")
     elif library == "polars":
         # Assuming dff and df have the same schema (column names and types)
         assert dff.columns == df.columns
-        
+
         # First, add a temporary column to each DataFrame with row numbers
         dff_with_index = dff.with_columns(pl.arange(0, dff.height).alias("row_number"))
-        df_with_index = df.with_columns(pl.arange(0, df.height).alias("dummy_row_number"))
-        
+        df_with_index = df.with_columns(
+            pl.arange(0, df.height).alias("dummy_row_number")
+        )
+
         # Perform an anti join to find rows in dff not present in df
         # Note: This requires the DataFrames to have columns to join on that define row uniqueness
 
-        diff = dff_with_index.join(df_with_index, on=list(dff.columns), how="anti", join_nulls=True)
+        diff = dff_with_index.join(
+            df_with_index, on=list(dff.columns), how="anti", join_nulls=True
+        )
 
         # Extract the row numbers of the differing rows
         row_numbers = diff.select("row_number").to_series(0).to_list()
@@ -124,6 +139,7 @@ def dataframe_set_difference(dff, df, library="pandas", show="rows_and_numbers")
 
     return ret
 
+
 def freq_counts(df, col=None, with_count=True, with_cum_freq=True):
     """Like value_counts, but normalizes to give frequency
     Polars function
@@ -134,15 +150,17 @@ def freq_counts(df, col=None, with_count=True, with_cum_freq=True):
     ```
     df.filter(
         (pl.col("fdate") > pl.datetime(2020,1,1)) &
-        (pl.col("bus_dt") == pl.col("fdate")) 
+        (pl.col("bus_dt") == pl.col("fdate"))
     ).pipe(freq_counts, col="bus_tenor_bin")
     ```
     """
     s = df[col]
-    ret = s.value_counts(sort=True).with_columns(
-        freq = pl.col("count") / s.shape[0] * 100,
-    ).with_columns(
-        cum_freq = pl.col("freq").cum_sum()
+    ret = (
+        s.value_counts(sort=True)
+        .with_columns(
+            freq=pl.col("count") / s.shape[0] * 100,
+        )
+        .with_columns(cum_freq=pl.col("freq").cum_sum())
     )
     if not with_count:
         ret = ret.drop("count")
@@ -183,8 +201,13 @@ def weighted_average(data_col=None, weight_col=None, data=None):
 
     ```
     """
-    weights_function = lambda row: data.loc[row.index, weight_col]
-    wm = lambda row: np.average(row, weights=weights_function(row))
+
+    def weights_function(row):
+        return data.loc[row.index, weight_col]
+
+    def wm(row):
+        return np.average(row, weights=weights_function(row))
+
     result = wm(data[data_col])
     return result
 
@@ -352,154 +375,6 @@ def weighted_quantile(
     return np.interp(quantiles, weighted_quantiles, values)
 
 
-def groupby_weighted_quantile(
-    data_col=None,
-    weight_col=None,
-    by_col=None,
-    data=None,
-    transform=False,
-    new_column_name="",
-):
-    """
-    This can already be accomplished with weighted_quantile, as demonstrated above.
-    This function is for convenience.
-    """
-    raise NotImplementedError
-    median_SD_spread = data.groupby("date").apply(
-        lambda x: weighted_quantile(x["rate_SD_spread"], 0.5, sample_weight=x["Volume"])
-    )
-    return None
-
-
-def load_date_mapping(
-    data_dir=None,
-    add_remaining_days_in_year=True,
-    add_estimated_historical_days=True,
-    historical_start="2016-01-01",
-    add_estimated_future_dates=True,
-    future_end="2092-01-01",
-):
-    data_dir = Path(data_dir)
-    df_dm = pd.read_csv(data_dir / "derived" / "all_dates_dvp.csv", header=None)
-    df_dm = df_dm.rename(columns={0: "date"})
-    df_dm["date"] = pd.to_datetime(df_dm["date"])
-    dvp_data_dates = df_dm["date"].copy()
-    dates = df_dm["date"].copy()
-
-    ## Check dvp days to see if any fall on non-business days
-    # start_date = df_dm.loc[0, 'date'] # Don't use this.
-    start_date = pd.to_datetime("2019-10-21 00:00:00")  # The DVP data contains a
-    # few days around the repo spike of Sep 2019. Any gaps between this and
-    # October do not represent holidays.
-    end_date = df_dm.iloc[-1, :]["date"]
-    bdate_range_dvp_data_bounds = pd.bdate_range(start=start_date, end=end_date)
-    pbd = (
-        pd.DataFrame(bdate_range_dvp_data_bounds, columns=["date"])
-        .reset_index()
-        .rename(columns={0: "pbd_day_num"})
-    )
-    # all dates in dvp data are pandas business days.
-    # Not all pandas business days are in the dvp data
-    merge_stats = misc_tools.merge_stats(df_dm, pbd, on=["date"])
-    assert merge_stats["left-intersection"] == 0
-
-    END_OF_CURRENT_YEAR = "2022-12-31"
-    if add_remaining_days_in_year:
-        ## Get forward looking list of holidays so I can compute "day_num"
-        # for remaining days in year. I can do this, because DTCC publishes the days
-        # that are expected to be holidays for the remaining year. So, I have the
-        # 2022 holidays. They haven't yet published the expected 2023 holidays.
-        #
-        # DTCC Holidays for 2022: https://www.dtcc.com/-/media/Files/pdf/2021/11/22/16162-21.pdf
-        holidays = [
-            "jan-17-2022",
-            "feb-21-2022",
-            "apr-15-2022",
-            "may-30-2022",
-            "jun-20-2022",
-            "jul-04-2022",
-            "sep-05-2022",
-            "oct-10-2022",
-            "nov-11-2022",
-            "nov-24-2022",
-            "dec-26-2022",
-        ]
-        holidays = pd.to_datetime(holidays)
-
-        today = pd.to_datetime(date.today())
-        BEGINNING_OF_NEXT_YEAR = pd.to_datetime("2023-01-01")
-        if today > BEGINNING_OF_NEXT_YEAR:
-            raise ValueError(
-                "Update this function to account for DTCC holidays in 2023"
-            )
-        bdate_remaining_year_range = pd.bdate_range(
-            start=end_date, end=BEGINNING_OF_NEXT_YEAR
-        )
-        bdate_remaining_year_range = bdate_remaining_year_range.drop(
-            holidays, errors="ignore"
-        )
-        dates = pd.concat([dates, pd.Series(bdate_remaining_year_range)])
-
-    if add_estimated_historical_days:
-
-        ## Check if the dvp holidays match with the SIFMA holidays for which
-        # we have DVP data
-        # pandas_market_calendars.get_calendar_names()
-        market_calendar = pandas_market_calendars.get_calendar("SIFMA_US")
-        # holidays = market_calendar.holidays()
-
-        # The following doesn't fix the issue with 2021-04-02
-        # schedule = market_calendar.schedule(start_date=start_date, end_date=end_date)
-        # early_closes = market_calendar.early_closes(schedule).index
-        # valid_days.intersection(early_closes).symmetric_difference(dates)
-
-        valid_days = market_calendar.valid_days(
-            start_date=start_date, end_date=end_date
-        )
-        valid_days = valid_days.tz_localize(None)  # .astype('datetime64[ns]')
-        # SIFMA recommended 2021-04-02 an early close for Good Friday. But there
-        # was no trading in DTCC's FICC that day. I don't have a DTCC specific
-        # calendar.
-        valid_days = valid_days.drop("2021-04-02")
-        mismatched_days = valid_days.symmetric_difference(dvp_data_dates)
-        # set(valid_days).difference(dates)
-        # set(dates).difference(valid_days)
-        # subdf = df.loc[df['day'] == '20210402', :]
-        assert len(mismatched_days) == 0
-
-        ## Now construct historical calendar
-        historical_start = pd.to_datetime(historical_start)
-        valid_days = market_calendar.valid_days(
-            start_date=historical_start, end_date=start_date
-        )
-        valid_days = valid_days.tz_localize(None)  # .astype('datetime64[ns]')
-        valid_days = pd.to_datetime(pd.Series(valid_days))
-        dates = pd.concat([valid_days, dates])
-
-    if add_estimated_future_dates:
-
-        ## Construct future calendar
-        # pandas_market_calendars.get_calendar_names()
-        market_calendar = pandas_market_calendars.get_calendar("SIFMA_US")
-        future_end = pd.to_datetime(future_end)
-        valid_days = market_calendar.valid_days(
-            start_date=END_OF_CURRENT_YEAR, end_date=future_end
-        )
-        valid_days = valid_days.tz_localize(None)  # .astype('datetime64[ns]')
-        valid_days = pd.to_datetime(pd.Series(valid_days))
-        dates = pd.concat([dates, valid_days])
-
-    df_dm = pd.DataFrame(list(set(dates)), columns=["date"])
-    df_dm = df_dm.sort_values(ascending=True, by="date")
-    df_dm = df_dm.reset_index(drop=True)
-    df_dm = df_dm.reset_index().rename(columns={"index": "day_num"})
-
-    # merges with strings seem to be faster. Include for convenience.
-    df_dm["date_str"] = df_dm["date"].dt.strftime("%Y%m%d")
-
-    return df_dm
-
-
 _alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ*@#"
 
 
@@ -523,7 +398,12 @@ def convert_cusips_from_8_to_9_digit(cusip_8dig_series):
 
 
 def _with_lagged_column_no_resample(
-    df=None, columns_to_lag=None, id_columns=None, lags=1, date_col="date", prefix="L"
+    df=None,
+    columns_to_lag=None,
+    id_columns=None,
+    lags=1,
+    # date_col="date",
+    prefix="L",
 ):
     """This can be easily accomplished with the shift method. For example,
 
@@ -573,7 +453,7 @@ def with_lagged_columns(
 
     Examples
     --------
-    
+
     ```
     >>> a=[
     ... ["A",'1990/1/1',1],
@@ -914,7 +794,7 @@ def plot_weighted_median_with_distribution_bars(
     """
     if ax is None:
         plt.clf()
-        fig, ax = plt.subplots()
+        _, ax = plt.subplots()
 
     median_series = data.groupby(date_col).apply(
         lambda x: weighted_quantile(x[variable_name], 0.5, sample_weight=x[weight_col])
@@ -968,15 +848,11 @@ def plot_weighted_median_with_distribution_bars(
             ylabel = f"{variable_name}"
     ax.set_ylabel(ylabel)
 
-    if not (xlabel is None):
+    if xlabel is not None:
         ax.set_xlabel(xlabel)
 
     plt.tight_layout()
     return ax
-
-
-def _demo():
-    pass
 
 
 if __name__ == "__main__":
