@@ -17,32 +17,45 @@ import datetime
 ########################################################################################
 
 
-def df_to_literal(df):
-    """
-    Convert a pandas dataframe to a literal string.
+def df_to_literal(df, missing_value="None"):
+    """Convert a pandas dataframe to a literal string representing the code to recreate it.
+
+    Converts a pandas DataFrame into a string representation that can be used to
+    recreate the DataFrame, including both data and index information. Missing values
+    (NaN) are represented as None.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        The DataFrame to convert to a literal string representation.
+
+    Returns
+    -------
+    str
+        A string representation of the DataFrame that can be used to recreate it.
 
     Examples
     --------
-    ```
+    >>> df = pd.DataFrame({
+    ...     'Name': ['Alice', 'Bob', None],
+    ...     'Age': [25, None, 35],
+    ...     'City': ['New York', 'Los Angeles', 'Chicago']
+    ... }, index=['a', 'b', 'c'])
+    >>> print(df_to_literal(df))
     df = pd.DataFrame(
     {
-        'Name': ['Alice', 'Bob', 'Charlie'],
-        'Age': [25, 30, 35],
+        'Name': ['Alice', 'Bob', None],
+        'Age': [25, None, 35],
         'City': ['New York', 'Los Angeles', 'Chicago']
-    }
+    }, index=['a', 'b', 'c']
     )
-    print(df_to_literal(df))
-    ```
-    will return
-    ```
-    df = pd.DataFrame(
-    {
-        'Name': ['Alice', 'Bob', 'Charlie'],
-        'Age': [25, 30, 35],
-        'City': ['New York', 'Los Angeles', 'Chicago']
-    }
-    )
-    ```
+
+    Notes
+    -----
+    The function preserves:
+    - Column names and data
+    - Index values (if not default RangeIndex)
+    - None values (converted from NaN)
     """
     cols = df.to_dict("list")
     lines = []
@@ -54,8 +67,20 @@ def df_to_literal(df):
             line += ","
         lines.append(line)
     lines.append("}")
+
+    # Add index if it's not default RangeIndex
+    if (
+        not isinstance(df.index, pd.RangeIndex)
+        or not (df.index == pd.RangeIndex(len(df))).all()
+    ):
+        index_values = list(df.index)
+        lines[-1] += f", index={index_values}"
+
     lines.append(")")
-    return "\n".join(lines)
+    output = "\n".join(lines)
+    # Replace 'nan' with None in the output string
+    output = output.replace("nan", missing_value)
+    return output
 
 
 def merge_stats(df_left, df_right, on=[]):
