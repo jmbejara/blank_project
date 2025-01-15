@@ -16,15 +16,14 @@ from typing import Union
 import jinja2
 import polars as pl
 
-import config
+from settings import config
 
-BASE_DIR = config.BASE_DIR
-OUTPUT_DIR = config.OUTPUT_DIR
-PIPELINE_DEV_MODE = config.PIPELINE_DEV_MODE
-PIPELINE_THEME = config.PIPELINE_THEME
-PUBLISH_DIR = config.PUBLISH_DIR
-USER = config.USER
-
+BASE_DIR = config("BASE_DIR")
+OUTPUT_DIR = config("OUTPUT_DIR")
+PIPELINE_DEV_MODE = config("PIPELINE_DEV_MODE")
+PIPELINE_THEME = config("PIPELINE_THEME")
+PUBLISH_DIR = config("PUBLISH_DIR")
+USER = config("USER")
 DOCS_BUILD_DIR = BASE_DIR / Path("_docs")
 
 

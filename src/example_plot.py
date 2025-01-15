@@ -1,8 +1,8 @@
 import pull_fred
-import config
+from settings import config
 from pathlib import Path
-DATA_DIR = Path(config.DATA_DIR)
-OUTPUT_DIR = Path(config.OUTPUT_DIR)
+DATA_DIR = Path(config("DATA_DIR"))
+OUTPUT_DIR = Path(config("OUTPUT_DIR"))
 
 import numpy as np
 from matplotlib import pyplot as plt

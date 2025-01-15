@@ -1,10 +1,8 @@
 import pandas as pd
 import pytest
-
-import config
+from settings import config
 import pull_fred
-
-DATA_DIR = config.DATA_DIR
+DATA_DIR = config("DATA_DIR")
 
 
 def test_pull_fred_functionality():

@@ -14,7 +14,7 @@ sys.path.insert(1, "./src/")
 from os import environ, getcwd, path
 from pathlib import Path
 
-import config
+from settings import config
 import pipeline_publish
 from colorama import Fore, Style, init
 
@@ -63,13 +63,13 @@ else:
 init(autoreset=True)
 
 
-BASE_DIR = Path(config.BASE_DIR)
-DATA_DIR = Path(config.DATA_DIR)
-MANUAL_DATA_DIR = Path(config.MANUAL_DATA_DIR)
-OUTPUT_DIR = Path(config.OUTPUT_DIR)
-OS_TYPE = config.OS_TYPE
-PUBLISH_DIR = Path(config.PUBLISH_DIR)
-USER = config.USER
+BASE_DIR = config("BASE_DIR")
+DATA_DIR = config("DATA_DIR")
+MANUAL_DATA_DIR = config("MANUAL_DATA_DIR")
+OUTPUT_DIR = config("OUTPUT_DIR")
+OS_TYPE = config("OS_TYPE")
+PUBLISH_DIR = config("PUBLISH_DIR")
+USER = config("USER")
 
 ## Helpers for handling Jupyter Notebook tasks
 # fmt: off
@@ -110,6 +110,7 @@ def copy_notebook_to_folder(notebook_stem, origin_folder, destination_folder):
 def task_pull_fred():
     """ """
     file_dep = [
+        "./src/settings.py",
         "./src/pull_fred.py",
         "./src/pull_ofr_api_data.py",
     ]
@@ -120,7 +121,7 @@ def task_pull_fred():
 
     return {
         "actions": [
-            "ipython ./src/config.py",
+            "ipython ./src/settings.py",
             "ipython ./src/pull_fred.py",
             "ipython ./src/pull_ofr_api_data.py",
         ],

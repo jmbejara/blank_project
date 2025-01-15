@@ -5,7 +5,7 @@ The precedence of environment variables is the following:
   1. Use locally defined variables
   2. Use globally defined variables
   3. Use variables defined in .env
-  4. Use default values defined in config.py
+  4. Use default values defined in settings.py
 
 In Windows,
 ```cmd
@@ -29,7 +29,7 @@ that the environment variables don't persist (are not set globally),
 DATA_DIR=../somedir/ OUTPUT_DIR=../otherdir/ python ./src/demo_environment_variables.py
 ```
 """
-import config
-print(config.DATA_DIR)
-print(config.OUTPUT_DIR)
-print(config.WRDS_USERNAME)
+from settings import config
+print(config("DATA_DIR"))
+print(config("OUTPUT_DIR"))
+print(config("WRDS_USERNAME"))

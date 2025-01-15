@@ -9,11 +9,11 @@ import pandas as pd
 import requests
 from io import BytesIO
 from pathlib import Path
-import config
+import settings
 
-DATA_DIR = config.DATA_DIR
-START_DATE = config.START_DATE
-END_DATE = config.END_DATE
+DATA_DIR = settings.DATA_DIR
+START_DATE = settings.START_DATE
+END_DATE = settings.END_DATE
 
 
 def pull_fed_yield_curve():

@@ -20,10 +20,10 @@ import pandas as pd
 import numpy as np
 np.random.seed(100)
 
-import config
+from settings import config
 from pathlib import Path
-DATA_DIR = Path(config.DATA_DIR)
-OUTPUT_DIR = Path(config.OUTPUT_DIR)
+DATA_DIR = Path(config("DATA_DIR"))
+OUTPUT_DIR = Path(config("OUTPUT_DIR"))
 
 
 ## Suppress scientific notation and limit to 3 decimal places

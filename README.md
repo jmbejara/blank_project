@@ -116,9 +116,9 @@ Of course, the _data directory and _output directory can be kept elsewhere on th
 machine. To make this easy, I always include the ability to customize these
 locations by defining the path to these directories in environment variables,
 which I intend to be defined in the `.env` file, though they can also simply be
-defined on the command line or elsewhere. The `config.py` is reponsible for
+defined on the command line or elsewhere. The `settings.py` is reponsible for
 loading these environment variables and doing some like preprocessing on them.
-The `config.py` file is the entry point for all other scripts to these
+The `settings.py` file is the entry point for all other scripts to these
 definitions. That is, all code that references these variables and others are
 loading by importing `config`.
 

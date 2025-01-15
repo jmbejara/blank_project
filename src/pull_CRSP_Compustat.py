@@ -31,12 +31,12 @@ from pandas.tseries.offsets import MonthEnd, YearEnd
 import numpy as np
 import wrds
 
-import config
+from settings import config
 from pathlib import Path
 
-OUTPUT_DIR = Path(config.OUTPUT_DIR)
-DATA_DIR = Path(config.DATA_DIR)
-WRDS_USERNAME = config.WRDS_USERNAME
+OUTPUT_DIR = config("OUTPUT_DIR")
+DATA_DIR = config("DATA_DIR")
+WRDS_USERNAME = config("WRDS_USERNAME")
 # START_DATE = config.START_DATE
 # END_DATE = config.END_DATE
 
@@ -163,7 +163,7 @@ def pull_CRSP_Comp_Link_Table(wrds_username=WRDS_USERNAME):
 
 
 def pull_Fama_French_factors(wrds_username=WRDS_USERNAME):
-    conn = wrds.Connection(wrds_username=config.WRDS_USERNAME)
+    conn = wrds.Connection(wrds_username=wrds_username)
     ff = conn.get_table(library="ff", table="factors_monthly")
     conn.close()
     ff[["smb", "hml"]] = ff[["smb", "hml"]].astype(float)

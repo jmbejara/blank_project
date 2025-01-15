@@ -1,9 +1,9 @@
 from pathlib import Path
-import config
+from settings import config
 
-OUTPUT_DIR = Path(config.OUTPUT_DIR)
-DATA_DIR = Path(config.DATA_DIR)
-START_DATE = config.START_DATE
+OUTPUT_DIR = config("OUTPUT_DIR")
+DATA_DIR = config("DATA_DIR")
+START_DATE = config("START_DATE")
 
 from datetime import datetime
 

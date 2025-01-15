@@ -25,12 +25,12 @@ import numpy as np
 import pandas as pd
 import wrds
 
-import config
+from settings import config
 
-DATA_DIR = Path(config.DATA_DIR)
-WRDS_USERNAME = config.WRDS_USERNAME
-START_DATE = config.START_DATE
-END_DATE = config.END_DATE
+DATA_DIR = config("DATA_DIR")
+WRDS_USERNAME = config("WRDS_USERNAME")
+START_DATE = config("START_DATE")
+END_DATE = config("END_DATE")
 
 
 def pull_CRSP_monthly_file(
