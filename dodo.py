@@ -11,11 +11,10 @@ import sys
 
 sys.path.insert(1, "./src/")
 
+import shutil
 from os import environ, getcwd, path
 from pathlib import Path
 
-from settings import config
-import pipeline_publish
 from colorama import Fore, Style, init
 
 ## Custom reporter: Print PyDoit Text in Green
@@ -26,6 +25,9 @@ from colorama import Fore, Style, init
 # to easily see the task lines printed by PyDoit. I want them to stand out
 # from among all the other lines printed to the console.
 from doit.reporter import ConsoleReporter
+
+import pipeline_publish
+from settings import config
 
 try:
     in_slurm = environ["SLURM_JOB_ID"] is not None
@@ -52,14 +54,11 @@ if not in_slurm:
         "reporter": GreenReporter,
         # other config here...
         # "cleanforget": True, # Doit will forget about tasks that have been cleaned.
-        'backend': 'sqlite3',
-        'dep_file': './.doit-db.sqlite'
+        "backend": "sqlite3",
+        "dep_file": "./.doit-db.sqlite",
     }
 else:
-    DOIT_CONFIG = {
-        'backend': 'sqlite3',
-        'dep_file': './.doit-db.sqlite'
-    }
+    DOIT_CONFIG = {"backend": "sqlite3", "dep_file": "./.doit-db.sqlite"}
 init(autoreset=True)
 
 
@@ -90,21 +89,32 @@ def jupyter_clear_output(notebook):
 # fmt: on
 
 
-def copy_notebook_to_folder(notebook_stem, origin_folder, destination_folder):
-    origin_path = Path(origin_folder) / f"{notebook_stem}.ipynb"
-    destination_folder = Path(destination_folder)
-    destination_folder.mkdir(parents=True, exist_ok=True)
-    destination_path = destination_folder / f"{notebook_stem}.ipynb"
-    if OS_TYPE == "nix":
-        command = f"cp {origin_path} {destination_path}"
-    else:
-        command = f"copy  {origin_path} {destination_path}"
-    return command
+def copy_file(origin_path, destination_path, mkdir=True):
+    """Create a Python action for copying a file."""
+
+    def _copy_file():
+        origin = Path(origin_path)
+        dest = Path(destination_path)
+        if mkdir:
+            dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(origin, dest)
+
+    return _copy_file
 
 
 ##################################
 ## Begin rest of PyDoit tasks here
 ##################################
+
+
+def task_config():
+    """Create empty directories for data and output if they don't exist"""
+    return {
+        "actions": ["ipython ./src/settings.py"],
+        "targets": [DATA_DIR, OUTPUT_DIR],
+        "file_dep": ["./src/settings.py"],
+        "clean": [],
+    }
 
 
 def task_pull_fred():
@@ -264,16 +274,12 @@ def task_convert_notebooks_to_scripts():
     than to the notebook's metadata.
     """
     build_dir = Path(OUTPUT_DIR)
-    build_dir.mkdir(parents=True, exist_ok=True)
 
     for notebook in notebook_tasks.keys():
         notebook_name = notebook.split(".")[0]
         yield {
             "name": notebook,
             "actions": [
-                # jupyter_execute_notebook(notebook_name),
-                # jupyter_to_html(notebook_name),
-                # copy_notebook_to_folder(notebook_name, Path("./src"), "./docs_src/notebooks/"),
                 jupyter_clear_output(notebook_name),
                 jupyter_to_python(notebook_name, build_dir),
             ],
@@ -289,7 +295,6 @@ def task_run_notebooks():
     """Preps the notebooks for presentation format.
     Execute notebooks if the script version of it has been changed.
     """
-
     for notebook in notebook_tasks.keys():
         notebook_name = notebook.split(".")[0]
         yield {
@@ -298,8 +303,10 @@ def task_run_notebooks():
                 """python -c "import sys; from datetime import datetime; print(f'Start """ + notebook + """: {datetime.now()}', file=sys.stderr)" """,
                 jupyter_execute_notebook(notebook_name),
                 jupyter_to_html(notebook_name),
-                copy_notebook_to_folder(
-                    notebook_name, Path("./src"), "./_docs/notebooks/"
+                copy_file(
+                    Path("./src") / f"{notebook_name}.ipynb",
+                    OUTPUT_DIR / f"{notebook_name}.ipynb",
+                    mkdir=True,
                 ),
                 jupyter_clear_output(notebook_name),
                 # jupyter_to_python(notebook_name, build_dir),
@@ -311,11 +318,10 @@ def task_run_notebooks():
             ],
             "targets": [
                 OUTPUT_DIR / f"{notebook_name}.html",
-                BASE_DIR / "_docs" / "notebooks" / f"{notebook_name}.ipynb",
+                OUTPUT_DIR / f"{notebook_name}.ipynb",
                 *notebook_tasks[notebook]["targets"],
             ],
             "clean": True,
-            # "verbosity": 1,
         }
 # fmt: on
 
@@ -323,6 +329,7 @@ def task_run_notebooks():
 # ###############################################################
 # ## Task below is for LaTeX compilation
 # ###############################################################
+
 
 def task_compile_latex_docs():
     """Compile the LaTeX documents to PDFs"""
@@ -366,10 +373,10 @@ def task_compile_latex_docs():
         "clean": True,
     }
 
+
 # ###############################################################
 # ## Sphinx documentation
 # ###############################################################
-
 
 
 pipeline_doc_file_deps = pipeline_publish.get_file_deps(base_dir=BASE_DIR)
@@ -400,7 +407,7 @@ def task_pipeline_publish():
     return {
         "actions": [
             "ipython ./src/pipeline_publish.py",
-            ],
+        ],
         "targets": targets,
         "file_dep": file_dep,
         "clean": True,
