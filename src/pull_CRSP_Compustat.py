@@ -34,11 +34,11 @@ import wrds
 from settings import config
 from pathlib import Path
 
-OUTPUT_DIR = config("OUTPUT_DIR")
-DATA_DIR = config("DATA_DIR")
+OUTPUT_DIR = Path(config("OUTPUT_DIR"))
+DATA_DIR = Path(config("DATA_DIR"))
 WRDS_USERNAME = config("WRDS_USERNAME")
-# START_DATE = config.START_DATE
-# END_DATE = config.END_DATE
+# START_DATE = config("START_DATE")
+# END_DATE = config("END_DATE")
 
 
 description_compustat = {
@@ -119,8 +119,8 @@ def pull_CRSP_stock_ciz(wrds_username=WRDS_USERNAME):
             a.mthret, a.mthretx, a.shrout, a.mthprc
         FROM 
             crsp.msf_v2 AS a
-        WHERE 
-            a.mthcaldt BETWEEN '01/01/1959' AND '12/31/2022'
+        -- WHERE 
+        --    a.mthcaldt BETWEEN '01/01/1959' AND '12/31/2022'
         """
 
     db = wrds.Connection(wrds_username=wrds_username)

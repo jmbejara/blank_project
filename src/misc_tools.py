@@ -573,7 +573,7 @@ def with_lagged_columns(
     # "B": Business Day
     # "D": Calendar day
     # "W": Weekly
-    # "M": Month end
+    # "ME": Month end
     # "BM": Business month end
     # "MS": Month start
     # "BMS": Business month start

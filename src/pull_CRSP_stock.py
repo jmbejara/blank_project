@@ -27,7 +27,7 @@ import wrds
 
 from settings import config
 
-DATA_DIR = config("DATA_DIR")
+DATA_DIR = Path(config("DATA_DIR"))
 WRDS_USERNAME = config("WRDS_USERNAME")
 START_DATE = config("START_DATE")
 END_DATE = config("END_DATE")
@@ -44,9 +44,11 @@ def pull_CRSP_monthly_file(
     of code 73, which is foreign companies -- without including this, the universe
     of securities is roughly half of what it should be.
     """
+    # Convert start_date to datetime if it's a string
+    if isinstance(start_date, str):
+        start_date = datetime.strptime(start_date, "%Y-%m-%d")
     # Not a perfect solution, but since value requires t-1 period market cap,
     # we need to pull one extra month of data. This is hidden from the user.
-    start_date = datetime.strptime(start_date, "%Y-%m-%d")
     start_date = start_date - relativedelta(months=1)
     start_date = start_date.strftime("%Y-%m-%d")
 
@@ -86,6 +88,19 @@ def pull_CRSP_monthly_file(
 
     df = df.loc[:, ~df.columns.duplicated()]
     df["shrout"] = df["shrout"] * 1000
+
+    # Also, as an additional note, CRSP reports that "cfacshr" and "cfacpr" are
+    # not always equal. This means that we cannot use `market_cap` = `prc` *
+    # `shrout` alone. We need to use the cumulative adjustment factors to adjust
+    # for corporate actions that affect the stock price, such as stock splits.
+    # "cfacshr" and "cfacpr" are not always equal because of less common
+    # distribution events, spinoffs, and rights. See here: [CRSP - Useful
+    # Variables](https://vimeo.com/443061703)
+    
+    df["adj_shrout"] = df["shrout"] * df["cfacshr"]
+    df["adj_prc"] = df["prc"].abs() / df["cfacpr"]
+    df["market_cap"] = df["adj_prc"] * df["adj_shrout"]
+
     # Deal with delisting returns
     df = apply_delisting_returns(df)
 
@@ -103,8 +118,6 @@ def apply_delisting_returns(df):
     if dlstcd is 500, 520, 551-574, 580, or 584, then dlret = -0.3
     if dlret is NA but dlstcd is not one of the above, then dlret = -1
     """
-
-
     df["dlret"] = np.select(
         [
             df["dlstcd"].isin([500, 520, 580, 584] + list(range(551, 575)))
@@ -127,8 +140,9 @@ def apply_delisting_returns(df):
         default=df["dlretx"],
     )
 
-    df.loc[df["dlret"].notna(), "ret"] = df["dlret"]
-    df.loc[df["dlretx"].notna(), "retx"] = df["dlretx"]
+    # Replace the inplace operations with direct assignments
+    df["ret"] = df["ret"].fillna(df["dlret"])
+    df["retx"] = df["retx"].fillna(df["dlretx"])
     return df
 
 
@@ -144,6 +158,10 @@ def apply_delisting_returns_alt(df):
 def pull_CRSP_index_files(
     start_date=START_DATE, end_date=END_DATE, wrds_username=WRDS_USERNAME
 ):
+    """
+    Pulls the CRSP index files from crsp_a_indexes.msix:
+    (Monthly)NYSE/AMEX/NASDAQ Capitalization Deciles, Annual Rebalanced (msix)
+    """
     # Pull index files
     query = f"""
         SELECT * 

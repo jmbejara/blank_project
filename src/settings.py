@@ -70,8 +70,8 @@ d["BASE_DIR"] = Path(__file__).absolute().parent.parent
 
 # fmt: off
 ## Other .env variables
-d["START_DATE"] = _config("START_DATE", default="1965-01-29", cast=to_datetime)
-d["END_DATE"] = _config("END_DATE", default="2022-12-31", cast=to_datetime)
+d["START_DATE"] = _config("START_DATE", default="1913-01-01", cast=to_datetime)
+d["END_DATE"] = _config("END_DATE", default="2024-01-01", cast=to_datetime)
 d["PIPELINE_DEV_MODE"] = _config("PIPELINE_DEV_MODE", default=True, cast=bool)
 d["PIPELINE_THEME"] = _config("PIPELINE_THEME", default="pipeline")
 
