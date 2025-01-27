@@ -25,14 +25,14 @@ https://wrds-www.wharton.upenn.edu/documents/400/CRSP_Programmers_Guide.pdf
 
 
 """
-import pandas as pd
-from pandas.tseries.offsets import MonthEnd, YearEnd
 
-import numpy as np
+from pathlib import Path
+
+import pandas as pd
 import wrds
+from pandas.tseries.offsets import MonthEnd
 
 from settings import config
-from pathlib import Path
 
 OUTPUT_DIR = Path(config("OUTPUT_DIR"))
 DATA_DIR = Path(config("DATA_DIR"))
@@ -45,6 +45,10 @@ description_compustat = {
     "gvkey": "Global Company Key",
     "datadate": "Data Date",
     "at": "Assets - Total",
+    "sale": "Sales/Revenue",
+    "cogs": "Cost of Goods Sold",
+    "xsga": "Selling, General and Administrative Expense",
+    "xint": "Interest Expense, Net",
     "pstkl": "Preferred Stock - Liquidating Value",
     "txditc": "Deferred Taxes and Investment Tax Credit",
     "pstkrv": "Preferred Stock - Redemption Value",
@@ -66,8 +70,8 @@ def pull_compustat(wrds_username=WRDS_USERNAME):
     """
     sql_query = """
         SELECT 
-            gvkey, datadate, at, pstkl, txditc,
-            pstkrv, seq, pstk
+            gvkey, datadate, at, sale, cogs, xsga, xint, pstkl, txditc,
+            pstkrv, seq, pstk, ni, sich, dp, ebit
         FROM 
             comp.funda
         WHERE 
@@ -105,33 +109,76 @@ description_crsp = {
     "mthprc": "Monthly Price - The price of the security at the end of the month.",
 }
 
+def get_crsp_columns(wrds_username=WRDS_USERNAME):
+    """Get all column names from CRSP monthly stock file (CIZ format)."""
+    sql_query = """
+        SELECT column_name, data_type
+        FROM information_schema.columns
+        WHERE table_schema = 'crsp'
+        AND table_name = 'msf_v2'
+        ORDER BY ordinal_position;
+    """
+    
+    db = wrds.Connection(wrds_username=wrds_username)
+    columns = db.raw_sql(sql_query)
+    db.close()
+    
+    return columns
 
 def pull_CRSP_stock_ciz(wrds_username=WRDS_USERNAME):
     """Pull necessary CRSP monthly stock data to
     compute Fama-French factors. Use the new CIZ format.
+
+    Notes
+    -----
+    
+    ## Cumulative Adjustment Factors (CFACPR and CFACSHR)
+    https://wrds-www.wharton.upenn.edu/pages/support/manuals-and-overviews/crsp/stocks-and-indices/crsp-stock-and-indexes-version-2/crsp-ciz-faq/
+
+    In the legacy format, CRSP provided two data series, CFACPR and CFACSHR for
+    cumulative adjustment factors for price and share respectively. In the new CIZ
+    data format, these two data series are no longer provided, at least in the
+    initial launch, per CRSP.
+
+    WRDS understands the importance of these two variables to many researchers and
+    we prepared a sample code that researchers can use to recreate the series using
+    the raw adjustment factors. However, we need to caution users that the results
+    of our sample code do not line up with the legacy CFACPR and CFACSHR completely.
+    While it generates complete replication in 95% of the daily observations, we do
+    observe major differences in the tail end. We do not have an explanation from
+    CRSP about the remaining 5%, hence we urge researchers to use caution. Please
+    contact CRSP support (Support@crsp.org) if you would like to discuss the issue
+    of missing cumulative adjustment factors in the new CIZ data.
+
+    For now, it's close enough to just let
+    market_cap = mthprc * shrout
+
     """
     sql_query = """
         SELECT 
-            a.permno, a.permco, a.mthcaldt, 
-            a.issuertype, a.securitytype, a.securitysubtype, a.sharetype, 
-            a.usincflg, 
-            a.primaryexch, a.conditionaltype, a.tradingstatusflg,
-            a.mthret, a.mthretx, a.shrout, a.mthprc
+            permno, permco, mthcaldt, 
+            issuertype, securitytype, securitysubtype, sharetype, 
+            usincflg, 
+            primaryexch, conditionaltype, tradingstatusflg,
+            mthret, mthretx, shrout, mthprc,
+            cfacshr, cfacpr
         FROM 
-            crsp.msf_v2 AS a
-        -- WHERE 
-        --    a.mthcaldt BETWEEN '01/01/1959' AND '12/31/2022'
+            crsp.msf_v2
+        WHERE 
+            mthcaldt >= '01/01/1959'
         """
+
+
 
     db = wrds.Connection(wrds_username=wrds_username)
     crsp_m = db.raw_sql(sql_query, date_cols=["mthcaldt"])
     db.close()
 
     # change variable format to int
-    crsp_m[['permco','permno']]=crsp_m[['permco','permno']].astype(int)
+    crsp_m[["permco", "permno"]] = crsp_m[["permco", "permno"]].astype(int)
 
     # Line up date to be end of month
-    crsp_m['jdate']=crsp_m['mthcaldt']+MonthEnd(0)
+    crsp_m["jdate"] = crsp_m["mthcaldt"] + MonthEnd(0)
 
     return crsp_m
 
@@ -167,10 +214,10 @@ def pull_Fama_French_factors(wrds_username=WRDS_USERNAME):
     ff = conn.get_table(library="ff", table="factors_monthly")
     conn.close()
     ff[["smb", "hml"]] = ff[["smb", "hml"]].astype(float)
-    
+
     ff["date"] = pd.to_datetime(ff["date"])
     ff["date"] = ff["date"] + MonthEnd(0)
-    
+
     return ff
 
 
@@ -196,6 +243,7 @@ def load_Fama_French_factors(data_dir=DATA_DIR):
     path = Path(data_dir) / "FF_FACTORS.parquet"
     ff = pd.read_parquet(path)
     return ff
+
 
 def _demo():
     comp = load_compustat(data_dir=DATA_DIR)
