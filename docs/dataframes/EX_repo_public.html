@@ -1,0 +1,721 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>EX_repo_public - Public Repo Data &#8212; Blank Project Template</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=337cac60" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=b9472d72"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'dataframes/EX_repo_public';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="icon" href="../_static/logo.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="EX_repo_public_relative_fed - Public Repo Data, Relative to the Fed Funds Target Midpoint" href="EX_repo_public_relative_fed.html" />
+    <link rel="prev" title="Chart List" href="../charts.html" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>   
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Blank Project Template - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Blank Project Template - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Pipeline Template - Example
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks 📖</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/EX_01_example_notebook_interactive.html">01. Example Notebook with Interactive Elements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/EX_02_example_with_dependencies.html">02. Example Notebook with Dependencies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/EX_03_public_repo_summary_charts.html">03. Public Repo Summary Charts</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Charts 📈</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../charts.html">Chart List</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Dataframes 📊</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">EX_repo_public</span></code> - Public Repo Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EX_repo_public_relative_fed.html"><code class="docutils literal notranslate"><span class="pre">EX_repo_public_relative_fed</span></code> - Public Repo Data, Relative to the Fed Funds Target Midpoint</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendix 💡</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../myst_markdown_demos.html">MyST Markdown Demos</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../apidocs/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../apidocs/misc_tools/misc_tools.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">misc_tools</span></code></a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="sidebar-primary-item">
+<div class="ablog-sidebar-item ablog__category">
+  <h3>
+    <a href="../charts/index/category.html">Categories</a>
+  </h3>
+  <ul>
+     
+    <li>
+      <a href="../charts/index/category/monetary-policy.html">Monetary Policy (1)</a>
+    </li>
+      
+    <li>
+      <a href="../charts/index/category/repo.html">Repo (3)</a>
+    </li>
+      
+    <li>
+      <a href="../charts/index/category/short-term-funding.html">Short Term Funding (3)</a>
+    </li>
+     
+  </ul>
+</div>
+</div>
+        <div class="sidebar-primary-item">
+<div class="ablog-sidebar-item ablog__tags">
+  <link
+    rel="stylesheet"
+    href="../_static/ablog/tagcloud.css"
+    type="text/css"
+  />
+  <h3><a href="../charts/index/tag.html">Tags</a></h3>
+  <ul class="ablog-cloud">
+     
+    <li class="ablog-cloud ablog-cloud-3">
+      <a href="../charts/index/tag/fred.html">FRED</a>
+    </li>
+      
+    <li class="ablog-cloud ablog-cloud-3">
+      <a href="../charts/index/tag/office-of-financial-research.html">Office of Financial Research</a>
+    </li>
+     
+  </ul>
+</div>
+</div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/jmbejara/blank_project" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/jmbejara/blank_project/issues/new?title=Issue%20on%20page%20%2Fdataframes/EX_repo_public.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/dataframes/EX_repo_public.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>EX_repo_public - Public Repo Data</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#description">Description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-dictionary">Data Dictionary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataframe-specs">Dataframe Specs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-specs">Pipeline Specs</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                   <section class="tex2jax_ignore mathjax_ignore" id="ex-repo-public-public-repo-data">
+<h1><code class="docutils literal notranslate"><span class="pre">EX_repo_public</span></code> - Public Repo Data<a class="headerlink" href="#ex-repo-public-public-repo-data" title="Link to this heading">#</a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading">#</a></h2>
+<p>This dataframe contains, among other things,repo rates and the Federal Funds target range. The shaded area shows the Federal Funds target range. During 2019, the Secured Overnight Financing Rate (SOFR), a broad measure of the cost of borrowing cash overnight collateralized by Treasury securities via repurchase agreements, often exceeded the upper limit of the Federal Funds target range. Since SOFR does not extend back further than 2017, we use the average repo rate in the triparty repo market whenever SOFR is unavailable.</p>
+</section>
+<section id="data-dictionary">
+<h2>Data Dictionary<a class="headerlink" href="#data-dictionary" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>DATE</strong>: <code class="docutils literal notranslate"><span class="pre">datetime64[ns]</span></code></p></li>
+<li><p><strong>GDP</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> US Nominal GDP</p></li>
+<li><p><strong>CPIAUCNS</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Consumer Price Index for All Urban Consumers: All Items in U.S. City Average <a class="reference external" href="https://fred.stlouisfed.org/series/CPIAUCNS">https://fred.stlouisfed.org/series/CPIAUCNS</a></p></li>
+<li><p><strong>GDPC1</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code>  Real Gross Domestic Product</p></li>
+<li><p><strong>DPCREDIT</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code>  Discount Window Primary Credit Rate</p></li>
+<li><p><strong>EFFR</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Effective Federal Funds Rate</p></li>
+<li><p><strong>OBFR</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Overnight Bank Funding Rate</p></li>
+<li><p><strong>SOFR</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Secured Overnight Financing Rate</p></li>
+<li><p><strong>IORR</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Interest Rate on Required Reserves (IORR Rate) (DISCONTINUED)</p></li>
+<li><p><strong>IOER</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Interest Rate on Excess Reserves (IOER Rate) (DISCONTINUED)</p></li>
+<li><p><strong>IORB</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Interest Rate on Reserve Balances (IORB Rate)</p></li>
+<li><p><strong>Fed_Funds_Target_Upper</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code></p></li>
+<li><p><strong>Fed_Funds_Target_Lower</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code></p></li>
+<li><p><strong>WALCL</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Assets: Total Assets: Total Assets (Less Eliminations from Consolidation): Wednesday Level</p></li>
+<li><p><strong>TOTRESNS</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Reserves of Depository Institutions: Total</p></li>
+<li><p><strong>TREAST</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Assets: Securities Held Outright: U.S. Treasury Securities: All: Wednesday Level</p></li>
+<li><p><strong>CURRCIR</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Currency in Circulation</p></li>
+<li><p><strong>GFDEBTN</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Federal Debt: Total Public Debt</p></li>
+<li><p><strong>WTREGEN</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Liabilities and Capital: Liabilities: Deposits with F.R. Banks, Other Than Reserve Balances: U.S. Treasury, General Account: Week Average</p></li>
+<li><p><strong>ON_RRP_Facility_Rate</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Overnight Reverse Repo Facility Rate</p></li>
+<li><p><strong>RRPONTSYD</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Overnight Reverse Repurchase Agreements: Treasury Securities Sold by the Federal Reserve in the Temporary Open Market Operations</p></li>
+<li><p><strong>RPONTSYD</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Overnight Repurchase Agreements: Treasury Securities Purchased by the Federal Reserve in the Temporary Open Market Operations</p></li>
+<li><p><strong>WSDONTL</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Memorandum Items: Securities Lent to Dealers: Overnight Facility: Wednesday Level</p></li>
+<li><p><strong>Interest_on_Reserves</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> IORB rate, backfilled with IOER reserves when IORB is not available.</p></li>
+<li><p><strong>ONRRP_CTPY_LIMIT</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Overnight Reverse Repo Facility Counterparty Limits</p></li>
+<li><p><strong>ONRP_AGG_LIMIT</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Standing Repo Facility (SRF) aggregate limit, not updated since late 2023</p></li>
+<li><p><strong>Tri_Party_Overnight_Average_Rate</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code></p></li>
+<li><p><strong>REPO_TRI_TV_OO_P</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Triparty overnight transaction volume</p></li>
+<li><p><strong>REPO_TRI_TV_TOT_P</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Triparty transaction volume on all repos</p></li>
+<li><p><strong>REPO_DVP_AR_OO_P</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> DVP average rate on overnight repos</p></li>
+<li><p><strong>REPO_DVP_TV_OO_P</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> DVP transaction volume on overnight repos</p></li>
+<li><p><strong>REPO_DVP_TV_TOT_P</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> DVP transaction volume on all repos</p></li>
+<li><p><strong>REPO_DVP_OV_TOT_P</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> DVP outstanding volume on all repos</p></li>
+<li><p><strong>REPO_GCF_AR_OO_P</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> GCF average rate on overnight repos</p></li>
+<li><p><strong>REPO_GCF_TV_OO_P</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> GCF transaction volume on overnight repos</p></li>
+<li><p><strong>REPO_GCF_TV_TOT_P</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> GCF transaction volume on all repos</p></li>
+<li><p><strong>FNYR_BGCR_A</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Federal Reserve Bank of New York Reference Rates. Broad General Collateral Rate</p></li>
+<li><p><strong>FNYR_TGCR_A</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Federal Reserve Bank of New York Reference Rates. Tri-Party General Collateral Rate</p></li>
+<li><p><strong>target_midpoint</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Fed Funds target midpoint</p></li>
+<li><p><strong>SOFR_less_IORB</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> SOFR less interest on reserve balances (backfilled with IOER)</p></li>
+<li><p><strong>Fed_Balance_Sheet_over_GDP</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Size of Fed’s balance sheet divided by nominal GDP</p></li>
+<li><p><strong>Tri_Party_less_Fed_ON_RRP_Rate</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Triparty average rate less the Fed’s overnight reverse repurchase agreement facility awared rate</p></li>
+<li><p><strong>Tri_Party_Rate_Less_Fed_Funds_Upper_Limit</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Triparty average rate less the Fed Fund’s target upper limit</p></li>
+<li><p><strong>Tri_Party_Rate_Less_Fed_Funds_Midpoint</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Triparty average rate less the Fed Fund’s target range midpoint</p></li>
+<li><p><strong>net_fed_repo</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> <code class="docutils literal notranslate"><span class="pre">RPONTSYD</span> <span class="pre">-</span> <span class="pre">RRPONTSYD</span></code>, Fed’s total repos minus Fed’s reverse repos</p></li>
+<li><p><strong>Total_Reserves_over_Currency</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Reserves of Depository Institutions: Total, divided by currency in circulation</p></li>
+<li><p><strong>Total_Reserves_over_GDP</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> Reserves of Depository Institutions: Total, divided by nominal GDP</p></li>
+<li><p><strong>SOFR_extended_with_Triparty</strong>: <code class="docutils literal notranslate"><span class="pre">float64</span></code> SOFR only goes back to around 2017. Before then, I use the average triparty repo rate to backfill.</p></li>
+</ul>
+</section>
+<section id="dataframe-specs">
+<h2>Dataframe Specs<a class="headerlink" href="#dataframe-specs" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Dataframe Name</p></th>
+<th class="head"><p>Public Repo Data</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Dataframe ID</p></td>
+<td><p><a class="reference internal" href="#"><span class="std std-doc">EX_repo_public</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Data Sources</p></td>
+<td><p>FRED, Office of Financial Research</p></td>
+</tr>
+<tr class="row-even"><td><p>Data Providers</p></td>
+<td><p>FRED, Office of Financial Research</p></td>
+</tr>
+<tr class="row-odd"><td><p>Links to Providers</p></td>
+<td><p><a class="reference external" href="https://fred.stlouisfed.org/">https://fred.stlouisfed.org/</a>, <a class="reference external" href="https://www.financialresearch.gov/short-term-funding-monitor/api/">https://www.financialresearch.gov/short-term-funding-monitor/api/</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Topic Tags</p></td>
+<td><p>Short Term Funding, Repo</p></td>
+</tr>
+<tr class="row-odd"><td><p>Type of Data Access</p></td>
+<td><p>Public</p></td>
+</tr>
+<tr class="row-even"><td><p>Data License</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>License Expiration Date</p></td>
+<td><p>N/A</p></td>
+</tr>
+<tr class="row-even"><td><p>Contact Provider Before Use?</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>Provider Contact Information</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>Restrictions on Use of Data</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>How is data pulled?</p></td>
+<td><p>Web API via Python</p></td>
+</tr>
+<tr class="row-even"><td><p>Data available up to (min)</p></td>
+<td><p>2024-07-01 00:00:00</p></td>
+</tr>
+<tr class="row-odd"><td><p>Data available up to (max)</p></td>
+<td><p>2025-01-24 00:00:00</p></td>
+</tr>
+<tr class="row-even"><td><p>Download Data as Parquet</p></td>
+<td><p><a class="reference download internal" download="" href="../_downloads/0be088ac487cba6716e56f9bc7a73a70/EX_repo_public.parquet"><span class="xref download myst">Parquet</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Download Data as Excel</p></td>
+<td><p><a class="reference download internal" download="" href="../_downloads/f0ba30c483aef32faaa80f6ca34c876b/EX_repo_public.xlsx"><span class="xref download myst">Excel</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>Linked Charts</p></td>
+<td><p><a class="reference internal" href="../charts/EX_repo_rates.html"><span class="std std-doc">EX_repo_rates</span></a><br></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="pipeline-specs">
+<h2>Pipeline Specs<a class="headerlink" href="#pipeline-specs" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pipeline Name</p></th>
+<th class="head"><p>Pipeline Template - Example</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Pipeline ID</p></td>
+<td><p><a class="reference internal" href="../index.html"><span class="std std-doc">EX</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Lead Pipeline Developer</p></td>
+<td><p>Jeremiah Bejarano</p></td>
+</tr>
+<tr class="row-even"><td><p>Contributors</p></td>
+<td><p>Jeremiah Bejarano, John Doe</p></td>
+</tr>
+<tr class="row-odd"><td><p>Bitbucket Repo URL</p></td>
+<td><p><a class="github reference external" href="https://github.com/jmbejara/blank_project">jmbejara/blank_project</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Pipeline Web Page</p></td>
+<td><p><a href="https://github.com/jmbejara/blank_project">https://github.com/jmbejara/blank_project</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Date of Last Code Update</p></td>
+<td><p>2025-02-10 00:55:32</p></td>
+</tr>
+<tr class="row-even"><td><p>Runs on Linux, Windows, Both, or Other?</p></td>
+<td><p>Windows/Linux/MacOS</p></td>
+</tr>
+<tr class="row-odd"><td><p>Linked Dataframes</p></td>
+<td><p><a class="reference internal" href="#"><span class="std std-doc">EX_repo_public</span></a><br>  <a class="reference internal" href="EX_repo_public_relative_fed.html"><span class="std std-doc">EX_repo_public_relative_fed</span></a><br></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In addition to the <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">r_requirements.txt</span></code>, the pipeline code relies
+on first loading modules using the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">load</span> <span class="n">anaconda3</span><span class="o">/</span><span class="mf">3.11.4</span> <span class="n">TeXLive</span><span class="o">/</span><span class="mi">2023</span> <span class="n">R</span><span class="o">/</span><span class="mf">4.4.0</span> <span class="n">pandoc</span><span class="o">/</span><span class="mf">3.1.6</span> <span class="n">gcc</span><span class="o">/</span><span class="mf">14.1.0</span> <span class="n">stata</span><span class="o">/</span><span class="mi">17</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+<div class="section ablog__blog_comments">
+   
+</div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../charts.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Chart List</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="EX_repo_public_relative_fed.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><code class="docutils literal notranslate"><span class="pre">EX_repo_public_relative_fed</span></code> - Public Repo Data, Relative to the Fed Funds Target Midpoint</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#description">Description</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-dictionary">Data Dictionary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataframe-specs">Dataframe Specs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-specs">Pipeline Specs</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jeremiah Bejarano
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, Jeremiah Bejarano.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

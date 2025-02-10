@@ -1,0 +1,8 @@
+/* Make blog post links match toctree styling */
+.ablog-post-title a.reference.internal {
+    font-weight: normal;
+    font-size: 0.9em;
+    color: #176de8;
+    text-decoration: underline;
+    font-family: inherit;
+}
