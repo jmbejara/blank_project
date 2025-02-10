@@ -1,4 +1,4 @@
-# `{{pipeline_id}}_{{dataframe_id}}` - {{dataframe_name}}
+
 ## Description
 
 This dataframe contains, among other things,repo rates and the Federal Funds target range. The shaded area shows the Federal Funds target range. During 2019, the Secured Overnight Financing Rate (SOFR), a broad measure of the cost of borrowing cash overnight collateralized by Treasury securities via repurchase agreements, often exceeded the upper limit of the Federal Funds target range. Since SOFR does not extend back further than 2017, we use the average repo rate in the triparty repo market whenever SOFR is unavailable.
@@ -54,13 +54,4 @@ This dataframe contains, among other things,repo rates and the Federal Funds tar
 - **Total_Reserves_over_Currency**: `float64` Reserves of Depository Institutions: Total, divided by currency in circulation
 - **Total_Reserves_over_GDP**: `float64` Reserves of Depository Institutions: Total, divided by nominal GDP
 - **SOFR_extended_with_Triparty**: `float64` SOFR only goes back to around 2017. Before then, I use the average triparty repo rate to backfill.
-
-
-## Dataframe Specs
-
-{% include "docs_src/_templates/dataframe_specs.md" %}
-
-## Pipeline Specs
-
-{% include "docs_src/_templates/pipeline_specs.md" %}
 

@@ -1,0 +1,8 @@
+[theme]
+logo_path = "assets/logo.png"
+favicon_path = ""
+
+[site]
+title = "Blank Project Template"
+author = "Jeremy Bejarano"
+copyright = "2025"

@@ -1,4 +1,3 @@
-# `{{pipeline_id}}_{{dataframe_id}}` - {{dataframe_name}}
 
 ## Description
 
@@ -22,11 +21,3 @@ This dataframe contains, among other things,repo rates relative the midpoint of 
 - **Total_Reserves_over_GDP**: `float64` Reserves of Depository Institutions: Total, divided by nominal GDP
 - **Fed_Balance_Sheet_over_GDP**: `float64` Size of Fed's balance sheet divided by nominal GDP
 
-
-## Dataframe Specs
-
-{% include "docs_src/_templates/dataframe_specs.md" %}
-
-## Pipeline Specs
-
-{% include "docs_src/_templates/pipeline_specs.md" %}

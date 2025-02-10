@@ -107,6 +107,11 @@
                 "path_to_excel_chart": "./src/repo_rates_normalized_w_balance_sheet.xlsx",
                 "path_to_chart_doc": "./docs_src/charts/repo_rates_normalized_w_balance_sheet.md"
             }
-        }
+        },
+        "notebooks": [
+            "_output/01_example_notebook_interactive.ipynb",
+            "_output/02_example_with_dependencies.ipynb",
+            "_output/03_public_repo_summary_charts.ipynb"
+        ]
     }
 }

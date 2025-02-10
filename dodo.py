@@ -26,7 +26,6 @@ from colorama import Fore, Style, init
 # from among all the other lines printed to the console.
 from doit.reporter import ConsoleReporter
 
-import pipeline_publish
 from settings import config
 
 try:
@@ -373,58 +372,16 @@ def task_compile_latex_docs():
         "clean": True,
     }
 
-
-# ###############################################################
-# ## Sphinx documentation
-# ###############################################################
-
-
-pipeline_doc_file_deps = pipeline_publish.get_file_deps(base_dir=BASE_DIR)
-generated_md_targets = pipeline_publish.get_targets(base_dir=BASE_DIR)
-
-
-def task_pipeline_publish():
-    """Create Pipeline Docs for Use in Sphinx"""
-
-    file_dep = [
-        "./src/pipeline_publish.py",
-        "./docs_src/conf.py",
-        "./README.md",
-        "./pipeline.json",
-        "./docs_src/_templates/chart_entry_bottom.md",
-        "./docs_src/_templates/chart_entry_top.md",
-        "./docs_src/_templates/pipeline_specs.md",
-        "./docs_src/_templates/dataframe_specs.md",
-        "./docs_src/charts.md",
-        "./docs_src/index.md",
-        *pipeline_doc_file_deps,
-    ]
-
-    targets = [
-        *generated_md_targets,
-    ]
-
-    return {
-        "actions": [
-            "ipython ./src/pipeline_publish.py",
-        ],
-        "targets": targets,
-        "file_dep": file_dep,
-        "clean": True,
-    }
-
-
 notebook_sphinx_pages = [
-    "./_docs/_build/html/notebooks/" + notebook.split(".")[0] + ".html"
+    "./docs/notebooks/EX_" + notebook.split(".")[0] + ".html"
     for notebook in notebook_tasks.keys()
 ]
 sphinx_targets = [
-    "./_docs/_build/html/index.html",
-    "./_docs/_build/html/myst_markdown_demos.html",
-    "./_docs/_build/html/apidocs/index.html",
+    "./docs/index.html",
+    "./docs/myst_markdown_demos.html",
+    "./docs/apidocs/index.html",
     *notebook_sphinx_pages,
 ]
-
 
 def task_compile_sphinx_docs():
     """Compile Sphinx Docs"""
@@ -433,32 +390,19 @@ def task_compile_sphinx_docs():
         for notebook in notebook_tasks.keys()
     ]
     file_dep = [
-        "./docs_src/conf.py",
-        "./docs_src/index.md",
-        "./docs_src/myst_markdown_demos.md",
-        "./docs_src/notebooks.md",
-        *notebook_scripts,
         "./README.md",
         "./pipeline.json",
-        "./src/pipeline_publish.py",
-        "./docs_src/charts.md",
-        # Pipeline docs
-        "./src/pipeline_publish.py",
-        "./docs_src/_templates/chart_entry_bottom.md",
-        "./docs_src/_templates/chart_entry_top.md",
-        "./docs_src/_templates/pipeline_specs.md",
-        "./docs_src/_templates/dataframe_specs.md",
-        *pipeline_doc_file_deps,
+        *notebook_scripts,
     ]
 
     return {
         "actions": [
-            "sphinx-build -M html ./_docs/ ./_docs/_build",
+            "chartbook generate -f",
         ],  # Use docs as build destination
         # "actions": ["sphinx-build -M html ./docs/ ./docs/_build"], # Previous standard organization
         "targets": sphinx_targets,
         "file_dep": file_dep,
-        "task_dep": ["run_notebooks", "pipeline_publish"],
+        "task_dep": ["run_notebooks",],
         "clean": True,
     }
 

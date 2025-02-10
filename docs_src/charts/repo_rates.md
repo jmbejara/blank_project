@@ -1,4 +1,3 @@
-{% include "docs_src/_templates/chart_entry_top.md" %}
 
 **Description:** This chat plots repo rates over time. It uses the Secured Overnight Financing Rate (SOFR), a broad measure of the cost of borrowing cash overnight collateralized by Treasury securities via repurchase agreements, often exceeded the upper limit of the Federal Funds target range. Since SOFR does not extend back further than 2017, we use the average repo rate in the triparty repo market whenever SOFR is unavailable.
 
@@ -15,5 +14,3 @@
 **What does this add that other charts might not?** It is helpful to visualize repo rates in the context of the fed fund's target range.
 
 
-
-{% include "docs_src/_templates/chart_entry_bottom.md" %}
